@@ -57,7 +57,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientDashboardConstants;
-import org.openmrs.module.hospitalcore.util.PatientUtil;
+import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -144,7 +144,7 @@ public class PatientAdmittedController {
 		model.addAttribute("relationName", relationNameattr.getValue());
 		
 		//Patient category
-		model.addAttribute("patCategory", PatientUtil.getPatientCategory(patient));
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
 		
 		
 		return "module/ipd/transferForm";
@@ -371,7 +371,7 @@ public class PatientAdmittedController {
 		Collections.sort(selectedDiagnosisList, new ConceptComparator());
 		Collections.sort(selectedProcedureList, new ConceptComparator());
 		//Patient category
-		model.addAttribute("patCategory", PatientUtil.getPatientCategory(patient));
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
 		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
 		model.addAttribute("sProcedureList", selectedProcedureList);
 		

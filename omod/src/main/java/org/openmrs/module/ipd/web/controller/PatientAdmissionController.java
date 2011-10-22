@@ -47,7 +47,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
-import org.openmrs.module.hospitalcore.util.PatientUtil;
+import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
 import org.springframework.stereotype.Controller;
@@ -113,7 +113,7 @@ public class PatientAdmissionController {
 		model.addAttribute("admission", admission);
 		
 		// patient category
-		model.addAttribute("patCategory", PatientUtil.getPatientCategory(admission.getPatient()));
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
 		
 		
 		
@@ -231,7 +231,7 @@ public class PatientAdmissionController {
 		model.addAttribute("urlS", "main.htm");
 		
 		// patient category
-		model.addAttribute("patCategory", PatientUtil.getPatientCategory(admission.getPatient()));
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
 		
 		
 		
