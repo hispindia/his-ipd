@@ -171,7 +171,7 @@ public class PatientAdmissionController {
 			encounter.setPatient(admission.getPatient());
 			encounter.setCreator( user);
 			encounter.setProvider(user );
-			encounter.setEncounterDatetime( new Date() );
+			encounter.setEncounterDatetime(date );
 			encounter.setEncounterType(encounterType);
 			encounter.setLocation( location );
 			encounter = Context.getEncounterService().saveEncounter(encounter);
@@ -273,7 +273,7 @@ public class PatientAdmissionController {
 				encounter.setPatient(admission.getPatient());
 				encounter.setCreator( user);
 				encounter.setProvider(user );
-				encounter.setEncounterDatetime( new Date() );
+				encounter.setEncounterDatetime( date);
 				encounter.setEncounterType(encounterType);
 				encounter.setLocation( location );
 				encounter = Context.getEncounterService().saveEncounter(encounter);
