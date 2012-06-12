@@ -41,6 +41,7 @@
 	<tr>
 		<td colspan="2"><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
 		<td colspan="2"><spring:message code="ipd.patient.fatherName"/>:&nbsp;${relationName }</td>
+		
 	</tr>
 	
 	<tr>

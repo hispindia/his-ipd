@@ -142,7 +142,8 @@ ADMITTED = {
 					jQuery("#availableDiagnosisList option[value=" +id+ "]").remove();
 				}else{
 					jQuery('#selectedDiagnosisList').append('<option value="' + id + '">' + name + '</option>');
-					if(confirm("Do you want also add this diagnosis to opd diagnosis?"))
+					// June 12th 2012: Thai Chuong Fixed issue #51
+					if(confirm("Do you want also add this diagnosis to ipd diagnosis?"))
 					{
 						jQuery.ajax({
 							  type: 'POST',
@@ -177,7 +178,8 @@ ADMITTED = {
 					jQuery("#availableProcedureList option[value=" +id+ "]").remove();
 				}else{
 					jQuery('#selectedProcedureList').append('<option value="' + id + '">' + name + '</option>');
-					if(confirm("Do you want also add this procedure to opd procedure?"))
+					// June 12th 2012: Thai Chuong Fixed issue #51
+					if(confirm("Do you want also add this procedure to ipd procedure?"))
 					{
 						jQuery.ajax({
 							  type: 'POST',
