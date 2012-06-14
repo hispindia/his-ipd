@@ -35,7 +35,16 @@ public class IpdFinalResultCommand {
 	private Integer[] selectedProcedureList;
 	private Integer admissionLogId;
 	private Integer admittedId;
-	private Integer outCome;
+    private Integer outCome;
+
+	//harsh 14/6/2012 need patient id for setting patient "dead" when death occurs
+	private Integer patientId;
+    public Integer getPatientId() {
+    	return patientId;
+    }
+    public void setPatientId(Integer patientId) {
+    	this.patientId = patientId;
+    }
 	public Integer[] getSelectedDiagnosisList() {
 		return selectedDiagnosisList;
 	}

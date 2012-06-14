@@ -31,6 +31,9 @@
 <input type="hidden" id="pageId" value="dischagePage"/>
 <form method="post" id="dischargeForm">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
+<!-- harsh 14/6/2012: to get patient ID -->
+<input type="hidden" id="patientId" name="patientId" value="${patientId}" />
+
 <div class="box">
 <c:if test ="${not empty message }">
 <div class="error">
