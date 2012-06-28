@@ -204,11 +204,11 @@ public class PatientAdmittedController {
 		List<Concept> listConceptProcedureOfIpdEncounter = new ArrayList<Concept>();
 		if (CollectionUtils.isNotEmpty(listObsOfIpdEncounter)) {
 			for (Obs obx : obses) {
-				if (obx.getConcept().getConceptId() == cDiagnosis.getConceptId()) {
+				if (obx.getConcept().getConceptId().equals(cDiagnosis.getConceptId())) {
 					listConceptDianosisOfIpdEncounter.add(obx.getValueCoded());
 				}
 				
-				if (obx.getConcept().getConceptId() == cProcedure.getConceptId()) {
+				if (obx.getConcept().getConceptId().equals( cProcedure.getConceptId())) {
 					listConceptProcedureOfIpdEncounter.add(obx.getValueCoded());
 				}
 			}

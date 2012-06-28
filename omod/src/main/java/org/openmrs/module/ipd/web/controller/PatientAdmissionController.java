@@ -146,6 +146,8 @@ public class PatientAdmissionController {
 		int treatingDoctor = NumberUtils.toInt(request.getParameter("treatingDoctor"), 0 );
 		
 		PersonAttribute relationNameattr =null;
+		String fathername="";
+		
 		User treatingD =  null;
 		try {
 			Date date = new Date();
@@ -199,7 +201,13 @@ public class PatientAdmissionController {
 			admitted.setBed(bedNumber);
 			admitted.setBirthDate(admission.getPatient().getBirthdate());
 			admitted.setCaste(caste);
+			if (relationNameattr!=null){
 			admitted.setFatherName(relationNameattr.getValue());
+			fathername=relationNameattr.getValue();
+			}else{
+				fathername="";
+				admitted.setFatherName(fathername);
+			} 
 			admitted.setGender(admission.getPatient().getGender());
 			
 			treatingD = Context.getUserService().getUser(treatingDoctor);
@@ -226,7 +234,7 @@ public class PatientAdmissionController {
 		}
 		model.addAttribute("treatingDoctor",treatingD);
 		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
-		model.addAttribute("relationName", relationNameattr != null ?relationNameattr.getValue() : "");
+		model.addAttribute("relationName",fathername );
 		model.addAttribute("message", "Succesfully");
 		model.addAttribute("urlS", "main.htm");
 		
