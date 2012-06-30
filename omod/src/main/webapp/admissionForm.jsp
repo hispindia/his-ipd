@@ -16,11 +16,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with IPD module.  If not, see <http://www.gnu.org/licenses/>.
  *
---%> 
+--%>
+ 
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
+
+
+
 <input type="hidden" id="pageId" value="admissionPage"/>
 <form method="post" id="admissionForm" class="box">
 <input type="hidden" id="id" name="id" value="${admission.id }" />
@@ -35,24 +39,26 @@
 	<tr>
 		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admission.patientName }</b></td>
 		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admission.patientIdentifier}</b></td>
+	</tr>
+	<tr>
 		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admission.age }</b></td>
 		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admission.gender }</b></td>
 	</tr>
 	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
-		<td colspan="2"><spring:message code="ipd.patient.fatherName"/>:&nbsp;${relationName }</td>
-		
-	</tr>
-	
-	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/><em>*</em><input type="text" id="monthlyIncome" name="monthlyIncome"  /></td>
-		<td colspan="2"><spring:message code="ipd.patient.homeAddress"/>:${address }</td>
+		<td><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
+		<td>${relationType }:&nbsp;${relationName }</td>
 	</tr>
 	<tr>
-		
+		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
+		<td><spring:message code="ipd.patient.districtTeshil"/>: ${districtTeshil }</td>  
 	</tr>
 	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.admittedWard"/><em>*</em>
+		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
+		<td><input type="text" id="monthlyIncome" name="monthlyIncome"  /></td>
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.admittedWard"/><em>*</em></td>
+		<td>
 		<select  id="admittedWard" name="admittedWard" >
 			  <option value=""></option>
 				<c:if test="${not empty listIpd }">
@@ -66,10 +72,10 @@
 		       		</c:if>
 			</select>
 		</td>
-		<td colspan="2"><spring:message code="ipd.patient.bedNumber"/><em>*</em><input type="text" id="bedNumber" name="bedNumber"  /></td>
 	</tr>
 	<tr>
-		<td colspan="4"><spring:message code="ipd.patient.treatingDoctor"/><em>*</em>
+		<td><spring:message code="ipd.patient.treatingDoctor"/><em>*</em></td>
+		<td>
 			<select  id="treatingDoctor" name="treatingDoctor" >
 			  <option value=""></option>
 				<c:if test="${not empty listDoctor }">
@@ -82,8 +88,16 @@
 			       		</c:forEach>
 		       		</c:if>
 			</select>
-		
 		</td>
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
+		<td><input type="text" id="bedNumber" name="bedNumber"  /></td>
+	</tr>
+	<tr> <!-- MARTA -->
+		<td><spring:message code="ipd.patient.dateTime"/>: </td>
+		<td>
+		<openmrs:formatDate date="${dateAdmission}" type="long" /></td>  
 	</tr>
 </table>
 
