@@ -214,7 +214,7 @@ public class PatientAdmissionController {
 			
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			
-			address = StringUtils.isNotBlank(add.getAddress1()) ? add.getAddress1() : "Address not available" + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
+			address = add.getAddress1() + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
 			
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
