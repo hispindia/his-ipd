@@ -1,3 +1,15 @@
+0.9.6
+- Resolved issues
+	Bug #57: Discharge Patient in IPD
+	Bug #170: IPD: Patient search in name box
+	Bug #171: IPD : Patient outcome
+	Bug #235: [0.9.6-SNAP SHOT] [SOLAN] Error with IPD patient
+	Support #51: discharge form
+	Support #146: IPD User role
+	Support #178: Tanda- IPD -Admission Slip printout
+	Support #290: [IPD Module] Address of the patient, Relative Name Logic and Date and Time should appears 
+				  on the admission screen and print out
+
 28/05/2011
 - set PatientAdmittedLogTransferFrom at the transfer time 
 - show concept name at transfer form and discharge form , current show concept_id
