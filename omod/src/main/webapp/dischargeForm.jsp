@@ -53,15 +53,20 @@
 		<td colspan="2"><spring:message code="ipd.patient.category"/>: ${patCategory }</td>
 		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td>
 	</tr>
+	<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 	<tr>
-		<td colspan="4"><spring:message code="ipd.patient.fatherName"/>:  ${relationName }</td>
-	</tr>
-	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.admittedWard"/>: ${admitted.admittedWard.name}</td>
+		<td>${relationType }:&nbsp;${relationName }</td>
 		<td colspan="2"><spring:message code="ipd.patient.bedNumber"/>: ${admitted.bed }</td>
 	</tr>
 	<tr>
+		<td colspan="2"><spring:message code="ipd.patient.admittedWard"/>: ${admitted.admittedWard.name}</td>
+	</tr>
+	<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
+	<tr>
 		<td colspan="4"><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
+	</tr>
+	<tr>
+		<td colspan="4"><spring:message code="ipd.patient.date/time"/>: ${dateTime }</td>
 	</tr>
 </table>
 
