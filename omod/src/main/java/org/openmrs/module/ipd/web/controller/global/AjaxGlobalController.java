@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Concept;
+import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.IpdService;
@@ -175,12 +176,22 @@ public class AjaxGlobalController {
 						IpdUtils.convertStringToList(ipdWardString), "");
 
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
+		//ghanshyam 30/07/2012 [IPD - Bug #325] [IPD] Inconsistency in print slip
+		Map<Integer, String> mapRelationType = new HashMap<Integer, String>();
 		for (IpdPatientAdmitted admit : listPatientAdmitted) {
-			PersonAttribute relationNameattr = admit.getPatient().getAttribute(
-					"Father/Husband Name");
-			mapRelationName.put(admit.getId(), relationNameattr.getValue());
+			PersonAttribute relationNameattr = admit.getPatient().getAttribute("Father/Husband Name");
+			PersonAttribute relationTypeattr = admit.getPatient().getAttribute("Relative Name Type");
+			if(relationTypeattr!=null){
+				mapRelationType.put(admit.getId(), relationTypeattr.getValue());
+			}
+			else{
+				mapRelationType.put(admit.getId(), "Relative Name");
+			}
+			mapRelationName.put(admit.getId(), relationNameattr.getValue());	
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
+		model.addAttribute("mapRelationType", mapRelationType);
+		model.addAttribute("dateTime", new Date().toString());
 
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 

@@ -106,21 +106,33 @@ public class PatientAdmittedController {
 		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
 		
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
+		Map<Integer, String> mapRelationType = new HashMap<Integer, String>();
 		for (IpdPatientAdmitted admit : listPatientAdmitted) {
 			PersonAttribute relationNameattr = admit.getPatient().getAttribute("Father/Husband Name");
 			//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out
 			PersonAddress add =admit.getPatient().getPersonAddress();
+			String address1 = add.getAddress1();
+			if(address1!=null){
 			String address = " " + add.getAddress1() +" " + add.getCountyDistrict() + " " + add.getCityVillage();
 			model.addAttribute("address", address);
+			}
+			else{
+				String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
+				model.addAttribute("address", address);
+			}
 			PersonAttribute relationTypeattr = admit.getPatient().getAttribute("Relative Name Type");
-			model.addAttribute("relationName", relationNameattr.getValue());
-			model.addAttribute("relationType", relationTypeattr.getValue());
-			model.addAttribute("dateTime", new Date().toString());
-			
-			mapRelationName.put(admit.getId(), relationNameattr.getValue());
+			//ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #313'
+			if(relationTypeattr!=null){
+				mapRelationType.put(admit.getId(), relationTypeattr.getValue());
+			}
+			else{
+				mapRelationType.put(admit.getId(), "Relative Name");
+			}
+			mapRelationName.put(admit.getId(), relationNameattr.getValue());	
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
-		
+		model.addAttribute("mapRelationType", mapRelationType);
+		model.addAttribute("dateTime", new Date().toString());
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
@@ -330,7 +342,13 @@ public class PatientAdmittedController {
 		//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out
 		PersonAttribute relationTypeattr = patient.getAttribute("Relative Name Type");
 		model.addAttribute("relationName", relationNameattr.getValue());
-		model.addAttribute("relationType", relationTypeattr.getValue());
+		//ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #312
+		if(relationTypeattr!=null){
+			model.addAttribute("relationType", relationTypeattr.getValue());
+		}
+		else{
+			model.addAttribute("relationType", "Relative Name");
+		}
 		model.addAttribute("dateTime", new Date().toString());
 		
 		Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);

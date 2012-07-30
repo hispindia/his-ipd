@@ -66,7 +66,9 @@
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${queue.age }</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${queue.gender }</strong></td></tr>
 			<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
-			<tr><td>${relationType }:&nbsp;${relationName }</td></tr>
+			<%-- ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #313'.changed from relationType to mapRelationType and relationName 
+			to  mapRelationName because in every print slip same relation name and relative name is coming--%>
+			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
 			<tr><td colspan="4"><spring:message code="ipd.patient.homeAddress"/>: ${address }</td></tr>
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${queue.monthlyIncome}</td></tr>
