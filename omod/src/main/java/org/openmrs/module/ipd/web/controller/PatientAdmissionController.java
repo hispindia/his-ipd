@@ -127,7 +127,15 @@ public class PatientAdmissionController {
 			model.addAttribute("districtTeshil", StringUtils.isNotBlank(districtTeshil) ? districtTeshil : "");
 			model.addAttribute("relationName", relationNameattr.getValue());
 			
-			model.addAttribute("relationType", relationTypeattr.getValue());
+			/*ghanshyam 30/07/2012 this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
+			                       exception.*/
+			if(relationTypeattr!=null){
+				model.addAttribute("relationType", relationTypeattr.getValue());
+			}
+			else{
+				model.addAttribute("relationType", "Relative Name");
+			}
+			
 			model.addAttribute("admission", admission);
 			
 			model.addAttribute("dateAdmission", admission.getAdmissionDate());
