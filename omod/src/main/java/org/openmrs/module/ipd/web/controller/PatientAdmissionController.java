@@ -227,7 +227,14 @@ public class PatientAdmissionController {
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			model.addAttribute("relationName", relationNameattr.getValue());
-			model.addAttribute("relationType", relationTypeattr.getValue());
+			//ghanshyam 02/08/2012 [IPD - Bug #331] (New) DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
+			if(relationTypeattr!=null){
+				model.addAttribute("relationType", relationTypeattr.getValue());
+			}
+			else{
+				model.addAttribute("relationType", "Relative Name");
+			}
+			//model.addAttribute("relationType", relationTypeattr.getValue());
 			
 			model.addAttribute("dateAdmission", date);
 			
@@ -247,6 +254,11 @@ public class PatientAdmissionController {
 				relationshipType = relationTypeattr.getValue();
 				
 			}
+			//ghanshyam 02/08/2012 [IPD - Bug #331] (New) DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
+			else{
+				relationshipType = "Relative Name";
+			}
+			
 			admitted.setRelationshipType(relationshipType);
 			admitted.setGender(admission.getPatient().getGender());
 			
