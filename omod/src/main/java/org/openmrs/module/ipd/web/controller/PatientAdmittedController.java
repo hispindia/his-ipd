@@ -105,6 +105,9 @@ public class PatientAdmittedController {
 		List<IpdPatientAdmitted> listPatientAdmitted = ipdService.searchIpdPatientAdmitted(searchPatient,
 		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
 		
+		/*Sagar Bele 08-08-2012 Support #327 [IPD] (DDU(SDMX)instance) snapshot- age column in IPD admitted patient index */
+		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
+				
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
 		Map<Integer, String> mapRelationType = new HashMap<Integer, String>();
 		for (IpdPatientAdmitted admit : listPatientAdmitted) {
@@ -133,7 +136,7 @@ public class PatientAdmittedController {
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
 		model.addAttribute("dateTime", new Date().toString());
-		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
+//		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
 	}

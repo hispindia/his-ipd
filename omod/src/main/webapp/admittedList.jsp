@@ -46,7 +46,9 @@
 			</a>
 		</td>
 		<td>${queue.patientName}</td>
-		<td><age:getAgeFromBirthDay input="${queue.birthDate }"></age:getAgeFromBirthDay></td>
+		
+<%--	<td><age:getAgeFromBirthDay input="${queue.birthDate }"></age:getAgeFromBirthDay></td>  --%>
+		<td>${queue.age}</td>
 		<td>${queue.gender}</td>
 		<td width="50">${queue.admittedWard.name}</td>
 		<td>${queue.bed}</td>
