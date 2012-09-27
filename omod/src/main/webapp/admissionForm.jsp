@@ -103,6 +103,6 @@
 
 <br/>
 <input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Submit">
-
-
+<%-- ghanshyam 27-sept-2012 Support #387 [ALL] Small changes in all modules(note:these lines of code written for cancel button) --%>
+<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Cancel" onclick="tb_cancel();">
 </form>

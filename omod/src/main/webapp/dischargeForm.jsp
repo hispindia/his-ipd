@@ -150,7 +150,11 @@
 </table>
 
 <table  width="98%">
-	<tr><td align="right"><input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Submit" onclick="ADMITTED.submitIpdFinalResult();"></td></tr>
+<%-- ghanshyam 27-sept-2012 Support #387 [ALL] Small changes in all modules(note:these lines of code written for cancel button) --%>
+<div align="right">
+	<input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Submit" onclick="ADMITTED.submitIpdFinalResult();">
+	<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Cancel" onclick="tb_cancel();">
+</div>	
 </table>
 
 </form>
