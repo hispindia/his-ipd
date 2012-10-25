@@ -50,7 +50,11 @@
 		<c:set var="person" value="${pAdmission.opdAmittedUser.person }"/>
 		<td>${person.givenName} ${person.middleName } ${person.familyName }</td>
 		
-		<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Remove" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','1');"/><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="No Bed" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','2');"/></td>
+		<td>
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Remove" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','1');"/>
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="No Bed" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','2');"/>
+		</td>
 	</tr>
 </c:forEach>
 </c:when>

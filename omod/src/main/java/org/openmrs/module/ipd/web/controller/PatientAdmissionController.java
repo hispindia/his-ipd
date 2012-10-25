@@ -138,7 +138,8 @@ public class PatientAdmissionController {
 			
 			model.addAttribute("admission", admission);
 			
-			model.addAttribute("dateAdmission", admission.getAdmissionDate());
+			//ghanshyam 25-oct-2012 Bug #425 [IPD Module] Admission Date fetched incorrectly.
+			model.addAttribute("dateAdmission", new Date());
 			
 			// patient category
 			model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
@@ -180,7 +181,10 @@ public class PatientAdmissionController {
 		try {
 			
 			Date date = new Date();
-			date = admission.getAdmissionDate();
+			
+			//ghanshyam 25-oct-2012 Bug #425 [IPD Module] Admission Date fetched incorrectly.(note:commented below line date = admission.getAdmissionDate())
+			//date = admission.getAdmissionDate();
+			
 			//copy admission to log
 			IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
 			patientAdmissionLog.setAdmissionDate(date);
