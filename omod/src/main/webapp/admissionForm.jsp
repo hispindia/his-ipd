@@ -50,7 +50,7 @@
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
-		<td><spring:message code="ipd.patient.districtTeshil"/>: ${districtTeshil }</td>  
+		<td><spring:message code="ipd.patient.districtTehsil"/>: ${districtTehsil }</td>  
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>

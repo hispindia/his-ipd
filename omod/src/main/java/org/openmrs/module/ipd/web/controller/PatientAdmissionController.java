@@ -109,7 +109,7 @@ public class PatientAdmissionController {
 		if (admission != null) {
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			String address = add.getAddress1();
-			String districtTeshil = add.getCountyDistrict() + " / " + add.getCityVillage();
+			String districtTehsil = add.getCountyDistrict() + " / " + add.getCityVillage();
 			
 			String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(
 			    IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
@@ -124,7 +124,7 @@ public class PatientAdmissionController {
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
-			model.addAttribute("districtTeshil", StringUtils.isNotBlank(districtTeshil) ? districtTeshil : "");
+			model.addAttribute("districtTehsil", StringUtils.isNotBlank(districtTehsil) ? districtTehsil : "");
 			model.addAttribute("relationName", relationNameattr.getValue());
 			
 			/*ghanshyam 30/07/2012 this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
