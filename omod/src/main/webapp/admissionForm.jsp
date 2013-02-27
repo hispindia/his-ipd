@@ -50,7 +50,8 @@
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
-		<td><spring:message code="ipd.patient.districtTehsil"/>: ${districtTehsil }</td>  
+		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+		<td><spring:message code="ipd.patient.districtUpazila"/>: ${districtUpazila }</td>  
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
