@@ -38,7 +38,10 @@
 			<table width="100%" >
 			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${admitted.patientName }</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${admitted.patientIdentifier}</strong></td></tr>
+			<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
+	        <%-- 
 			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${patCategory }</strong></td></tr>
+			--%>
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${admitted.age}</b></td></tr>
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${admitted.gender }</strong></td></tr>
 			<tr> <td>${relationType }:&nbsp;${relationName }</td>  </tr>

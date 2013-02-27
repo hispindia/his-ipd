@@ -64,7 +64,10 @@
 			<table width="100%" >
 			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${queue.patientName }</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${queue.patientIdentifier}</strong></td></tr>
+			<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
+			<%--
 			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${queue.patientCategory }</strong></td></tr>
+			--%>
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${queue.age }</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${queue.gender }</strong></td></tr>
 			<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>

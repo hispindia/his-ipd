@@ -64,8 +64,11 @@ return true;
 		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admission.age }</b></td>
 		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admission.gender }</b></td>
 	</tr>
+	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	<tr>
+		<%--
 		<td><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
+		--%>
 		<td>${relationType }:&nbsp;${relationName }</td>
 	</tr>
 	<tr>

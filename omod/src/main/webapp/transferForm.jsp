@@ -39,13 +39,14 @@
 		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admitted.age }</b></td>
 		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admitted.gender }</b></td>
 	</tr>
+	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
+	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+	<%--
 	<tr>
 		<td colspan="2"><spring:message code="ipd.patient.category"/>: ${patCategory }</td>
-		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
-		<%--
 		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td>
-		--%>
 	</tr>
+	--%>
 	<tr>
 		<td colspan="4"><spring:message code="ipd.patient.fatherName"/>:  ${relationName }</td>
 	</tr>
