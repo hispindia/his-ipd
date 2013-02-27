@@ -165,7 +165,8 @@ public class PatientAdmissionController {
 			String age = request.getParameter("age");
 			String gender = request.getParameter("gender");*/
 		String caste = request.getParameter("caste");
-		BigDecimal monthlyIncome = NumberUtils.createBigDecimal(request.getParameter("monthlyIncome"));
+		//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
+		//BigDecimal monthlyIncome = NumberUtils.createBigDecimal(request.getParameter("monthlyIncome"));
 		//String fatherName = request.getParameter("fatherName");
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
@@ -271,7 +272,8 @@ public class PatientAdmissionController {
 			treatingD = Context.getUserService().getUser(treatingDoctor);
 			
 			admitted.setIpdAdmittedUser(treatingD);
-			admitted.setMonthlyIncome(monthlyIncome);
+			//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
+			//admitted.setMonthlyIncome(monthlyIncome);
 			admitted.setPatient(patientAdmissionLog.getPatient());
 			admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
 			admitted.setPatientAdmissionLog(patientAdmissionLog);

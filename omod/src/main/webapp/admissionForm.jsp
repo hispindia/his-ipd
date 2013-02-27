@@ -22,7 +22,27 @@
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
-
+<script type="text/javascript">
+function validate(){
+if (StringUtils.isBlank(jQuery("#monthlyIncome").val())) {
+				alert("Please enter monthly Income");
+				return false;
+			}		
+if (StringUtils.isBlank(jQuery("#admittedWard").val())) {
+				alert("Please select admitted Ward");
+				return false;
+			}	
+if (StringUtils.isBlank(jQuery("#treatingDoctor").val())) {
+				alert("Please select treating Doctor");
+				return false;
+			}	
+if (StringUtils.isBlank(jQuery("#bedNumber").val())) {
+				alert("Please enter bed Number");
+				return false;
+			}																							
+return true;
+}
+</script>
 
 
 <input type="hidden" id="pageId" value="admissionPage"/>
@@ -53,10 +73,13 @@
 		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 		<td><spring:message code="ipd.patient.districtUpazila"/>: ${districtUpazila }</td>  
 	</tr>
+	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+	<%--
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
 		<td><input type="text" id="monthlyIncome" name="monthlyIncome"  /></td>
 	</tr>
+	--%>
 	<tr>
 		<td><spring:message code="ipd.patient.admittedWard"/><em>*</em></td>
 		<td>

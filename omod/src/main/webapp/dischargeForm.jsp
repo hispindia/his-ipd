@@ -51,7 +51,10 @@
 	</tr>
 	<tr>
 		<td colspan="2"><spring:message code="ipd.patient.category"/>: ${patCategory }</td>
+		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+		<%--
 		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td>
+		--%>
 	</tr>
 	<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 	<tr>

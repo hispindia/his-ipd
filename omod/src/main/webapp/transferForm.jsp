@@ -41,7 +41,10 @@
 	</tr>
 	<tr>
 		<td colspan="2"><spring:message code="ipd.patient.category"/>: ${patCategory }</td>
+		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+		<%--
 		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td>
+		--%>
 	</tr>
 	<tr>
 		<td colspan="4"><spring:message code="ipd.patient.fatherName"/>:  ${relationName }</td>

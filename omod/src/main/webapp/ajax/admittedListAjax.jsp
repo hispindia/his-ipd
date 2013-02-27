@@ -69,8 +69,11 @@
 			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
 			<c:set var="personAddress" value="${queue.patient.personAddress }"/>
 			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
+			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+		    <%--
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${queue.monthlyIncome}</td></tr>
+			--%>
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${queue.admittedWard.name}</strong></td></tr>
 			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${queue.ipdAdmittedUser.givenName}</strong></td></tr>
