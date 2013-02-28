@@ -24,29 +24,30 @@
 <%@ include file="includes/js_css.jsp" %>
 <script type="text/javascript">
 function validate(){
-if (StringUtils.isBlank(jQuery("#monthlyIncome").val())) {
-				alert("Please enter monthly Income");
-				return false;
-			}		
-if (StringUtils.isBlank(jQuery("#admittedWard").val())) {
-				alert("Please select admitted Ward");
-				return false;
-			}	
-if (StringUtils.isBlank(jQuery("#treatingDoctor").val())) {
-				alert("Please select treating Doctor");
-				return false;
-			}	
-if (StringUtils.isBlank(jQuery("#bedNumber").val())) {
-				alert("Please enter bed Number");
-				return false;
-			}																							
-return true;
+var admittedward=document.forms["admissionForm"]["admittedWard"].value;
+var treatingdoctor=document.forms["admissionForm"]["treatingDoctor"].value;
+var bednumber=document.forms["admissionForm"]["bedNumber"].value;
+  if (admittedward==null || admittedward=="")
+  {
+  alert("Please select admitted Ward");
+  return false;
+  }
+  if (treatingdoctor==null || treatingdoctor=="")
+  {
+  alert("Please select treating Doctor");
+  return false;
+  }
+  if (bednumber==null || bednumber=="")
+  {
+  alert("Please enter bed Number");
+  return false;
+  }
 }
 </script>
 
 
 <input type="hidden" id="pageId" value="admissionPage"/>
-<form method="post" id="admissionForm" class="box">
+<form method="post" id="admissionForm" class="box" onsubmit="javascript:return validate();">
 <input type="hidden" id="id" name="id" value="${admission.id }" />
 <c:if test ="${not empty message }">
 <div class="error">
