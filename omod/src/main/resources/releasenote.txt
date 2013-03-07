@@ -1,3 +1,6 @@
+0.9.8
+- #965               change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
+
 0.9.7
 New Requirement #312: [IPD] Add fields in the Discharge screen and print out
 New Requirement #313: [IPD] Add fields in the Admitted patient print slip
