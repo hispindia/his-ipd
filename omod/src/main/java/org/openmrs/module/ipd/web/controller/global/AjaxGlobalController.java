@@ -83,7 +83,7 @@ public class AjaxGlobalController {
 		Integer opdId = pql.getOpdConcept().getConceptId();
 		Integer referralId = pql.getReferralConcept().getConceptId();
 		//ghanshyam 23-oct-2012 Bug #423 [IPD][0.9.7] Error Screen on clicking patiend ID in Admitted patient Index
-		String url = "/module/patientdashboard/main.htm?patientId=" + patientId + "&opdId=" + opdId + "&referralId=" + referralId + "&queueId=" + id;		
+		String url = "/module/patientdashboard/main.htm?patientId=" + patientId + "&opdId=" + opdId + "&referralId=" + referralId + "&ipdAdmittedId=" + id;		
 		return "redirect:" + url;
 	}
 	@RequestMapping(value = "/module/ipd/addConceptToWard.htm" , method=RequestMethod.POST)
