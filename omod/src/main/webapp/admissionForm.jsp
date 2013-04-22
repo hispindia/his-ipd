@@ -22,11 +22,47 @@
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
+<%-- ghanshyam 22-april-2013 Bug #1411 [IPD]inconsistency in form validation For Patient Admission --%>
+<script type="text/javascript">
+function validate(){
+var monthlyincome=document.forms["admissionForm"]["monthlyIncome"].value;
+var admittedward=document.forms["admissionForm"]["admittedWard"].value;
+var treatingdoctor=document.forms["admissionForm"]["treatingDoctor"].value;
+var bednumber=document.forms["admissionForm"]["bedNumber"].value;
+  if (monthlyincome==null || monthlyincome=="")
+  {
+  alert("Please enter monthly Income");
+  return false;
+  }
+  else{
+   if (!StringUtils.isDigit(monthlyincome)) {
+	 alert("Please enter monthly Income in Digit");
+	 return false;
+	}
+  }
+  if (admittedward==null || admittedward=="")
+  {
+  alert("Please select admitted Ward");
+  return false;
+  }
+  if (treatingdoctor==null || treatingdoctor=="")
+  {
+  alert("Please select treating Doctor");
+  return false;
+  }
+  if (bednumber==null || bednumber=="")
+  {
+  alert("Please enter bed Number");
+  return false;
+  }
+}
+</script>
 
 
 
 <input type="hidden" id="pageId" value="admissionPage"/>
-<form method="post" id="admissionForm" class="box">
+<%-- ghanshyam 22-april-2013 Bug #1411 [IPD]inconsistency in form validation For Patient Admission --%>
+<form method="post" id="admissionForm" class="box" onsubmit="javascript:return validate();">
 <input type="hidden" id="id" name="id" value="${admission.id }" />
 <c:if test ="${not empty message }">
 <div class="error">

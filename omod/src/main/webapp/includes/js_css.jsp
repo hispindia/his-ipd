@@ -37,3 +37,5 @@
 <script type="text/javascript"  src="${pageContext.request.contextPath}/moduleResources/ipd/scripts/page-actions.js" ></script>
 <script type="text/javascript"  src="${pageContext.request.contextPath}/moduleResources/ipd/scripts/page-utils.js" ></script>
 <script type="text/javascript"  src="${pageContext.request.contextPath}/moduleResources/ipd/scripts/lists.js" ></script>
+
+<script type="text/javascript"  src="${pageContext.request.contextPath}/moduleResources/ipd/scripts/string-utils.js" ></script>
