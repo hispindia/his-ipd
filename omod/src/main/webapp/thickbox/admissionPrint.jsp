@@ -27,7 +27,8 @@
 		setTimeout(function(){
 			jQuery("#printArea").printArea({popTitle: "Support by HISP india(hispindia.org)"});
 			},value);
-		//setTimeout("self.parent.location.href=self.parent.location.href;self.parent.tb_remove()",3000);
+		//ghanshyam 23-april-2013 Bug #1430 [IPD - Patients for Admisssion Tab](note:added below line)	
+		setTimeout("self.parent.location.href=self.parent.location.href;self.parent.tb_remove()",1000);
 	}
 </script>
 <body onload="runout(1000);">
