@@ -40,11 +40,15 @@
 	<tr  align="center" class='${varStatus.index % 2 == 0 ? "oddRow" : "evenRow" } ' >
 		<td><c:out value="${(( pagingUtil.currentPage - 1  ) * pagingUtil.pageSize ) + varStatus.count }"/></td>	
 		<td><openmrs:formatDate date="${queue.admissionDate}" type="textbox"/></td>
+		<%-- ghanshyam 09-may-2013 Support #1545 [IPD]remove "Patient ID" link from "Admitted patient index" in all india module --%>
+		<%--
 		<td>
 			<a href="#" title="Go to dashboard" onclick="ACT.go('gotoDashboard.htm?id=${queue.id}');">
 				${queue.patientIdentifier}
 			</a>
 		</td>
+		--%>
+		<td>${queue.patientIdentifier}</td>
 		<td>${queue.patientName}</td>
 		
 <%--	<td><age:getAgeFromBirthDay input="${queue.birthDate }"></age:getAgeFromBirthDay></td>  --%>
