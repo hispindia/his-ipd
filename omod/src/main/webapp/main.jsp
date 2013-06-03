@@ -41,7 +41,9 @@
 					<option value=""></option>
 					<c:if test="${not empty listIpd }">
 			  			<c:forEach items="${listIpd}" var="ipd" >
-			          			<option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}"  
+			          			<option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
+			          			${ipd.answerConcept.name}
+			          			</option> 
 			          			<c:if test="${not empty ipdWard}">
 			          				<c:forEach items="${ipdWard}" var="x" >
 			          				    <c:if test="${x ==  ipd.answerConcept.id}">
@@ -49,8 +51,6 @@
 			          				    </c:if>
 			          				</c:forEach>
 			          			</c:if>
-			          			
-			          			>${ipd.answerConcept.name}</option>
 			       		</c:forEach>
 		       		</c:if>
 	  			</select> 
@@ -61,7 +61,9 @@
 					<option value=""></option>
 					<c:if test="${not empty listDoctor }">
 			  			<c:forEach items="${listDoctor}" var="doct" >
-			          			<option title="${doct.givenName}"   value="${doct.id}"  
+			          			<option title="${doct.givenName}"   value="${doct.id}">
+			          			${doct.givenName}
+			          			</option> 
 			          			<c:if test="${not empty doctor}">
 			          				<c:forEach items="${doctor}" var="x" >
 			          				    <c:if test="${x ==  doct.id}">
@@ -69,8 +71,6 @@
 			          				    </c:if>
 			          				</c:forEach>
 			          			</c:if>
-			          			
-			          			>${doct.givenName}</option>
 			       		</c:forEach>
 		       		</c:if>
 	  			</select> 

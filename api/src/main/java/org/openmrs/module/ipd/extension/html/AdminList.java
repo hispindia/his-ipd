@@ -53,7 +53,7 @@ public class AdminList extends AdministrationSectionExt {
 	public Map<String, String> getLinks() {
 		
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("module/ipd/main.htm", "ipd.title");
+		map.put("module/ipd/manageWardStrengthController.htm", "ipd.manageWardStrength");
 		
 		return map;
 	}

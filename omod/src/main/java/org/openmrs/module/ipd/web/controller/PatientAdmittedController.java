@@ -239,6 +239,8 @@ public class PatientAdmittedController {
 		}
 		
 		List<Concept> listConceptDiagnosis = new ArrayList<Concept>();
+	
+		if(command.getSelectedDiagnosisList()!=null){
 		for (Integer cId : command.getSelectedDiagnosisList()) {
 			Concept cons = conceptService.getConcept(cId);
 			listConceptDiagnosis.add(cons);
@@ -257,6 +259,7 @@ public class PatientAdmittedController {
 				obses.add(obsDiagnosis);
 			}
 		}
+	}
 		List<Concept> listConceptProcedure = new ArrayList<Concept>();
 		if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
 			
