@@ -202,6 +202,7 @@ public class PatientAdmittedController {
 		ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
 		//User user =Context.getAuthenticatedUser();
 		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
+		ipdPatientVitalStatistics.setCreatedOn(new Date());
 		ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
