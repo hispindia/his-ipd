@@ -200,6 +200,7 @@ public class PatientAdmittedController {
 		ipdPatientVitalStatistics.setPulse(pulse);
 		ipdPatientVitalStatistics.setTemperature(temperature);
 		ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
+		ipdPatientVitalStatistics.setNote(note);
 		//User user =Context.getAuthenticatedUser();
 		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
 		ipdPatientVitalStatistics.setCreatedOn(new Date());
