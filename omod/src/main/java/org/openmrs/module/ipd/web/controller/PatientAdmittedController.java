@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
@@ -54,6 +53,7 @@ import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientDashboardConstants;
@@ -139,6 +139,73 @@ public class PatientAdmittedController {
 //		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
+	}
+	
+	//ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
+	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.GET)
+	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, Model model) {
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		Concept ipdConcept = Context.getConceptService().getConceptByName(
+		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
+		model.addAttribute("listIpd", ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		model.addAttribute("admitted", admitted);
+		
+		Patient patient = admitted.getPatient();
+		
+		PersonAddress add = patient.getPersonAddress();
+		String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
+		
+		model.addAttribute("address", address);
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+		model.addAttribute("relationName", relationNameattr.getValue());
+		
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
+		return "module/ipd/vitalStatisticsForm";
+	}
+	
+	//ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
+	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.POST)
+	public String vitalSatatisticsPost(@RequestParam("admittedId") Integer admittedId, 
+			                   @RequestParam("patientId") Integer patientId, 
+	                           @RequestParam(value = "systolic", required = false) String systolic,
+	                           @RequestParam(value = "diastolic", required = false) String diastolic,
+	                           @RequestParam(value = "pulse", required = false) String pulse,
+	                           @RequestParam(value = "temperature", required = false) String temperature,
+	                           @RequestParam(value = "dietadvisedsolid", required = false) String dietadvisedsolid,
+	                           @RequestParam(value = "dietadvisedsemsolid", required = false) String dietadvisedsemsolid,
+	                           @RequestParam(value = "dietadvisedliquid", required = false) String dietadvisedliquid,
+	                           @RequestParam(value = "note", required = false) String note,Model model) {
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		PatientService patientService = Context.getPatientService();
+		Patient patient = patientService.getPatient(patientId);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		String dietAdvised="";
+		if("solid".equals(dietadvisedsolid)){
+			dietAdvised=dietadvisedsolid;
+		}
+		if("semisolid".equals(dietadvisedsemsolid)){
+			dietAdvised=dietAdvised+" "+dietadvisedsemsolid;
+		}
+		if("liquid".equals(dietadvisedliquid)){
+			dietAdvised=dietAdvised+" "+dietadvisedliquid;
+		}
+		IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
+		ipdPatientVitalStatistics.setPatient(patient);
+		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
+		ipdPatientVitalStatistics.setSystolic(systolic);
+		ipdPatientVitalStatistics.setDiastolic(diastolic);
+		ipdPatientVitalStatistics.setPulse(pulse);
+		ipdPatientVitalStatistics.setTemperature(temperature);
+		ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
+		//User user =Context.getAuthenticatedUser();
+		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
+		ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
+		model.addAttribute("urlS", "main.htm?tab=1");
+		model.addAttribute("message", "Succesfully");
+		return "/module/ipd/thickbox/success";
 	}
 	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)

@@ -83,6 +83,16 @@ QUEUE={
 };	
 
 ADMITTED = {
+       //ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
+		vitalStatistics : function(id)
+		{
+			if(SESSION.checkSession())
+			{
+				
+				var url = "vitalStatistics.htm?id="+id+"&keepThis=false&TB_iframe=true&height=500&width=1000";
+				tb_show("Daily Vital Statistics",url,false);
+			}
+		},
 		transfer : function(id)
 		{
 			if(SESSION.checkSession())
