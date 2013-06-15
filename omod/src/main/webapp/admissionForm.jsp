@@ -87,7 +87,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	<tr>
 		<td><spring:message code="ipd.patient.admittedWard"/><em>*</em></td>
 		<td>
-		<select  id="admittedWard" name="admittedWard" >
+		<select  id="admittedWard" name="admittedWard" onchange="BEDSTRENGTH.getBedStrength(this);">
 			  <option value=""></option>
 				<c:if test="${not empty listIpd }">
 			  			<c:forEach items="${listIpd}" var="ipd" >
@@ -121,6 +121,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	<tr>
 		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
 		<td><input type="text" id="bedNumber" name="bedNumber"  /></td>
+		<td><div id="divBedStrength"></div></td>
 	</tr>
 	<tr> <!-- MARTA -->
 		<td><spring:message code="ipd.patient.dateTime"/>: </td>

@@ -34,10 +34,12 @@ import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.Department;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
+import org.openmrs.module.hospitalcore.model.InventoryDrug;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
+import org.openmrs.module.hospitalcore.model.WardBedStrength;
 import org.openmrs.module.ipd.util.IpdUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -170,6 +172,7 @@ public class AjaxGlobalController {
 			Model model) {
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
+		
 		List<IpdPatientAdmitted> listPatientAdmitted = ipdService
 				.searchIpdPatientAdmitted(searchPatient,
 						IpdUtils.convertStringToList(doctorString),
@@ -197,5 +200,38 @@ public class AjaxGlobalController {
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 
 		return "module/ipd/ajax/admittedListAjax";
+	}
+	
+	@RequestMapping(value = "/module/ipd/getBedStrength.htm", method = RequestMethod.GET)
+	public String getBedStrength(@RequestParam(value="wardId",required=false) Integer wardId, Model model) {
+		
+		IpdService ipdService = (IpdService) Context
+				.getService(IpdService.class);
+		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();
+		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(wardId);
+		
+		if (wardBedStrength!=null){
+		Integer bedStrength = wardBedStrength.getBedStrength();
+		List<IpdPatientAdmitted> allAdmittedPatients = ipdService.getAllIpdPatientAdmitted();
+		
+		for (IpdPatientAdmitted ipdAdmittedPatient: allAdmittedPatients)
+		{
+			Long bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
+			Integer bedCount = bedStrengthMap.get(bedNo);
+			if (bedCount==null){
+				bedCount = 1;
+			}else {
+				bedCount = bedCount + 1;
+			}
+			bedStrengthMap.put(bedNo, bedCount);
+			System.out.println("bedno=" + bedNo + "bedcount=" + bedCount);
+		}
+		}else{
+			model.addAttribute("bedStrengthValueAvailable", "false");
+		}
+		
+		model.addAttribute("bedStrengthMap", bedStrengthMap);
+		
+		return "module/ipd/ajax/bedStrength";
 	}
 }

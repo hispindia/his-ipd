@@ -27,6 +27,33 @@ IPD={
 		}
 };
 
+BEDSTRENGTH = {
+	getBedStrength : function(thiz) {
+		if (SESSION.checkSession()) {
+			var x = jQuery(thiz).val();
+			if (x != null && x != '') {
+				if (SESSION.checkSession()) {
+					var data = jQuery.ajax({
+						type : "GET",
+						url : "getBedStrength.htm",
+						data : ({
+							wardId : x
+						}),
+						async : false,
+						cache : false
+					}).responseText;
+					if (data != undefined && data != null && data != '') {
+						jQuery("#divBedStrength").html(data);
+
+					} else {
+						alert('Please refresh page!');
+					}
+
+				}
+			}
+		}
+	}
+};
 ADMISSION={
 		admit : function(id)
 		{
