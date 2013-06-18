@@ -21,7 +21,13 @@
 
 <form method="POST"  id="BedStrength">
 ${bedStrengthMap[4]}
+
 <table>
+
+<c:forEach items="${bedStrengthMap}" var="bedStrength">
+
+
+</c:forEach>
 	<tr>
 	<td>hi</td>
 	<td>Bed Strength</td>

@@ -209,10 +209,17 @@ public class AjaxGlobalController {
 				.getService(IpdService.class);
 		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();
 		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(wardId);
-		
+		System.out.println("ward bed strength = " +wardBedStrength + "<<<wardId" + wardId);
 		if (wardBedStrength!=null){
 		Integer bedStrength = wardBedStrength.getBedStrength();
 		List<IpdPatientAdmitted> allAdmittedPatients = ipdService.getAllIpdPatientAdmitted();
+		
+		//populate all bed numbers with 0;
+		System.out.println("maxBedStrength=" + wardBedStrength.getBedStrength());
+		for (Long i =1L ;i<bedStrength;i++){
+			bedStrengthMap.put(i, 0);
+			
+		}
 		
 		for (IpdPatientAdmitted ipdAdmittedPatient: allAdmittedPatients)
 		{
@@ -224,14 +231,19 @@ public class AjaxGlobalController {
 				bedCount = bedCount + 1;
 			}
 			bedStrengthMap.put(bedNo, bedCount);
-			System.out.println("bedno=" + bedNo + "bedcount=" + bedCount);
+			
 		}
 		}else{
 			model.addAttribute("bedStrengthValueAvailable", "false");
 		}
 		
-		model.addAttribute("bedStrengthMap", bedStrengthMap);
+		for (Long key : bedStrengthMap.keySet()){
+			System.out.println("bedno=" + key + "bedcount=" + bedStrengthMap.get(key));
+		}
 		
+		
+		model.addAttribute("bedStrengthMap", bedStrengthMap);
+		model.addAttribute("size", Math.sqrt(bedStrengthMap.size()));
 		return "module/ipd/ajax/bedStrength";
 	}
 }

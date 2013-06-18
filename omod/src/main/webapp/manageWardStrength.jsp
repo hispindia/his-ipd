@@ -32,7 +32,7 @@
 		<c:forEach items="${wards}" var="ward">
 		<tr>
 		<td>	${ward.answerConcept.name} </td>
-		<td><input type="text" id="${ward.answerConcept.id}" style="width: 80px;" name="${ward.answerConcept.id}"  /></td>
+		<td><input type="text" id="${ward.answerConcept.id}" style="width: 80px;" name="${ward.answerConcept.id}"  value = "${bedStrengthMap[ward.answerConcept.id] }"/></td>
 		</tr>
 		</c:forEach>
     </c:if>

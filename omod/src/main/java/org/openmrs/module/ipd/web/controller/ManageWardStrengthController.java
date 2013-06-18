@@ -22,7 +22,9 @@ package org.openmrs.module.ipd.web.controller;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,6 +52,7 @@ public class ManageWardStrengthController {
 		
 		ConceptService cs = Context.getConceptService();
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		Map<Integer,Integer> bedStrengthMap = new HashMap<Integer, Integer>();
 		
 		Integer gp = Integer.valueOf(Context.getAdministrationService()
 				.getGlobalProperty(
@@ -58,9 +61,23 @@ public class ManageWardStrengthController {
 		Concept concept = cs.getConcept(gp);
 		
 		Collection<ConceptAnswer> wards = concept.getAnswers();
+		for (ConceptAnswer ward : wards){
+			System.out.println(ward.getAnswerConcept().getId());
+		
+		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(ward.getAnswerConcept().getId());
+			if (wardBedStrength!=null){		
+				bedStrengthMap.put(ward.getAnswerConcept().getId(), wardBedStrength.getBedStrength());
+			}
+		}
+		
+
+		for (Integer key : bedStrengthMap.keySet()){
+			System.out.println("IPD:bedno=" + key + "bedcount=" + bedStrengthMap.get(key));
+		}
+		
 		
 		model.addAttribute("wards",wards);
-		
+		model.addAttribute("bedStrengthMap",bedStrengthMap);
 		return "module/ipd/manageWardStrength";
 	}
 	
