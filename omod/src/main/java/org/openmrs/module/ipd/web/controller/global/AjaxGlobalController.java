@@ -243,7 +243,7 @@ public class AjaxGlobalController {
 		
 		
 		model.addAttribute("bedStrengthMap", bedStrengthMap);
-		model.addAttribute("size", Math.sqrt(bedStrengthMap.size()));
+		model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
 		return "module/ipd/ajax/bedStrength";
 	}
 }

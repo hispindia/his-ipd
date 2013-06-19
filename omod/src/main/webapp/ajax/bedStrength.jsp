@@ -17,22 +17,41 @@
  *  along with IPD module.  If not, see <http://www.gnu.org/licenses/>.
  *
 --%> 
+<%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 
 <form method="POST"  id="BedStrength">
-${bedStrengthMap[4]}
 
-<table>
-
-<c:forEach items="${bedStrengthMap}" var="bedStrength">
-
-
-</c:forEach>
+<c:set var="count" value="0" />
+<table border = .5>
+	<c:forEach begin="1" end="${size}" step="1" var="i">
 	<tr>
-	<td>hi</td>
-	<td>Bed Strength</td>
+		<c:forEach begin="1" end="${size}" step="1" var="j">
+		<c:set var="count" value="${count +1 }" />			
+		<c:choose>
+					<c:when test="${bedStrengthMap[count] != null }">
+						<c:choose>
+							<c:when test="${bedStrengthMap[count] > 0 }">
+								<td style="background-color:red" onMouseOver="this.bgColor='#00CC00'">
+							</c:when>
+							<c:otherwise>
+								<td style="background-color:green" onMouseOver="this.bgColor='#00CC00'">
+							</c:otherwise>
+						</c:choose>
+						${count}/${bedStrengthMap[count]}
+					</td>	
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose>
+		
+		
+		
+		</c:forEach>
 	</tr>
-	
+	</c:forEach>
+		
 </table>
 
 </form>
