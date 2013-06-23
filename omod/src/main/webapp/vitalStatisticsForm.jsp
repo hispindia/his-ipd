@@ -26,9 +26,34 @@
 	redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp"%>
 <%@ include file="includes/js_css.jsp"%>
+<script type="text/javascript">
+function validate(){
+var bloodpressure=document.forms["vitalStatisticsForm"]["bloodPressure"].value;
+var pulserate=document.forms["vitalStatisticsForm"]["pulseRate"].value;
+var temperature=document.forms["vitalStatisticsForm"]["temperature"].value;
+if (bloodpressure==null || bloodpressure=="")
+  {
+  alert("Please enter blood pressure");
+  return false;
+  }
+if (pulserate==null || pulserate=="")
+  {
+  alert("Please enter pulse");
+  return false;
+  }
+if (temperature==null || temperature=="")
+  {
+  alert("Please enter temperature");
+  return false;
+  }	
+}
+</script>
 <input type="hidden" id="pageId" value="vitalStatisticsPage" />
-<form method="post" id="vitalStatisticsForm" action="vitalStatistics.htm?patientId=${admitted.patient.patientId}">
-	<input type="hidden" id="admittedId" name="admittedId" value="${admitted.id }" />
+<form method="post" id="vitalStatisticsForm"
+	action="vitalStatistics.htm?patientId=${admitted.patient.patientId}"
+	onsubmit="javascript:return validate();">
+	<input type="hidden" id="admittedId" name="admittedId"
+		value="${admitted.id }" />
 	<div class="box">
 		<c:if test="${not empty message }">
 			<div class="error">
@@ -40,16 +65,13 @@
 		<table width="100%">
 			<tr>
 				<td><spring:message code="ipd.patient.patientName" />:&nbsp;<b>${admitted.patientName
-						}</b>
-				</td>
+						}</b></td>
 				<td><spring:message code="ipd.patient.patientId" />:&nbsp;<b>${admitted.patientIdentifier}</b>
 				</td>
 				<td><spring:message code="ipd.patient.age" />:&nbsp;<b>${admitted.age
-						}</b>
-				</td>
+						}</b></td>
 				<td><spring:message code="ipd.patient.gender" />:&nbsp;<b>${admitted.gender
-						}</b>
-				</td>
+						}</b></td>
 			</tr>
 			<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
@@ -78,49 +100,89 @@
 	</div>
 	<br />
 	<table class="box">
-		<tr>
-			<td><b>Blood Pressure:</b>
-			</td>
-			<td>Systolic</td>
-			<td><input type="text" id="systolic" name="systolic" size="11"></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>Diastolic</td>
-			<td><input type="text" id="diastolic" name="diastolic" size="11">
-			</td>
-		</tr>
-		<tr>
-			<td><b>Pulse:</b>
-			</td>
-			<td></td>
-			<td><input type="text" id="pulse" name="pulse" size="11"></td>
-		</tr>
-		<tr>
-			<td><b>Temperature:</b>
-			</td>
-			<td>In Fahrenheit</td>
-			<td><input type="text" id="temperature" name="temperature" size="11">
-			</td>
-		</tr>
-		<tr>
-			<td><b>Diet Advised :</b></td>
-			<td><input type="checkbox" id="dietadvisedsolid"
-				name="dietadvisedsolid" value="solid">Solid</input></td>
-			<td><input type="checkbox" id="dietadvisedsemsolid"
-				name="dietadvisedsemsolid" value="semisolid">Semi solid</input></td>
-			<td><input type="checkbox" name="dietadvisedliquid"
-				id="dietadvisedliquid" value="liquid">Liquid</input></td>
-		</tr>
-		<tr>
-			<td><b>Notes:</b>
-		</tr>
-		<tr>
-			<td></td>
-			<td><TEXTAREA id="note" name="note" rows=5 cols=30>
-		</TEXTAREA>
-			</td>
-		</tr>
+		<thead>
+			<tr>
+				<td><input type="text" id="hSlNo" name="hSlNo" value="S.No"
+					size="7" readonly="readonly"></td>
+				<td><input type="text" id="hDateTime" name="hDateTime"
+					value="Date/Time" size="21" readonly="readonly">
+				</td>
+				<td><input type="text" id="hBloodPressure"
+					name="hBloodPressure" value="Blood Pressure" size="13"
+					readonly="readonly">
+				</td>
+				<td><input type="text" id="hPulseRate" name="hPulseRate"
+					value="Pulse Rate(/min)" size="14" readonly="readonly"></td>
+				<td><input type="text" id="hTemperature" name="hTemperature"
+					value="Temperature(F)" size="11" readonly="readonly">
+				</td>
+				<td><input type="text" id="hDietAdvised" name="hDietAdvised"
+					value="Diet Advised" size="11" readonly="readonly">
+				</td>
+				<td><input type="text" id="hNotes" name="hNotes"
+					value="Notes(if any)" size="30" readonly="readonly">
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="ipvs" items="${ipdPatientVitalStatistics}"
+				varStatus="index">
+				<c:choose>
+					<c:when test="${index.count mod 2 == 0}">
+						<c:set var="klass" value="odd" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="klass" value="even" />
+					</c:otherwise>
+				</c:choose>
+				<tr>
+					<td><input type="text" id="rSlNo" name="rSlNo"
+						value="${index.count}" size="7" readonly="readonly"></td>
+					<td><input type="text" id="rDateTime" name="rDateTime"
+						value="${ipvs.createdOn}" size="21" readonly="readonly">
+					</td>
+					<td><input type="text" id="rBloodPressure"
+						name="rBloodPressure" value="${ipvs.bloodPressure}" size="13"
+						readonly="readonly"></td>
+					<td><input type="text" id="rPulseRate" name="rPulseRate"
+						value="${ipvs.pulseRate}" size="14" readonly="readonly"></td>
+					<td><input type="text" id="rTemperature" name="rTemperature"
+						value="${ipvs.temperature}" size="11" readonly="readonly">
+					</td>
+					<td><input type="text" id="rDietAdvised" name="rDietAdvised"
+						value="${ipvs.dietAdvised}" size="11" readonly="readonly">
+					</td>
+					<td><input type="text" id="rNotes" name="rNotes"
+						value="${ipvs.note}" size="30" readonly="readonly">
+					</td>
+				</tr>
+			</c:forEach>
+			<tr>
+				<td><input type="text" id="slNo" name="slNo"
+					value="${sizeOfipdPatientVitalStatistics}" size="7"
+					readonly="readonly"></td>
+				<td><input type="text" id="dateTime" name="dateTime"
+					value="${dat}" size="21" readonly="readonly"></td>
+				<td><input type="text" id="bloodPressure" name="bloodPressure"
+					size="13">
+				</td>
+				<td><input type="text" id="pulseRate" name="pulseRate"
+					size="14">
+				</td>
+				<td><input type="text" id="temperature" name="temperature"
+					size="11">
+				</td>
+				<td><select id="dietAdvised" name="dietAdvised">
+						<option value="">Select</option>
+						<c:forEach items="${dietList}" var="dl">
+							<option value="${dl.name}">${dl.name}</option>
+						</c:forEach>
+				</select>
+				</td>
+				<td><input type="text" id="notes" name="notes" value=""
+					size="30"></td>
+			</tr>
+		</tbody>
 	</table>
 
 	<table width="98%">

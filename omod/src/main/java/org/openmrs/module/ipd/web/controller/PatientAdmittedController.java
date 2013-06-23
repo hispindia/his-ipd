@@ -20,6 +20,7 @@
 
 package org.openmrs.module.ipd.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -143,7 +144,8 @@ public class PatientAdmittedController {
 	
 	//ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
 	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.GET)
-	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, Model model) {
+	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, 
+			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -163,6 +165,14 @@ public class PatientAdmittedController {
 		
 		//Patient category
 		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
+		List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patient.getPatientId(),patientAdmissionLogId);
+		model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
+		model.addAttribute("sizeOfipdPatientVitalStatistics", ipdPatientVitalStatistics.size()+1);
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		model.addAttribute("dat", formatter.format(new Date()));
+		List<Concept> dietConcept= ipdService.getDiet();
+		model.addAttribute("dietList", dietConcept);
 		return "module/ipd/vitalStatisticsForm";
 	}
 	
@@ -170,37 +180,24 @@ public class PatientAdmittedController {
 	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.POST)
 	public String vitalSatatisticsPost(@RequestParam("admittedId") Integer admittedId, 
 			                   @RequestParam("patientId") Integer patientId, 
-	                           @RequestParam(value = "systolic", required = false) String systolic,
-	                           @RequestParam(value = "diastolic", required = false) String diastolic,
-	                           @RequestParam(value = "pulse", required = false) String pulse,
+	                           @RequestParam(value = "bloodPressure", required = false) String bloodPressure,
+	                           @RequestParam(value = "pulseRate", required = false) String pulseRate,
 	                           @RequestParam(value = "temperature", required = false) String temperature,
-	                           @RequestParam(value = "dietadvisedsolid", required = false) String dietadvisedsolid,
-	                           @RequestParam(value = "dietadvisedsemsolid", required = false) String dietadvisedsemsolid,
-	                           @RequestParam(value = "dietadvisedliquid", required = false) String dietadvisedliquid,
-	                           @RequestParam(value = "note", required = false) String note,Model model) {
+	                           @RequestParam(value = "dietAdvised", required = false) String dietAdvised,
+	                           @RequestParam(value = "notes", required = false) String notes,Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientService patientService = Context.getPatientService();
 		Patient patient = patientService.getPatient(patientId);
 		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
-		String dietAdvised="";
-		if("solid".equals(dietadvisedsolid)){
-			dietAdvised=dietadvisedsolid;
-		}
-		if("semisolid".equals(dietadvisedsemsolid)){
-			dietAdvised=dietAdvised+" "+dietadvisedsemsolid;
-		}
-		if("liquid".equals(dietadvisedliquid)){
-			dietAdvised=dietAdvised+" "+dietadvisedliquid;
-		}
+		//String dietAdvised="";
 		IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
 		ipdPatientVitalStatistics.setPatient(patient);
 		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
-		ipdPatientVitalStatistics.setSystolic(systolic);
-		ipdPatientVitalStatistics.setDiastolic(diastolic);
-		ipdPatientVitalStatistics.setPulse(pulse);
+		ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
+		ipdPatientVitalStatistics.setPulseRate(pulseRate);
 		ipdPatientVitalStatistics.setTemperature(temperature);
 		ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
-		ipdPatientVitalStatistics.setNote(note);
+		ipdPatientVitalStatistics.setNote(notes);
 		//User user =Context.getAuthenticatedUser();
 		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
 		ipdPatientVitalStatistics.setCreatedOn(new Date());

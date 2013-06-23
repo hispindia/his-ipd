@@ -56,7 +56,7 @@
 		<td width="50">${person.givenName} ${person.middleName } ${person.familyName }</td>
 		<td>
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
-		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}');"/>
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Transfer" onclick="ADMITTED.transfer('${queue.id}');"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Print" onclick="ADMITTED.print('${queue.id}');"/>
