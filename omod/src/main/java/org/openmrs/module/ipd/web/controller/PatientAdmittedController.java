@@ -263,7 +263,7 @@ public class PatientAdmittedController {
 	}
 	
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.POST)
-	public String dischargePost(IpdFinalResultCommand command, Model model) {
+	public String dischargePost(IpdFinalResultCommand command, Model model, @RequestParam("otherInstructions") String  otherInstructions) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
@@ -397,10 +397,11 @@ public class PatientAdmittedController {
 		ipdEncounter.setObs(obses);
 		
 		Context.getEncounterService().saveEncounter(ipdEncounter);
+
 		
 		//end
 		
-		ipdService.discharge(command.getAdmittedId(), command.getOutCome());
+		ipdService.discharge(command.getAdmittedId(), command.getOutCome(),  otherInstructions );
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";

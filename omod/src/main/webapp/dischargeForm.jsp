@@ -151,6 +151,13 @@
 		</select></td>
 		<td></td>
 	</tr>
+	<!--  Kesavulu loka 24/06/2013 # 1926 One text filed for otherInstructions. -->
+	<tr><td><b>Other Instructions</b>
+	</tr>
+	<tr>
+		<td><TEXTAREA NAME="otherInstructions" id="otherInstructions" ROWS=3 COLS=50 >
+		</TEXTAREA></td>
+	</tr>
 </table>
 
 <table  width="98%">
