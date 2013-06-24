@@ -108,13 +108,13 @@ if (temperature==null || temperature=="")
 					value="Date/Time" size="21" readonly="readonly">
 				</td>
 				<td><input type="text" id="hBloodPressure"
-					name="hBloodPressure" value="Blood Pressure" size="13"
+					name="hBloodPressure" value="Blood Pressure" size="14"
 					readonly="readonly">
 				</td>
 				<td><input type="text" id="hPulseRate" name="hPulseRate"
-					value="Pulse Rate(/min)" size="14" readonly="readonly"></td>
+					value="Pulse Rate(/min)" size="16" readonly="readonly"></td>
 				<td><input type="text" id="hTemperature" name="hTemperature"
-					value="Temperature(F)" size="11" readonly="readonly">
+					value="Temperature(F)" size="15" readonly="readonly">
 				</td>
 				<td><input type="text" id="hDietAdvised" name="hDietAdvised"
 					value="Diet Advised" size="11" readonly="readonly">
@@ -142,12 +142,12 @@ if (temperature==null || temperature=="")
 						value="${ipvs.createdOn}" size="21" readonly="readonly">
 					</td>
 					<td><input type="text" id="rBloodPressure"
-						name="rBloodPressure" value="${ipvs.bloodPressure}" size="13"
+						name="rBloodPressure" value="${ipvs.bloodPressure}" size="14"
 						readonly="readonly"></td>
 					<td><input type="text" id="rPulseRate" name="rPulseRate"
-						value="${ipvs.pulseRate}" size="14" readonly="readonly"></td>
+						value="${ipvs.pulseRate}" size="16" readonly="readonly"></td>
 					<td><input type="text" id="rTemperature" name="rTemperature"
-						value="${ipvs.temperature}" size="11" readonly="readonly">
+						value="${ipvs.temperature}" size="15" readonly="readonly">
 					</td>
 					<td><input type="text" id="rDietAdvised" name="rDietAdvised"
 						value="${ipvs.dietAdvised}" size="11" readonly="readonly">
@@ -164,15 +164,15 @@ if (temperature==null || temperature=="")
 				<td><input type="text" id="dateTime" name="dateTime"
 					value="${dat}" size="21" readonly="readonly"></td>
 				<td><input type="text" id="bloodPressure" name="bloodPressure"
-					size="13">
-				</td>
-				<td><input type="text" id="pulseRate" name="pulseRate"
 					size="14">
 				</td>
-				<td><input type="text" id="temperature" name="temperature"
-					size="11">
+				<td><input type="text" id="pulseRate" name="pulseRate"
+					size="16">
 				</td>
-				<td><select id="dietAdvised" name="dietAdvised" multiple="multiple">
+				<td><input type="text" id="temperature" name="temperature"
+					size="15">
+				</td>
+				<td><select id="dietAdvised" name="dietAdvised" size="3" multiple="multiple">
 				        <!--  
 						<option value="">Select</option>
 						-->
