@@ -29,6 +29,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
@@ -183,20 +186,27 @@ public class PatientAdmittedController {
 	                           @RequestParam(value = "bloodPressure", required = false) String bloodPressure,
 	                           @RequestParam(value = "pulseRate", required = false) String pulseRate,
 	                           @RequestParam(value = "temperature", required = false) String temperature,
-	                           @RequestParam(value = "dietAdvised", required = false) String dietAdvised,
-	                           @RequestParam(value = "notes", required = false) String notes,Model model) {
+	                           //@RequestParam(value = "dietAdvised", required = false) String dietAdvised,
+	                           @RequestParam(value = "notes", required = false) String notes,
+	                           Model model,HttpServletRequest request) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientService patientService = Context.getPatientService();
 		Patient patient = patientService.getPatient(patientId);
 		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
-		//String dietAdvised="";
+		String dietAdvise = "";
+		String select[] = request.getParameterValues("dietAdvised");
+		if (select != null && select.length != 0) {
+			for (int i = 0; i < select.length; i++) {
+				dietAdvise = dietAdvise + select[i] + " ";
+			}
+		}
 		IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
 		ipdPatientVitalStatistics.setPatient(patient);
 		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
 		ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
 		ipdPatientVitalStatistics.setPulseRate(pulseRate);
 		ipdPatientVitalStatistics.setTemperature(temperature);
-		ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
+		ipdPatientVitalStatistics.setDietAdvised(dietAdvise);
 		ipdPatientVitalStatistics.setNote(notes);
 		//User user =Context.getAuthenticatedUser();
 		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());

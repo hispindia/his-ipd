@@ -172,8 +172,10 @@ if (temperature==null || temperature=="")
 				<td><input type="text" id="temperature" name="temperature"
 					size="11">
 				</td>
-				<td><select id="dietAdvised" name="dietAdvised">
+				<td><select id="dietAdvised" name="dietAdvised" multiple="multiple">
+				        <!--  
 						<option value="">Select</option>
+						-->
 						<c:forEach items="${dietList}" var="dl">
 							<option value="${dl.name}">${dl.name}</option>
 						</c:forEach>
