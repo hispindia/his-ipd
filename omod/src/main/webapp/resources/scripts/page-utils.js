@@ -59,7 +59,7 @@ ADMISSION={
 		{
 			if(SESSION.checkSession())
 			{
-				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=300&width=600";
+				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=500&width=850";
 				tb_show("Admission",url,false);
 			}
 		},
@@ -125,7 +125,7 @@ ADMITTED = {
 			if(SESSION.checkSession())
 			{
 				
-				var url = "transfer.htm?id="+id+"&keepThis=false&TB_iframe=true&height=500&width=1000";
+				var url = "transfer.htm?id="+id+"&keepThis=false&TB_iframe=true&height=555&width=1000";
 				tb_show("Transfer",url,false);
 			}
 		},
@@ -134,7 +134,7 @@ ADMITTED = {
 			if(SESSION.checkSession())
 			{
 				
-				var url = "discharge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=600&width=1000";
+				var url = "discharge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
 				tb_show("Discharge",url,false);
 			}
 		},

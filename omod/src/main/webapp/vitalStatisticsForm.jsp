@@ -65,13 +65,16 @@ if (temperature==null || temperature=="")
 		<table width="100%">
 			<tr>
 				<td><spring:message code="ipd.patient.patientName" />:&nbsp;<b>${admitted.patientName
-						}</b></td>
+						}</b>
+				</td>
 				<td><spring:message code="ipd.patient.patientId" />:&nbsp;<b>${admitted.patientIdentifier}</b>
 				</td>
 				<td><spring:message code="ipd.patient.age" />:&nbsp;<b>${admitted.age
-						}</b></td>
+						}</b>
+				</td>
 				<td><spring:message code="ipd.patient.gender" />:&nbsp;<b>${admitted.gender
-						}</b></td>
+						}</b>
+				</td>
 			</tr>
 			<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
@@ -92,8 +95,8 @@ if (temperature==null || temperature=="")
 					${admitted.bed }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><spring:message code="ipd.patient.homeAddress" />:
-					${address }</td>
+				 <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
+				<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
 			</tr>
 		</table>
 
@@ -103,25 +106,22 @@ if (temperature==null || temperature=="")
 		<thead>
 			<tr>
 				<td><input type="text" id="hSlNo" name="hSlNo" value="S.No"
-					size="7" readonly="readonly"></td>
-				<td><input type="text" id="hDateTime" name="hDateTime"
-					value="Date/Time" size="21" readonly="readonly">
+					size="7" readonly="readonly">
 				</td>
+				<td><input type="text" id="hDateTime" name="hDateTime"
+					value="Date/Time" size="21" readonly="readonly"></td>
 				<td><input type="text" id="hBloodPressure"
 					name="hBloodPressure" value="Blood Pressure" size="14"
-					readonly="readonly">
-				</td>
+					readonly="readonly"></td>
 				<td><input type="text" id="hPulseRate" name="hPulseRate"
-					value="Pulse Rate(/min)" size="16" readonly="readonly"></td>
+					value="Pulse Rate(/min)" size="16" readonly="readonly">
+				</td>
 				<td><input type="text" id="hTemperature" name="hTemperature"
-					value="Temperature(F)" size="15" readonly="readonly">
-				</td>
+					value="Temperature(F)" size="15" readonly="readonly"></td>
 				<td><input type="text" id="hDietAdvised" name="hDietAdvised"
-					value="Diet Advised" size="11" readonly="readonly">
-				</td>
+					value="Diet Advised" size="11" readonly="readonly"></td>
 				<td><input type="text" id="hNotes" name="hNotes"
-					value="Notes(if any)" size="30" readonly="readonly">
-				</td>
+					value="Notes(if any)" size="30" readonly="readonly"></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -137,15 +137,17 @@ if (temperature==null || temperature=="")
 				</c:choose>
 				<tr>
 					<td><input type="text" id="rSlNo" name="rSlNo"
-						value="${index.count}" size="7" readonly="readonly"></td>
-					<td><input type="text" id="rDateTime" name="rDateTime"
-						value="${ipvs.createdOn}" size="21" readonly="readonly">
+						value="${index.count}" size="7" readonly="readonly">
 					</td>
+					<td><input type="text" id="rDateTime" name="rDateTime"
+						value="${ipvs.createdOn}" size="21" readonly="readonly"></td>
 					<td><input type="text" id="rBloodPressure"
 						name="rBloodPressure" value="${ipvs.bloodPressure}" size="14"
-						readonly="readonly"></td>
+						readonly="readonly">
+					</td>
 					<td><input type="text" id="rPulseRate" name="rPulseRate"
-						value="${ipvs.pulseRate}" size="16" readonly="readonly"></td>
+						value="${ipvs.pulseRate}" size="16" readonly="readonly">
+					</td>
 					<td><input type="text" id="rTemperature" name="rTemperature"
 						value="${ipvs.temperature}" size="15" readonly="readonly">
 					</td>
@@ -153,36 +155,35 @@ if (temperature==null || temperature=="")
 						value="${ipvs.dietAdvised}" size="11" readonly="readonly">
 					</td>
 					<td><input type="text" id="rNotes" name="rNotes"
-						value="${ipvs.note}" size="30" readonly="readonly">
-					</td>
+						value="${ipvs.note}" size="30" readonly="readonly"></td>
 				</tr>
 			</c:forEach>
 			<tr>
 				<td><input type="text" id="slNo" name="slNo"
 					value="${sizeOfipdPatientVitalStatistics}" size="7"
-					readonly="readonly"></td>
+					readonly="readonly">
+				</td>
 				<td><input type="text" id="dateTime" name="dateTime"
-					value="${dat}" size="21" readonly="readonly"></td>
+					value="${dat}" size="21" readonly="readonly">
+				</td>
 				<td><input type="text" id="bloodPressure" name="bloodPressure"
-					size="14">
-				</td>
+					size="14"></td>
 				<td><input type="text" id="pulseRate" name="pulseRate"
-					size="16">
-				</td>
+					size="16"></td>
 				<td><input type="text" id="temperature" name="temperature"
-					size="15">
-				</td>
-				<td><select id="dietAdvised" name="dietAdvised" size="3" multiple="multiple">
-				        <!--  
+					size="15"></td>
+				<td><select id="dietAdvised" name="dietAdvised" size="3"
+					multiple="multiple">
+						<!--  
 						<option value="">Select</option>
 						-->
 						<c:forEach items="${dietList}" var="dl">
 							<option value="${dl.name}">${dl.name}</option>
 						</c:forEach>
-				</select>
-				</td>
+				</select></td>
 				<td><input type="text" id="notes" name="notes" value=""
-					size="30"></td>
+					size="30">
+				</td>
 			</tr>
 		</tbody>
 	</table>

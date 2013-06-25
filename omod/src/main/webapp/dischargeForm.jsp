@@ -67,7 +67,8 @@
 	</tr>
 	<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 	<tr>
-		<td colspan="4"><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
+	     <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
+		<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td> 
 	</tr>
 	<tr>
 		<td colspan="4"><spring:message code="ipd.patient.date/time"/>: ${dateTime }</td>

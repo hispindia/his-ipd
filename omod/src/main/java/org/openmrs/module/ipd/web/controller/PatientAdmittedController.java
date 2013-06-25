@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -159,9 +160,13 @@ public class PatientAdmittedController {
 		Patient patient = admitted.getPatient();
 		
 		PersonAddress add = patient.getPersonAddress();
-		String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
-		
-		model.addAttribute("address", address);
+		String address = add.getAddress1();
+		// ghansham 25-june-2013 issue no # 1924 Change in the address format
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
 		
 		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		model.addAttribute("relationName", relationNameattr.getValue());
@@ -249,9 +254,13 @@ public class PatientAdmittedController {
 		Patient patient = admitted.getPatient();
 		
 		PersonAddress add = patient.getPersonAddress();
-		String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
-		
-		model.addAttribute("address", address);
+		String address = add.getAddress1();
+		// ghansham 25-june-2013 issue no # 1924 Change in the address format
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
 		
 		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		model.addAttribute("relationName", relationNameattr.getValue());
@@ -418,8 +427,13 @@ public class PatientAdmittedController {
 		model.addAttribute("patientId", patient.getId());
 		
 		PersonAddress add = patient.getPersonAddress();
-		String address = " " + add.getAddress1() +" " + add.getCountyDistrict() + " " + add.getCityVillage();
-		model.addAttribute("address", address);
+		String address = add.getAddress1();
+		// ghansham 25-june-2013 issue no # 1924 Change in the address format
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
 		
 		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out

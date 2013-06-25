@@ -20,7 +20,6 @@
 
 package org.openmrs.module.ipd.web.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -109,8 +108,9 @@ public class PatientAdmissionController {
 		if (admission != null) {
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			String address = add.getAddress1();
-			//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
-			String districtUpazila = add.getCountyDistrict() + " / " + add.getCityVillage();
+			//ghansham 25-june-2013 issue no # 1924 Change in the address format
+			String district = add.getCountyDistrict();
+			String upazila = add.getCityVillage();
 			
 			String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(
 			    IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
@@ -125,8 +125,9 @@ public class PatientAdmissionController {
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
-			//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
-			model.addAttribute("districtUpazila", StringUtils.isNotBlank(districtUpazila) ? districtUpazila : "");
+			// ghansham 25-june-2013 issue no # 1924 Change in the address format
+			model.addAttribute("district", district);
+			model.addAttribute("upazila", upazila);
 			model.addAttribute("relationName", relationNameattr.getValue());
 			
 			/*ghanshyam 30/07/2012 this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
@@ -171,8 +172,6 @@ public class PatientAdmissionController {
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
 		String bedNumber = request.getParameter("bedNumber");
-		//String homeAddress = request.getParameter("homeAddress");
-		String address = "";
 		
 		int treatingDoctor = NumberUtils.toInt(request.getParameter("treatingDoctor"), 0);
 		
@@ -229,7 +228,13 @@ public class PatientAdmissionController {
 			
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			
-			address = add.getAddress1() + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
+			String address = add.getAddress1();
+			// ghansham 25-june-2013 issue no # 1924 Change in the address format
+			String district = add.getCountyDistrict();
+			String upazila = add.getCityVillage();
+			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+			model.addAttribute("district", district);
+			model.addAttribute("upazila", upazila);
 			
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
@@ -292,7 +297,6 @@ public class PatientAdmissionController {
 			return "module/ipd/admissionForm";
 		}
 		model.addAttribute("treatingDoctor", treatingD);
-		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
 		model.addAttribute("relationName", fathername);
 		model.addAttribute("relationType", relationshipType);
 		model.addAttribute("message", "Succesfully");

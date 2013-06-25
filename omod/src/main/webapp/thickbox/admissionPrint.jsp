@@ -27,7 +27,7 @@
 		setTimeout(function(){
 			jQuery("#printArea").printArea({popTitle: "Support by HISP india(hispindia.org)"});
 			},value);
-		//setTimeout("self.parent.location.href=self.parent.location.href;self.parent.tb_remove()",3000);
+	setTimeout("self.parent.location.href=self.parent.location.href;self.parent.tb_remove()",2000);
 	}
 </script>
 <body onload="runout(1000);">
@@ -45,7 +45,7 @@
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${admitted.age}</b></td></tr>
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${admitted.gender }</strong></td></tr>
 			<tr> <td>${relationType }:&nbsp;${relationName }</td>  </tr>
-			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${address }</td></tr>
+			<tr><td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td></tr>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 			<%--
 			<tr></tr>

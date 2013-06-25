@@ -73,9 +73,8 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td>${relationType }:&nbsp;${relationName }</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
-		<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
-		<td><spring:message code="ipd.patient.districtUpazila"/>: ${districtUpazila }</td>  
+	    <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
+		<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 	<%--
