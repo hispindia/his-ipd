@@ -152,13 +152,17 @@
 		</select></td>
 		<td></td>
 	</tr>
-	<!--  Kesavulu loka 24/06/2013 # 1926 One text filed for otherInstructions. -->
-	<tr><td><b>Other Instructions</b>
-	</tr>
+	<!--  Kesavulu loka 26/06/2013 # 1926 One text filed for otherInstructions. -->
+<div class="ui-widget">
+	<table>
+	<b>Other Instructions:
 	<tr>
-		<td><TEXTAREA NAME="otherInstructions" id="otherInstructions" ROWS=3 COLS=50 >
-		</TEXTAREA></td>
+	 <td><input id="otherInstructions" class="ui-autocomplete-input ui-widget-content ui-corner-all ac_input" name="otherInstructions" 
+				style="width:910px; height:50px" title="" autocomplete="off"></td>
+		<!--  <td><TEXTAREA NAME="otherInstructions" id="otherInstructions"  ROWS=3 COLS=130 >		</TEXTAREA></td> -->
 	</tr>
+	</table>
+</div>
 </table>
 
 <table  width="98%">
