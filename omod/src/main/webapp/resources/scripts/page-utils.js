@@ -67,12 +67,14 @@ ADMISSION={
 		{
 			if(SESSION.checkSession()){
 				if(action == 1){
-					if( confirm("Are you want to remove?"))
+				//ghanshyam 2-july-2013 issue no # 1970 Prompt message to be changed
+					if( confirm("Are you sure?"))
 					{
 						ACT.go("removeOrNoBed.htm?admissionId="+id+"&action="+1);
 					}
 				}else if(action == 2){
-					if( confirm("Are you sure no bed for this patient?"))
+				//ghanshyam 2-july-2013 issue no # 1970 Prompt message to be changed
+					if( confirm("Are you sure?"))
 					{
 						ACT.go("removeOrNoBed.htm?admissionId="+id+"&action="+2);
 					}
