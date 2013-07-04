@@ -23,15 +23,23 @@
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
 <script type="text/javascript">
+
+$( document ).ready(function() {
+var wardId= ${admission.admissionWard.id};
+FIRSTBEDSTRENGTH.getFirstBedStrength(wardId);
+});
+
 function validate(){
 var admittedward=document.forms["admissionForm"]["admittedWard"].value;
 var treatingdoctor=document.forms["admissionForm"]["treatingDoctor"].value;
 var bednumber=document.forms["admissionForm"]["bedNumber"].value;
+
   if (admittedward==null || admittedward=="")
   {
   alert("Please select admitted Ward");
   return false;
   }
+  
   if (treatingdoctor==null || treatingdoctor=="")
   {
   alert("Please select treating Doctor");
@@ -42,13 +50,27 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
   alert("Please enter bed Number");
   return false;
   }
+  if (bednumber!=null)
+  {
+	var checkMaxBed=parseInt(document.forms["BedStrength"]["bedMax"].value);
+	if(isNaN(bednumber)){
+	  alert("Please enter bed number in correct format");
+	  return false;
+	  }
+	if(bednumber > checkMaxBed){
+	  alert("Please enter correct bed number");
+	  return false;
+	  }
+  }
+
 }
+
 </script>
 
 
 <input type="hidden" id="pageId" value="admissionPage"/>
 <form method="post" id="admissionForm" class="box" onsubmit="javascript:return validate();">
-<input type="hidden" id="id" name="id" value="${admission.id }" />
+<input type="hidden" id="id" name="id" value="${admission.id }"/>
 <c:if test ="${not empty message }">
 <div class="error">
 <ul>
@@ -119,8 +141,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
-		<td><input type="text" id="bedNumber" name="bedNumber"  /></td>
-		
+		<td><input type="text" id="bedNumber" name="bedNumber" /></td>
 		<td>
 		<div id="divBedStrength"></div>
 		</td>

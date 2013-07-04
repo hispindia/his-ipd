@@ -213,17 +213,19 @@ public class AjaxGlobalController {
 		if (wardBedStrength!=null){
 		Integer bedStrength = wardBedStrength.getBedStrength();
 		List<IpdPatientAdmitted> allAdmittedPatients = ipdService.getAllIpdPatientAdmitted();
-		
 		//populate all bed numbers with 0;
 		System.out.println("maxBedStrength=" + wardBedStrength.getBedStrength());
-		for (Long i =1L ;i<bedStrength;i++){
+		for (Long i =1L ;i<=bedStrength;i++){
 			bedStrengthMap.put(i, 0);
 			
 		}
 		
 		for (IpdPatientAdmitted ipdAdmittedPatient: allAdmittedPatients)
 		{
+			if (ipdAdmittedPatient.getAdmittedWard().getId().equals(wardId))
+			{
 			Long bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
+			System.out.println("bedno="+bedNo+"ward=" + wardId);
 			Integer bedCount = bedStrengthMap.get(bedNo);
 			if (bedCount==null){
 				bedCount = 1;
@@ -231,7 +233,7 @@ public class AjaxGlobalController {
 				bedCount = bedCount + 1;
 			}
 			bedStrengthMap.put(bedNo, bedCount);
-			
+			}
 		}
 		}else{
 			model.addAttribute("bedStrengthValueAvailable", "false");
@@ -244,6 +246,7 @@ public class AjaxGlobalController {
 		
 		model.addAttribute("bedStrengthMap", bedStrengthMap);
 		model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
+		model.addAttribute("bedMax", Math.round(bedStrengthMap.size()));
 		return "module/ipd/ajax/bedStrength";
 	}
 }

@@ -55,6 +55,7 @@ public class ManageWardStrengthController {
 
 			WardBedStrength wardBedStrength = ipdService
 					.getWardBedStrengthByWardId(ward.getAnswerConcept().getId());
+						
 			if (wardBedStrength != null) {
 				bedStrengthMap.put(ward.getAnswerConcept().getId(),
 						wardBedStrength.getBedStrength());

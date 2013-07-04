@@ -21,8 +21,33 @@
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
+
+<script type="text/javascript">
+
+function validateForm(){
+	var bednumber=document.forms["transferForm"]["bedNumber"].value;
+
+  if (bednumber!=null)
+  {
+	var checkMaxBed=parseInt(document.forms["BedStrength"]["bedMax"].value);
+	if(isNaN(bednumber)){
+	  alert("Please enter bed number in correct format");
+	  return false;
+	  }
+	if(bednumber > checkMaxBed){
+	  alert("Please enter correct bed number");
+	  return false;
+	  }
+  }
+
+}
+
+</script>
+
+
+
 <input type="hidden" id="pageId" value="transferPage"/>
-<form method="post" id="transferForm">
+<form method="post" id="transferForm" onsubmit="javascript:return validateForm();">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 <div class="box">
 <c:if test ="${not empty message }">
@@ -70,7 +95,7 @@
 	</tr>
 	<tr>
 		<td>
-		<select  id="toWard" name="toWard" >
+		<select  id="toWard" name="toWard" onchange="BEDSTRENGTH.getBedStrength(this);" >
 			  <option value="">[Please Select]</option>
 					<c:forEach items="${listIpd}" var="ipd" >
          			<option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">${ipd.answerConcept.name}</option>
@@ -86,6 +111,13 @@
        		</select>
 		</td>
 	</tr>
+	<tr>
+		<td></td>
+		<td>
+		<div id="divBedStrength"></div>
+		</td>
+		
+	</tr>
 </table>
 
 <table  width="98%">
@@ -95,4 +127,5 @@
 	<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Cancel" onclick="tb_cancel();">
 </div>	
 </table>
+<input id="transferPage" name="transferPage" type="hidden" value="1"/>
 </form>

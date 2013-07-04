@@ -18,11 +18,35 @@
  *
 --%> 
 <%@ include file="/WEB-INF/template/include.jsp" %>
+
+<script type="text/javascript">
+function validateCheck(checkAlert){
+	if(document.forms["transferForm"] != undefined)
+	{
+	document.forms["transferForm"]["bedNumber"].value=checkAlert;	
+	}
+	else {
+	document.forms["admissionForm"]["bedNumber"].value=checkAlert;
+	}
+}
+</script>
+
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
-
 <form method="POST"  id="BedStrength">
-
+<input type="hidden" name="size" value="${size}">
 <c:set var="count" value="0" />
+<c:set var="bedCount" value="0" />
+<c:set var="bedOccupied" value="0" />
+<c:set var="bedMax" value="${bedMax}" />
+<c:forEach begin="1" end="${size}" step="1" var="m">
+	<c:set var="bedCount" value="${bedCount +1 }" />
+	<c:choose>
+	<c:when test="${bedStrengthMap[bedCount] != null && bedStrengthMap[bedCount] > 0}">
+		<c:set var="bedOccupied" value="${bedOccupied +1 }" />
+	</c:when>
+	</c:choose>
+</c:forEach>
+
 <table border = .5>
 	<c:forEach begin="1" end="${size}" step="1" var="i">
 	<tr>
@@ -31,28 +55,33 @@
 		<c:choose>
 					<c:when test="${bedStrengthMap[count] != null }">
 						<c:choose>
-							<c:when test="${bedStrengthMap[count] > 0 }">
-								<td style="background-color:red" onMouseOver="this.bgColor='#00CC00'">
+							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied!=bedCount}">
+								<td>
+									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" />
 							</c:when>
+							
+							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied==bedCount}">
+								<td>
+									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count});" />
+							</c:when>
+							
 							<c:otherwise>
-								<td style="background-color:green" onMouseOver="this.bgColor='#00CC00'">
+								<td style="background-color:green" onMouseOver="this.bgColor='#00CC11'">
+									<input id="validate" name="validateName" size="4" style="background-color:green" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count});" />
 							</c:otherwise>
 						</c:choose>
-						${count}/${bedStrengthMap[count]}
+
 					</td>	
 					</c:when>
 					<c:otherwise>
 						
 					</c:otherwise>
 				</c:choose>
-		
-		
-		
 		</c:forEach>
 	</tr>
 	</c:forEach>
 		
 </table>
-
+<input id="bedMax" name="bedMax" type="hidden" value="${bedMax}"/>
 </form>
 

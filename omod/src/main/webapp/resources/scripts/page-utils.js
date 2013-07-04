@@ -54,6 +54,29 @@ BEDSTRENGTH = {
 		}
 	}
 };
+
+FIRSTBEDSTRENGTH = {
+	getFirstBedStrength : function(thiz) {
+		var x = thiz;
+		if (x != null && x != '') {
+				var data = jQuery.ajax({
+					type : "GET",
+					url : "getBedStrength.htm",
+					data : ({
+						wardId : x
+					}),
+					async : false,
+					cache : false
+				}).responseText;
+				if (data != undefined && data != null && data != '') {
+					jQuery("#divBedStrength").html(data);
+
+				} else {
+					alert('Please refresh page!');
+				}
+			}
+	}
+};
 ADMISSION={
 		admit : function(id)
 		{
