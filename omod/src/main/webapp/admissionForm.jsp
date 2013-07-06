@@ -138,6 +138,9 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		       		</c:if>
 			</select>
 		</td>
+		</td>
+		<td>Click To Select Bed Number
+		</td>
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
