@@ -141,7 +141,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
-		<td><input type="text" id="bedNumber" name="bedNumber" /></td>
+		<td><input type="text" id="bedNumber" name="bedNumber" readonly="readonly" /></td>
 		<td>
 		<div id="divBedStrength"></div>
 		</td>
