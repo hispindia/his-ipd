@@ -38,7 +38,7 @@ function validateCheck(checkAlert){
 <c:set var="bedCount" value="0" />
 <c:set var="bedOccupied" value="0" />
 <c:set var="bedMax" value="${bedMax}" />
-<c:forEach begin="1" end="${size}" step="1" var="m">
+<c:forEach begin="1" end="${bedMax}" step="1" var="m">
 	<c:set var="bedCount" value="${bedCount +1 }" />
 	<c:choose>
 	<c:when test="${bedStrengthMap[bedCount] != null && bedStrengthMap[bedCount] > 0}">
@@ -55,12 +55,12 @@ function validateCheck(checkAlert){
 		<c:choose>
 					<c:when test="${bedStrengthMap[count] != null }">
 						<c:choose>
-							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied!=bedCount}">
+							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied < bedMax}">
 								<td>
 									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" />
 							</c:when>
 							
-							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied==bedCount}">
+							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied >= bedMax}">
 								<td>
 									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count});" />
 							</c:when>
