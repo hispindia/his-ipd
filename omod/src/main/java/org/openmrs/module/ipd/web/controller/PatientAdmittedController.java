@@ -225,9 +225,12 @@ public class PatientAdmittedController {
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)
 	public String transferPost(@RequestParam("admittedId") Integer id, @RequestParam("toWard") Integer toWardId,
 	                           @RequestParam("doctor") Integer doctorId,
-	                           @RequestParam(value = "bedNumber", required = false) String bed, Model model) {
+	                           @RequestParam(value = "bedNumber", required = false) String bed, 
+	                           //ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
+	                           @RequestParam(value = "comments", required = false) String comments,Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
-		ipdService.transfer(id, toWardId, doctorId, bed);
+		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
+		ipdService.transfer(id, toWardId, doctorId, bed,comments);
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";

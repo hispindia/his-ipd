@@ -147,7 +147,11 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td>
 		<div id="divBedStrength"></div>
 		</td>
-		
+	</tr>
+	<!-- ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability -->
+	<tr>
+		<td><spring:message code="ipd.patient.comments"/></td>
+		<td><input type="text" id="comments" name="comments" /></td>
 	</tr>
 	<tr> <!-- MARTA -->
 		<td><spring:message code="ipd.patient.dateTime"/>: </td>

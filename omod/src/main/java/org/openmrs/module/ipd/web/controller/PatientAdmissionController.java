@@ -172,6 +172,8 @@ public class PatientAdmissionController {
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
 		String bedNumber = request.getParameter("bedNumber");
+		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
+		String comments = request.getParameter("comments");
 		
 		int treatingDoctor = NumberUtils.toInt(request.getParameter("treatingDoctor"), 0);
 		
@@ -256,6 +258,8 @@ public class PatientAdmissionController {
 			admitted.setAdmittedWard(Context.getConceptService().getConcept(admittedWard));
 			admitted.setBasicPay(basicPay);
 			admitted.setBed(bedNumber);
+			//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
+			admitted.setComments(comments);
 			admitted.setBirthDate(admission.getPatient().getBirthdate());
 			admitted.setCaste(caste);
 			if (relationNameattr != null) {

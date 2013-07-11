@@ -112,7 +112,11 @@ function validateForm(){
 		</td>
 	</tr>
 	<tr>
-		<td></td>
+		<!-- ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability -->
+		<td>
+		<spring:message code="ipd.patient.comments"/>
+		<input type="text" id="comments" name="comments" />
+		</td>
 		<td>
 		<div id="divBedStrength"></div>
 		</td>
