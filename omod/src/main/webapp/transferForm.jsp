@@ -102,7 +102,7 @@ function validateForm(){
       		</c:forEach>  			
 		</select>
 		</td>
-		<td><input type="text" name="bedNumber" id="bedNumber" /></td>
+		<td><input type="text" name="bedNumber" id="bedNumber" readonly="readonly"/></td>
 		<td>
 			<select id="doctor" name="doctor">
 			<c:forEach items="${listDoctor}" var="doct" >
