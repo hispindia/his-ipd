@@ -8,7 +8,7 @@
 	<name>@MODULE_NAME@</name>
 	<version>@MODULE_VERSION@</version>
 	<package>@MODULE_PACKAGE@</package>
-	<author>Chuyen Nguyen, Viet Nguyen</author>
+	<author>Ghanshyam, Chuyen Nguyen, Viet Nguyen</author>
 	<description>
 			Ipd
 	</description>
