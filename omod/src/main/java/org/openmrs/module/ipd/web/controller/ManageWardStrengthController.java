@@ -51,7 +51,7 @@ public class ManageWardStrengthController {
 
 		Collection<ConceptAnswer> wards = concept.getAnswers();
 		for (ConceptAnswer ward : wards) {
-			System.out.println(ward.getAnswerConcept().getId());
+//			System.out.println(ward.getAnswerConcept().getId());
 
 			WardBedStrength wardBedStrength = ipdService
 					.getWardBedStrengthByWardId(ward.getAnswerConcept().getId());
@@ -63,8 +63,7 @@ public class ManageWardStrengthController {
 		}
 
 		for (Integer key : bedStrengthMap.keySet()) {
-			System.out.println("IPD:bedno=" + key + "bedcount="
-					+ bedStrengthMap.get(key));
+//				System.out.println("IPD:bedno=" + key + "bedcount="	+ bedStrengthMap.get(key));
 		}
 
 		model.addAttribute("wards", wards);
@@ -83,7 +82,7 @@ public class ManageWardStrengthController {
 		Collection<ConceptAnswer> wards = concept.getAnswers();
 		WardBedStrength wardBedStrength = null;
 		for (ConceptAnswer ward : wards) {
-			System.out.println(ward.getAnswerConcept().getId());
+//			System.out.println(ward.getAnswerConcept().getId());
 			String bedStrengthRequest = request.getParameter(""
 					+ ward.getAnswerConcept().getId());
 			if (bedStrengthRequest != null

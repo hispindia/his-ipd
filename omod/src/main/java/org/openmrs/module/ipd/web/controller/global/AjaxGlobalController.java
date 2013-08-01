@@ -209,12 +209,12 @@ public class AjaxGlobalController {
 				.getService(IpdService.class);
 		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();
 		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(wardId);
-		System.out.println("ward bed strength = " +wardBedStrength + "<<<wardId" + wardId);
+//		System.out.println("ward bed strength = " +wardBedStrength + "<<<wardId" + wardId);
 		if (wardBedStrength!=null){
 		Integer bedStrength = wardBedStrength.getBedStrength();
 		List<IpdPatientAdmitted> allAdmittedPatients = ipdService.getAllIpdPatientAdmitted();
 		//populate all bed numbers with 0;
-		System.out.println("maxBedStrength=" + wardBedStrength.getBedStrength());
+//		System.out.println("maxBedStrength=" + wardBedStrength.getBedStrength());
 		for (Long i =1L ;i<=bedStrength;i++){
 			bedStrengthMap.put(i, 0);
 			
@@ -225,7 +225,7 @@ public class AjaxGlobalController {
 			if (ipdAdmittedPatient.getAdmittedWard().getId().equals(wardId))
 			{
 			Long bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
-			System.out.println("bedno="+bedNo+"ward=" + wardId);
+//			System.out.println("bedno="+bedNo+"ward=" + wardId);
 			Integer bedCount = bedStrengthMap.get(bedNo);
 			if (bedCount==null){
 				bedCount = 1;
@@ -240,7 +240,7 @@ public class AjaxGlobalController {
 		}
 		
 		for (Long key : bedStrengthMap.keySet()){
-			System.out.println("bedno=" + key + "bedcount=" + bedStrengthMap.get(key));
+//			System.out.println("bedno=" + key + "bedcount=" + bedStrengthMap.get(key));
 		}
 		
 		
