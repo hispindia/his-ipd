@@ -283,7 +283,10 @@ public class PatientAdmissionController {
 			admitted.setIpdAdmittedUser(treatingD);
 			//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
 			//admitted.setMonthlyIncome(monthlyIncome);
+			//ghanshyam 7-august-2013 code review bug
+			if(patientAdmissionLog!=null){
 			admitted.setPatient(patientAdmissionLog.getPatient());
+			}
 			admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
 			admitted.setPatientAdmissionLog(patientAdmissionLog);
 			admitted.setPatientIdentifier(admission.getPatientIdentifier());

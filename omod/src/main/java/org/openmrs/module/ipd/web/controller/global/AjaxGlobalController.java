@@ -246,7 +246,9 @@ public class AjaxGlobalController {
 		
 		model.addAttribute("bedStrengthMap", bedStrengthMap);
 		model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
-		model.addAttribute("bedMax", Math.round(bedStrengthMap.size()));
+		//ghanshyam 7-august-2013 code review bug
+		float bedStrengthSize= bedStrengthMap.size();
+		model.addAttribute("bedMax", Math.round(bedStrengthSize));
 		return "module/ipd/ajax/bedStrength";
 	}
 }
