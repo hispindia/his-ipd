@@ -17,14 +17,14 @@
  *  along with IPD module.  If not, see <http://www.gnu.org/licenses/>.
  *
 --%>
- 
+
+<%@ include file="includes/js_css.jsp" %>
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
-<%@ include file="includes/js_css.jsp" %>
 <script type="text/javascript">
 
-$( document ).ready(function() {
+jQuery(document).ready(function() {
 var wardId= ${admission.admissionWard.id};
 FIRSTBEDSTRENGTH.getFirstBedStrength(wardId);
 });

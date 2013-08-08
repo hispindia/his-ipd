@@ -21,11 +21,11 @@
  *  issue no: #1847
 --%>
 
+<%@ include file="includes/js_css.jsp"%>
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm"
 	redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp"%>
-<%@ include file="includes/js_css.jsp"%>
 <script type="text/javascript">
 function validate(){
 var bloodpressure=document.forms["vitalStatisticsForm"]["bloodPressure"].value;

@@ -308,7 +308,7 @@ function moveSelectedOptionToBottom( listId ) {
  *
  * TODO: avoid performance hit on page with many selects, by checking use of filterList method
  */
-$(document).ready(function() {
+jQuery(document).ready(function() {
     $("select").each(function(i,o){
         var m = document.createElement("select");
         m.id = o.id+"_storage";
