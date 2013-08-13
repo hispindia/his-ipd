@@ -47,6 +47,7 @@
 			</a>
 		</td>
 		--%>
+		<td>${queue.patientIdentifier}</td>
 		<td>${queue.patientName}</td>
 		<td>${queue.age }</td>
 		<td>${queue.gender}</td>

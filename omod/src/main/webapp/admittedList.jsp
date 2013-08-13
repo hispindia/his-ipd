@@ -48,6 +48,7 @@
 			</a>
 		</td>
 		--%>
+		<td>${queue.patientIdentifier}</td>
 		<td>${queue.patientName}</td>
 		
 <%--	<td><age:getAgeFromBirthDay input="${queue.birthDate }"></age:getAgeFromBirthDay></td>  --%>
