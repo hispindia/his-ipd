@@ -1,3 +1,13 @@
+0.9.9
+- #2398             remove "Patient ID" link from "Admitted patient index" in Bangladesh module
+- #1970             Prompt message to be changed
+- #1969             Bed management diagram should also show while transfering a patient
+- #1968             Bed management - the chosen ward should show by default
+- #1942             Introducing the availability at the time of internally transferring a patient form one ward to another
+- #1926             'Other Instructions' field on the Discharge Page
+- #1847             Capture Vital statistics for admitted patient in ipd
+- #1724             Introducing bed availability
+
 0.9.8
 - #965               change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
 
