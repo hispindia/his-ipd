@@ -50,10 +50,12 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
+import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientDashboardConstants;
@@ -193,12 +195,17 @@ public class PatientAdmittedController {
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
 			PatientService ps=Context.getPatientService();
+			//ghanshyam,23-oct-2013,New Requirement #2937 Dealing with Dead Patient
+			HospitalCoreService hcs = (HospitalCoreService) Context.getService(HospitalCoreService.class);
 			Patient patient = ps.getPatient(command.getPatientId());
+			PatientSearch patientSearch = hcs.getPatient(command.getPatientId());
 			patient.setDead(true);
 			patient.setDeathDate(new Date());
 			
-			
 			ps.savePatient(patient);
+			
+			patientSearch.setDead(true);
+			hcs.savePatientSearch(patientSearch);
 		}
 		
 		//star
