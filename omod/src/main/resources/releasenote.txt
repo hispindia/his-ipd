@@ -1,3 +1,7 @@
+0.9.9
+released by ghanshyam on 11-Nov-2013
+- #2937 Dealing with Dead Patient
+
 0.9.8
 released by ghanshyam on 20-may-2013
 - #423	Error Screen on clicking patient ID in Admitted patient Index
