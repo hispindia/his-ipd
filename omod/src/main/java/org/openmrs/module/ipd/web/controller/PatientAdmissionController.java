@@ -34,6 +34,7 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
+import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Role;
@@ -41,9 +42,11 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
+import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.OpdTestOrder;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipd.util.IpdConstants;
@@ -408,5 +411,27 @@ public class PatientAdmissionController {
 			}*/
 		}
 		return "redirect:/module/ipd/main.htm";
+	}
+	
+	//Abhishek-Ankur 07-Dec-2013 #New Requirement: Accepting a patient as indoor Patient
+	@RequestMapping(value = "/module/ipd/accept.htm", method = RequestMethod.GET)
+	public String accept(@RequestParam(value = "admissionId", required = false) Integer admissionId) {
+		final int indoorPatient = 1;
+		PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
+		
+		if (admission != null) {
+			admission.setIndoorStatus(indoorPatient);
+			Patient patient = admission.getPatient();
+			Date admissionDate = admission.getAdmissionDate();
+			List<OpdTestOrder> statusList = ipdService.searchPatientIndoorStatus(patient, admissionDate);
+			for (OpdTestOrder sl : statusList) {
+				sl.setIndoorStatus(indoorPatient);
+				patientDashboardService.saveOrUpdateOpdOrder(sl);
+			}
+		}
+		return "redirect:/module/ipd/main.htm";
+		
 	}
 }

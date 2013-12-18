@@ -51,7 +51,18 @@
 		<td>${person.givenName} ${person.middleName } ${person.familyName }</td>
 		
 		<td>
-		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>
+		<!-- Abhishek-Ankur 6-Dec-2013 #New Requirement: Indoor Billing patient registration -->
+		<span id="acceptButton_${pAdmission.id}">
+		<c:choose>
+			<c:when test="${pAdmission.indoorStatus == 0}">
+				<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Accept" onclick="ADMISSION.accept('${pAdmission.id}');"/>
+			</c:when>
+			<c:when test="${pAdmission.indoorStatus == 1}">
+				Accepted
+			</c:when>
+		</c:choose>
+		</span>
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"   value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Remove" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','1');"/>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="No Bed" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','2');"/>
 		</td>

@@ -78,6 +78,17 @@ FIRSTBEDSTRENGTH = {
 	}
 };
 ADMISSION={
+		//Abhishek-Ankur 07-Dec-2013 #New Requirement: Indoor Billing patient registration
+		accept: function(id)
+		{
+			if(SESSION.checkSession())
+			{
+				if(confirm("Are you sure you want to accept this Patient?")) {
+					ACT.go("accept.htm?admissionId="+id);
+					//jQuery("#acceptButton_" + id).html("<b>Accepted</b>");
+				}
+			}
+		},
 		admit : function(id)
 		{
 			if(SESSION.checkSession())
