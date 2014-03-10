@@ -62,7 +62,22 @@
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Transfer" onclick="ADMITTED.transfer('${queue.id}');"/>
-			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
+		    <c:choose>
+		    <c:when test="${queue.requestForDischargeStatus == 0}">
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
+		    </c:when>
+		    <c:when test="${queue.requestForDischargeStatus == 1}">
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Request sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    </c:when>
+		    </c:choose>
+			<c:choose>
+		    <c:when test="${queue.billingStatus == 0}">
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" disabled="disabled" onclick="ADMITTED.discharge('${queue.id}');"/>
+		    </c:when>
+		    <c:when test="${queue.billingStatus == 1}">
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
+		    </c:when>
+		    </c:choose>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Print" onclick="ADMITTED.print('${queue.id}');"/>
 			<div id="printArea${queue.id}" style="display:none; margin: 10px auto; width: 981px; font-size: 1.5em;font-family:'Dot Matrix Normal',Arial,Helvetica,sans-serif;">
 			<!--<img src="${pageContext.request.contextPath}/moduleResources/ipd/HEADEROPDSLIP.jpg" width="981" height="170"></img>

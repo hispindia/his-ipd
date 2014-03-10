@@ -78,6 +78,17 @@ FIRSTBEDSTRENGTH = {
 	}
 };
 ADMISSION={
+
+        	accept: function(id)
+           {
+             if(SESSION.checkSession())
+             {
+               if(confirm("Are you sure you want to accept this Patient?")) {
+               ACT.go("accept.htm?admissionId="+id);
+             }
+           }
+        },
+        
 		admit : function(id)
 		{
 			if(SESSION.checkSession())
@@ -152,6 +163,15 @@ ADMITTED = {
 				
 				var url = "transfer.htm?id="+id+"&keepThis=false&TB_iframe=true&height=555&width=1000";
 				tb_show("Transfer",url,false);
+			}
+		},
+		requestForDischarge: function(id)
+		{
+			if(SESSION.checkSession())
+			{
+				
+				var url = "requestForDischarge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+				tb_show("Discharge",url,false);
 			}
 		},
 		discharge: function(id)

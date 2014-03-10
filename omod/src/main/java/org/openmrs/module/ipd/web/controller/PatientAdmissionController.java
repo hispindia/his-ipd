@@ -20,6 +20,7 @@
 
 package org.openmrs.module.ipd.web.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,13 +35,19 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
+import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.hospitalcore.BillingService;
 import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
+import org.openmrs.module.hospitalcore.PatientDashboardService;
+import org.openmrs.module.hospitalcore.model.BillableService;
+import org.openmrs.module.hospitalcore.model.IndoorPatientServiceBill;
+import org.openmrs.module.hospitalcore.model.IndoorPatientServiceBillItem;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
@@ -201,6 +208,7 @@ public class PatientAdmissionController {
 			patientAdmissionLog.setPatientIdentifier(admission.getPatientIdentifier());
 			patientAdmissionLog.setPatientName(admission.getPatientName());
 			patientAdmissionLog.setStatus(IpdConstants.STATUS[0]);
+			patientAdmissionLog.setIndoorStatus(1);
 			
 			//save ipd encounter
 			User user = Context.getAuthenticatedUser();
@@ -215,9 +223,9 @@ public class PatientAdmissionController {
 			encounter.setEncounterDatetime(date);
 			encounter.setEncounterType(encounterType);
 			encounter.setLocation(location);
-			encounter = Context.getEncounterService().saveEncounter(encounter);
+			//encounter = Context.getEncounterService().saveEncounter(encounter);
 			//done save ipd encounter
-			patientAdmissionLog.setIpdEncounter(encounter);
+			patientAdmissionLog.setIpdEncounter(admission.getIpdEncounter());
 			//Get Opd Obs Group
 			Obs obsGroup = Context.getService(HospitalCoreService.class).getObsGroup(admission.getPatient());
 			patientAdmissionLog.setOpdObsGroup(obsGroup);
@@ -225,6 +233,43 @@ public class PatientAdmissionController {
 			patientAdmissionLog = ipdService.saveIpdPatientAdmissionLog(patientAdmissionLog);
 			
 			if (patientAdmissionLog != null && patientAdmissionLog.getId() != null) {
+				
+				    BillingService billingService = Context.getService(BillingService.class);
+					Patient patient=admission.getPatient();
+					IndoorPatientServiceBill bill = new IndoorPatientServiceBill();
+					
+					bill.setCreatedDate(new Date());
+					bill.setPatient(patient);
+					bill.setCreator(Context.getAuthenticatedUser());
+					
+					IndoorPatientServiceBillItem item;
+					BillableService service;
+					BigDecimal amount = new BigDecimal(0);
+					
+					ArrayList<Concept> al=new ArrayList<Concept>();
+					Concept concept1=Context.getConceptService().getConcept("ADMISSION FEE");
+					Concept concept2=Context.getConceptService().getConcept("CATERING FEE");
+					al.add(concept1);
+					al.add(concept2);
+					for(Concept c:al){
+					service = billingService.getServiceByConceptId(c.getConceptId());
+					amount=service.getPrice();
+					item = new IndoorPatientServiceBillItem();
+					item.setCreatedDate(new Date());
+					item.setName(service.getName());
+					item.setIndoorPatientServiceBill(bill);
+					item.setQuantity(1);
+					item.setService(service);
+					item.setUnitPrice(service.getPrice());
+					item.setAmount(amount);
+					item.setActualAmount(amount);
+					bill.addBillItem(item);
+		            }
+					bill.setAmount(amount);
+					bill.setActualAmount(amount);
+					bill.setEncounter(admission.getIpdEncounter());	
+					bill = billingService.saveIndoorPatientServiceBill(bill);
+				
 				ipdService.removeIpdPatientAdmission(admission);
 			}
 			
@@ -342,6 +387,7 @@ public class PatientAdmissionController {
 			patientAdmissionLog.setPatientIdentifier(admission.getPatientIdentifier());
 			patientAdmissionLog.setPatientName(admission.getPatientName());
 			patientAdmissionLog.setStatus(IpdConstants.STATUS[action]);
+			patientAdmissionLog.setIndoorStatus(1);
 			
 			//save ipd encounter
 			
@@ -408,5 +454,35 @@ public class PatientAdmissionController {
 			}*/
 		}
 		return "redirect:/module/ipd/main.htm";
+	}
+	
+	@RequestMapping(value = "/module/ipd/accept.htm", method = RequestMethod.GET)
+	public String accept(@RequestParam(value = "admissionId", required = false) Integer admissionId) {
+	int acceptStatus = 1;
+	PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+	IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+	IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
+
+	if (admission != null) {
+	admission.setAcceptStatus(acceptStatus);
+	EncounterType encounterType = Context.getService(HospitalCoreService.class).insertEncounterTypeByKey(
+		    HospitalCoreConstants.PROPERTY_IPDENCOUNTER);
+		
+		Encounter encounter = new Encounter();
+		Date date = new Date();
+		User user = Context.getAuthenticatedUser();
+		Location location = new Location(1);
+		encounter.setPatient(admission.getPatient());
+		encounter.setCreator(user);
+		encounter.setProvider(user);
+		encounter.setEncounterDatetime(date);
+		encounter.setEncounterType(encounterType);
+		encounter.setLocation(location);
+		encounter = Context.getEncounterService().saveEncounter(encounter);
+		admission.setIpdEncounter(encounter);
+	    ipdService.saveIpdPatientAdmission(admission);
+	}
+	return "redirect:/module/ipd/main.htm";
+
 	}
 }

@@ -54,11 +54,15 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
+import org.openmrs.module.hospitalcore.BillingService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmittedLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
+import org.openmrs.module.hospitalcore.model.PatientServiceBill;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientDashboardConstants;
@@ -413,7 +417,12 @@ public class PatientAdmittedController {
 		
 		//end
 		
-		ipdService.discharge(command.getAdmittedId(), command.getOutCome(),  otherInstructions );
+		IpdPatientAdmittedLog ipdPatientAdmittedLog=ipdService.discharge(command.getAdmittedId(), command.getOutCome(),  otherInstructions );
+		Encounter encounter=ipdPatientAdmittedLog.getPatientAdmissionLog().getIpdEncounter();
+		BillingService billingService = (BillingService) Context.getService(BillingService.class);
+		PatientServiceBill patientServiceBill=billingService.getPatientServiceBillByEncounter(encounter);
+		patientServiceBill.setDischargeStatus(1);
+		billingService.savePatientServiceBill(patientServiceBill);
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
@@ -527,6 +536,23 @@ public class PatientAdmittedController {
 		model.addAttribute("sProcedureList", selectedProcedureList);
 		
 		return "module/ipd/dischargeForm";
+	}
+	
+	@RequestMapping(value = "/module/ipd/requestForDischarge.htm", method = RequestMethod.GET)
+	public String requestForDischarge(Model model,@RequestParam(value = "id", required = false) Integer admittedId) {
+	int requestForDischargeStatus = 1;
+	IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+	IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+	admitted.setRequestForDischargeStatus(requestForDischargeStatus);
+	admitted=ipdService.saveIpdPatientAdmitted(admitted);
+	IpdPatientAdmissionLog ipdPatientAdmissionLog=admitted.getPatientAdmissionLog();
+	ipdPatientAdmissionLog.setRequestForDischargeStatus(requestForDischargeStatus);
+	ipdService.saveIpdPatientAdmissionLog(ipdPatientAdmissionLog);
+	
+	model.addAttribute("urlS", "main.htm?tab=1");
+	model.addAttribute("message", "Succesfully");
+	return "/module/ipd/thickbox/success";
+
 	}
 	
 }
