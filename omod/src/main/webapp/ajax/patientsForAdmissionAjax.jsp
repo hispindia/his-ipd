@@ -57,7 +57,14 @@
         </c:when>
         </c:choose>
         </span>
+        <c:choose>
+		<c:when test="${pAdmission.initialDepositStatus == 0}">
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" disabled="disabled" onclick="ADMISSION.admit('${pAdmission.id}');"/>
+		</c:when>
+		<c:when test="${pAdmission.initialDepositStatus == 1}">
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>
+		</c:when>
+		</c:choose>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Remove" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','1');"/>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="No Bed" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','2');"/>
 		</td>
