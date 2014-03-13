@@ -52,6 +52,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
+import org.openmrs.module.hospitalcore.util.Money;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
@@ -243,8 +244,12 @@ public class PatientAdmissionController {
 					bill.setCreator(Context.getAuthenticatedUser());
 					
 					IndoorPatientServiceBillItem item;
+					int quantity = 1;
+					Money itemAmount;
+					Money mUnitPrice;
+					Money totalAmount = new Money(BigDecimal.ZERO);
+					BigDecimal totalActualAmount = new BigDecimal(0);
 					BillableService service;
-					BigDecimal amount = new BigDecimal(0);
 					
 					ArrayList<Concept> al=new ArrayList<Concept>();
 					Concept concept1=Context.getConceptService().getConcept("ADMISSION FEE");
@@ -253,20 +258,26 @@ public class PatientAdmissionController {
 					al.add(concept2);
 					for(Concept c:al){
 					service = billingService.getServiceByConceptId(c.getConceptId());
-					amount=service.getPrice();
+					
+					mUnitPrice = new Money(service.getPrice());
+					itemAmount = mUnitPrice.times(quantity);
+					totalAmount = totalAmount.plus(itemAmount);
+					
 					item = new IndoorPatientServiceBillItem();
 					item.setCreatedDate(new Date());
 					item.setName(service.getName());
 					item.setIndoorPatientServiceBill(bill);
-					item.setQuantity(1);
+					item.setQuantity(quantity);
 					item.setService(service);
 					item.setUnitPrice(service.getPrice());
-					item.setAmount(amount);
-					item.setActualAmount(amount);
+					item.setAmount(itemAmount.getAmount());
+					item.setActualAmount(itemAmount.getAmount());
+					totalActualAmount = totalActualAmount.add(item.getActualAmount());
+					
 					bill.addBillItem(item);
 		            }
-					bill.setAmount(amount);
-					bill.setActualAmount(amount);
+					bill.setAmount(totalAmount.getAmount());
+					bill.setActualAmount(totalActualAmount);
 					bill.setEncounter(admission.getIpdEncounter());	
 					bill = billingService.saveIndoorPatientServiceBill(bill);
 				
