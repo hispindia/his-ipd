@@ -57,8 +57,16 @@
 		<td width="50">${person.givenName} ${person.middleName } ${person.familyName }</td>
 		<td>
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
+		    <c:choose>
+		    <c:when test="${queue.requestForDischargeStatus == 0}">
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Transfer" onclick="ADMITTED.transfer('${queue.id}');"/>
+		    </c:when>
+		    <c:when test="${queue.requestForDischargeStatus == 1}">
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" disabled="disabled" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Transfer" disabled="disabled" onclick="ADMITTED.transfer('${queue.id}');"/>
+		    </c:when>
+		    </c:choose>
 		    <c:choose>
 		    <c:when test="${queue.requestForDischargeStatus == 0}">
 		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
