@@ -55,6 +55,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
 import org.openmrs.module.hospitalcore.BillingService;
+import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
@@ -281,6 +282,7 @@ public class PatientAdmittedController {
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.POST)
 	public String dischargePost(IpdFinalResultCommand command, Model model, @RequestParam("otherInstructions") String  otherInstructions) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
 		
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
@@ -423,9 +425,17 @@ public class PatientAdmittedController {
 		PatientServiceBill patientServiceBill=billingService.getPatientServiceBillByEncounter(encounter);
 		patientServiceBill.setDischargeStatus(1);
 		billingService.savePatientServiceBill(patientServiceBill);
+		List<Obs> diagnosisList=hospitalCoreService.getObsByEncounterAndConcept(encounter, Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
+		List<Obs> procedureList=hospitalCoreService.getObsByEncounterAndConcept(encounter, Context.getConceptService().getConcept("POST FOR PROCEDURE"));
+		PersonAddress personAddress = hospitalCoreService.getPersonAddress(Context.getPersonService().getPerson(Context.getPatientService().getPatient(command.getPatientId())));
+		model.addAttribute("ipdPatientAdmittedLog", ipdPatientAdmittedLog);
+		model.addAttribute("dischargeDate",new Date());
+		model.addAttribute("diagnosisList",diagnosisList);
+		model.addAttribute("procedureList",procedureList);
+		model.addAttribute("personAddress",personAddress);
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
-		return "/module/ipd/thickbox/success";
+		return "/module/ipd/thickbox/dischargePrint";
 	}
 	
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.GET)
