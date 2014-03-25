@@ -132,6 +132,16 @@ public class PatientAdmissionController {
 			
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			
+			PersonAttribute maritalStatus  = admission.getPatient().getAttribute("Marital Status");
+			
+			PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
+			
+			PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");
+			
+			PersonAttribute nationalID  = admission.getPatient().getAttribute("National ID");
+			
+			PersonAttribute patientCategory  = admission.getPatient().getAttribute("Patient Category");
+			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
 			// ghansham 25-june-2013 issue no # 1924 Change in the address format
 			model.addAttribute("district", district);
@@ -154,6 +164,31 @@ public class PatientAdmissionController {
 			
 			// patient category
 			model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
+			
+			model.addAttribute("maritalStatus", maritalStatus.getValue());
+			
+			if(contactNumber!=null){
+				model.addAttribute("contactNumber", contactNumber.getValue());
+			}
+			else{
+				model.addAttribute("contactNumber", "");
+			}
+			
+			if(emailAddress!=null){
+				model.addAttribute("emailAddress", emailAddress.getValue());
+			}
+			else{
+				model.addAttribute("emailAddress", "");
+			}
+			
+			if(nationalID!=null){
+				model.addAttribute("nationalID", nationalID.getValue());
+			}
+			else{
+				model.addAttribute("nationalID", "");
+			}
+			
+			model.addAttribute("patientCategory", patientCategory.getValue());
 			
 			return "module/ipd/admissionForm";
 		}
@@ -182,6 +217,9 @@ public class PatientAdmissionController {
 		String bedNumber = request.getParameter("bedNumber");
 		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
 		String comments = request.getParameter("comments");
+		String chief = request.getParameter("chief");
+		String subChief = request.getParameter("subChief");
+		String religion = request.getParameter("religion");
 		
 		int treatingDoctor = NumberUtils.toInt(request.getParameter("treatingDoctor"), 0);
 		
@@ -349,6 +387,9 @@ public class PatientAdmissionController {
 			admitted.setPatientName(admission.getPatientName());
 			admitted.setStatus(IpdConstants.STATUS[0]);
 			admitted.setUser(Context.getAuthenticatedUser());
+			admitted.setChief(chief);
+			admitted.setSubChief(subChief);
+			admitted.setReligion(religion);
 			admitted = ipdService.saveIpdPatientAdmitted(admitted);
 			model.addAttribute("admitted", admitted);
 			
@@ -367,6 +408,24 @@ public class PatientAdmissionController {
 		
 		// patient category
 		model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
+		
+		PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
+		
+		PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");
+		
+		if(contactNumber!=null){
+			model.addAttribute("contactNumber", contactNumber.getValue());
+		}
+		else{
+			model.addAttribute("contactNumber", "");
+		}
+		
+		if(emailAddress!=null){
+			model.addAttribute("emailAddress", emailAddress.getValue());
+		}
+		else{
+			model.addAttribute("emailAddress", "");
+		}
 		
 		return "module/ipd/thickbox/admissionPrint";
 	}

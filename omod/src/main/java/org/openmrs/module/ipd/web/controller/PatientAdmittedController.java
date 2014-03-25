@@ -435,6 +435,24 @@ public class PatientAdmittedController {
 		model.addAttribute("personAddress",personAddress);
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
+		
+        PersonAttribute contactNumber = ipdPatientAdmittedLog.getPatient().getAttribute("Phone Number");
+		
+		PersonAttribute emailAddress = ipdPatientAdmittedLog.getPatient().getAttribute("Patient E-mail Address");
+		
+		if(contactNumber!=null){
+			model.addAttribute("contactNumber", contactNumber.getValue());
+		}
+		else{
+			model.addAttribute("contactNumber", "");
+		}
+		
+		if(emailAddress!=null){
+			model.addAttribute("emailAddress", emailAddress.getValue());
+		}
+		else{
+			model.addAttribute("emailAddress", "");
+		}
 		return "/module/ipd/thickbox/dischargePrint";
 	}
 	

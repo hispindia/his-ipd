@@ -97,6 +97,24 @@
 			<tr></tr>
 			<tr></tr>
 			<tr><td><strong>Outcome:</strong>${ipdPatientAdmittedLog.admissionOutCome}</td></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr><td><strong>Contact Number:</strong>${contactNumber}</td></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr></tr>
+			<tr><td><strong>Email Address:</strong>${emailAddress}</td></tr>
 		</table>
 <br/><br/><br/><br/>
 <span style="float:right;font-size: 1.0em">Signature of ward sister/attending Doctor / Stamp</span>

@@ -55,6 +55,8 @@
 			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${admitted.admittedWard.name}</strong></td></tr>
 			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${treatingDoctor.givenName}</strong></td></tr>
 			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: <strong>${admitted.bed }</strong></td></tr>
+			<tr><td ><spring:message code="ipd.patient.contactNumber"/>: <strong>${contactNumber}</strong></td></tr>
+			<tr><td ><spring:message code="ipd.patient.emailAddress"/>: <strong>${emailAddress}</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.dateTime"/>: <openmrs:formatDate date="${dateAdmission}" type="long" /></td></tr>
 		</table>
 <br/><br/><br/><br/>

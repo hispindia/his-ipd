@@ -67,6 +67,17 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 
 </script>
 
+<script type="text/javascript">
+// Patient Attribute
+	var _attributes = new Array();
+	<c:forEach var="entry" items="${patient.attributes}">
+		_attributes[${entry.key}] = "${entry.value}";
+	</c:forEach>
+	
+MODEL = {
+		patientAttributes: _attributes
+		};
+</script>
 
 <input type="hidden" id="pageId" value="admissionPage"/>
 <form method="post" id="admissionForm" class="box" onsubmit="javascript:return validate();">
@@ -157,6 +168,38 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td><spring:message code="ipd.patient.dateTime"/>: </td>
 		<td>
 		<openmrs:formatDate date="${dateAdmission}" type="long" /></td>  
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.chief"/></td>
+		<td><input type="text" id="chief" name="chief" /></td>
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.subChief"/></td>
+		<td><input type="text" id="subChief" name="subChief" /></td>
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.religion"/></td>
+		<td><input type="text" id="religion" name="religion" /></td>
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.maritalStatus"/>: </td>
+		<td> ${maritalStatus}</td>  
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.contactNumber"/>: </td>
+		<td> ${contactNumber}</td>  
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.emailAddress"/>: </td>
+		<td> ${emailAddress}</td>  
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.nationalID"/>: </td>
+		<td> ${nationalID}</td>  
+	</tr>
+	<tr>
+		<td><spring:message code="ipd.patient.patientCategory"/>: </td>
+		<td> ${patientCategory}</td>  
 	</tr>
 </table>
 
