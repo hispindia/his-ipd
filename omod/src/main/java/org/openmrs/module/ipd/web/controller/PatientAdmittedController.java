@@ -63,6 +63,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmittedLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
+import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.model.PatientServiceBill;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
@@ -283,15 +284,18 @@ public class PatientAdmittedController {
 	public String dischargePost(IpdFinalResultCommand command, Model model, @RequestParam("otherInstructions") String  otherInstructions) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
-		
+		PatientSearch patientSearch = hospitalCoreService.getPatient(command.getPatientId());
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
+			
+			ConceptService conceptService = Context.getConceptService();
+			Concept causeOfDeath = conceptService.getConceptByName("NONE");
+			hospitalCoreService.savePatientSearch(patientSearch);
 			PatientService ps=Context.getPatientService();
 			Patient patient = ps.getPatient(command.getPatientId());
 			patient.setDead(true);
 			patient.setDeathDate(new Date());
-			
-			
+			patient.setCauseOfDeath(causeOfDeath);
 			ps.savePatient(patient);
 		}
 		
