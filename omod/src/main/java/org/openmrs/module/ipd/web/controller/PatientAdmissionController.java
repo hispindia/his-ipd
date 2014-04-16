@@ -45,12 +45,14 @@ import org.openmrs.module.hospitalcore.BillingService;
 import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
+import org.openmrs.module.hospitalcore.PatientQueueService;
 import org.openmrs.module.hospitalcore.model.BillableService;
 import org.openmrs.module.hospitalcore.model.IndoorPatientServiceBill;
 import org.openmrs.module.hospitalcore.model.IndoorPatientServiceBillItem;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.Money;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
@@ -435,6 +437,7 @@ public class PatientAdmissionController {
 	                            @RequestParam(value = "action", required = false) Integer action, Model model) {
 		
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		PatientQueueService queueService = Context.getService(PatientQueueService.class);
 		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
 		
 		User user = Context.getAuthenticatedUser();
@@ -522,6 +525,9 @@ public class PatientAdmissionController {
 					ipdService.removeIpdPatientAdmission(admission);
 				}
 			}*/
+			OpdPatientQueueLog opdPatientQueueLog=patientAdmissionLog.getOpdLog();
+			opdPatientQueueLog.setVisitOutCome("no bed");
+			queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
 		}
 		return "redirect:/module/ipd/main.htm";
 	}

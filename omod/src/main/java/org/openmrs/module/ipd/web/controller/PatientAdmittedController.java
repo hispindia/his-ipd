@@ -284,6 +284,7 @@ public class PatientAdmittedController {
 	public String dischargePost(IpdFinalResultCommand command, Model model, @RequestParam("otherInstructions") String  otherInstructions) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+		PatientQueueService queueService = Context.getService(PatientQueueService.class);
 		PatientSearch patientSearch = hospitalCoreService.getPatient(command.getPatientId());
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
@@ -424,6 +425,9 @@ public class PatientAdmittedController {
 		//end
 		
 		IpdPatientAdmittedLog ipdPatientAdmittedLog=ipdService.discharge(command.getAdmittedId(), command.getOutCome(),  otherInstructions );
+		OpdPatientQueueLog opdPatientQueueLog=ipdPatientAdmittedLog.getPatientAdmissionLog().getOpdLog();
+		opdPatientQueueLog.setVisitOutCome("DISCHARGE ON REQUEST");
+		queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
 		Encounter encounter=ipdPatientAdmittedLog.getPatientAdmissionLog().getIpdEncounter();
 		BillingService billingService = (BillingService) Context.getService(BillingService.class);
 		PatientServiceBill patientServiceBill=billingService.getPatientServiceBillByEncounter(encounter);
