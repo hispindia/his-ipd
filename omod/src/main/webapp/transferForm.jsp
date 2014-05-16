@@ -60,7 +60,7 @@ function validateForm(){
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admitted.patientName }</b></td>
+		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${fn:replace(admitted.patientName,',',' ')}</b></td>
 		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admitted.patientIdentifier}</b></td>
 		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admitted.age }</b></td>
 		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admitted.gender }</b></td>

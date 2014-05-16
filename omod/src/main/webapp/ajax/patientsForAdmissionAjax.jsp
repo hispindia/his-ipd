@@ -38,14 +38,14 @@
 		<td><c:out value="${varStatus.count }"/></td>
 		<td><openmrs:formatDate date="${pAdmission.admissionDate }" type="textbox"/></td>	
 		<td>${pAdmission.patientIdentifier}</td>
-		<td>${pAdmission.patientName}</td>
+		<td>${fn:replace(pAdmission.patientName,',',' ')}</td>
 		<td>
 			${pAdmission.age }
 		</td>
 		<td>${pAdmission.gender}</td>
 		<td>${pAdmission.admissionWard.name}</td>
 		<c:set var="person" value="${pAdmission.opdAmittedUser.person }"/>
-		<td>${person.givenName} ${person.middleName } ${person.familyName }</td>
+		<td>${person.givenName} ${fn:replace(person.middleName,',',' ')} ${person.familyName }</td>
 		<td>
 		<span id="acceptButton_${pAdmission.id}">
         <c:choose>

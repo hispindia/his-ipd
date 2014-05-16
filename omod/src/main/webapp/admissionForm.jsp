@@ -91,7 +91,7 @@ MODEL = {
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admission.patientName }</b></td>
+		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${fn:replace(admission.patientName,',',' ')}</b></td>
 		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admission.patientIdentifier}</b></td>
 	</tr>
 	<tr>

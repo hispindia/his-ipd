@@ -48,13 +48,13 @@
 		</td>
 		--%>
 		<td>${queue.patientIdentifier}</td>
-		<td>${queue.patientName}</td>
+		<td>${fn:replace(queue.patientName,',',' ')}</td>
 		<td>${queue.age }</td>
 		<td>${queue.gender}</td>
 		<td width="50">${queue.admittedWard.name}</td>
 		<td>${queue.bed}</td>
 		<c:set var="person" value="${queue.ipdAdmittedUser.person }"/>
-		<td width="50">${person.givenName} ${person.middleName } ${person.familyName }</td>
+		<td width="50">${person.givenName} ${fn:replace(person.middleName,',',' ')} ${person.familyName }</td>
 		<td>
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
 		    <c:choose>
@@ -90,7 +90,7 @@
 			 -->
 			
 			<table width="100%" >
-			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${queue.patientName }</strong></td></tr>
+			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${fn:replace(queue.patientName,',',' ')}</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${queue.patientIdentifier}</strong></td></tr>
 						<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${queue.patientCategory }</strong></td></tr>
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${queue.age}</strong></td></tr>

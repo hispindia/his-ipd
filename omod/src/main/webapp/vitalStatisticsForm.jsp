@@ -64,8 +64,7 @@ if (temperature==null || temperature=="")
 		</c:if>
 		<table width="100%">
 			<tr>
-				<td><spring:message code="ipd.patient.patientName" />:&nbsp;<b>${admitted.patientName
-						}</b>
+				<td><spring:message code="ipd.patient.patientName" />:&nbsp;<b>${fn:replace(admitted.patientName,',',' ')}</b>
 				</td>
 				<td><spring:message code="ipd.patient.patientId" />:&nbsp;<b>${admitted.patientIdentifier}</b>
 				</td>
