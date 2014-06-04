@@ -75,7 +75,7 @@
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
-		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Request sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
 		    </c:when>
 		    </c:choose>
 			<c:choose>
@@ -104,7 +104,7 @@
 			<%-- ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #313'.changed from relationType to mapRelationType and relationName 
 			to  mapRelationName because in every print slip same relation name and relative name is coming--%>
 			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
-			<tr><td colspan="4"><spring:message code="ipd.patient.homeAddress"/>: ${address }</td></tr>
+			<tr><td colspan="4"><spring:message code="ipd.patient.address"/>: ${address }</td></tr>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 		    <%--
 			<tr></tr>
@@ -117,7 +117,7 @@
 			<tr><td ><spring:message code="ipd.patient.date/time"/>: <strong>${dateTime }</strong></td></tr>
 		</table>
 		<br/><br/><br/><br/><br/><br/>
-		<span style="float:right;font-size: 1.5em">Signature of ward sister/attending Doctor / Stamp</span>
+		<span style="float:right;font-size: 1.5em">Signature of Ward Sister/Attending Doctor / Stamp</span>
 		</div>
 		</td>
 		

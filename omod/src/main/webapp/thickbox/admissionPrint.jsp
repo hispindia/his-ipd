@@ -34,33 +34,33 @@
 <div class="box">
 <div id="printArea" style="margin: 10px auto; width: 981px; font-size: 1.5em;font-family:'Dot Matrix Normal',Arial,Helvetica,sans-serif;">
 <!--<img src="${pageContext.request.contextPath}/moduleResources/ipd/HEADEROPDSLIP.jpg" width="981" height="170"></img>
-			--><p><b><h1> IPD ADMISSION SLIP </h1></b></p>
+			--><p><b><h2> IPD ADMISSION SLIP </h2></b></p>
 			<table width="100%" >
-			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${admitted.patientName }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${admitted.patientIdentifier}</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.patientName"/></td><td>:<strong>${admitted.patientName }</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.patientId"/></td><td>:<strong>${admitted.patientIdentifier}</strong></td></tr>
 			<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	        <%-- 
 			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${patCategory }</strong></td></tr>
 			--%>
-			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${admitted.age}</b></td></tr>
-			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${admitted.gender }</strong></td></tr>
-			<tr> <td>${relationType }:&nbsp;${relationName }</td>  </tr>
-			<tr><td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.age"/></td><td>:<strong>${admitted.age}</b></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.gender"/></td><td>:<strong>${admitted.gender }</strong></td></tr>
+			<tr><td align="right">${relationType }</td><td>:${relationName }</td>  </tr>
+			<tr><td align="right"><spring:message code="ipd.patient.address"/> </td><td>:${address } &nbsp;${upazila } &nbsp;${district } </td></tr>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 			<%--
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td></tr>
 			--%>
 			<tr></tr>
-			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${admitted.admittedWard.name}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${treatingDoctor.givenName}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: <strong>${admitted.bed }</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.contactNumber"/>: <strong>${contactNumber}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.emailAddress"/>: <strong>${emailAddress}</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.dateTime"/>: <openmrs:formatDate date="${dateAdmission}" type="long" /></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.admittedWard"/></td><td>:<strong> ${admitted.admittedWard.name}</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.treatingDoctor"/></td><td>:<strong> ${treatingDoctor.givenName}</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.bedNumber"/></td><td> :<strong>${admitted.bed }</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.contactNumber"/></td><td>: <strong>${contactNumber}</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.emailAddress"/></td><td> :<strong>${emailAddress}</strong></td></tr>
+			<tr><td align="right"><spring:message code="ipd.patient.dateTime"/></td><td> :<openmrs:formatDate date="${dateAdmission}" type="long" /></td></tr>
 		</table>
 <br/><br/><br/><br/>
-<span style="float:right;font-size: 1.0em">Signature of ward sister/attending Doctor / Stamp</span>
+<span style="float:right;font-size: 1.0em">Signature of Ward Sister/Attending Doctor / Stamp</span>
 <br/>
 </div>
 <div>

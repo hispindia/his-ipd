@@ -1,4 +1,4 @@
- <%--
+<%--
  *  Copyright 2009 Society for Health Information Systems Programmes, India (HISP India)
  *
  *  This file is part of IPD module.
@@ -72,7 +72,7 @@
 		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
-		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Request sent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		    </c:when>
 		    </c:choose>
 		    <c:choose>
@@ -98,7 +98,7 @@
 			<%-- ghanshyam 30/07/2012 [IPD - Bug #325] [IPD] Inconsistency in print slip--%>
 			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
 			<c:set var="personAddress" value="${queue.patient.personAddress }"/>
-			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
+			<tr><td ><spring:message code="ipd.patient.address"/>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 		    <%--
 			<tr></tr>

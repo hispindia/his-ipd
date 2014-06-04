@@ -53,7 +53,7 @@
         <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Accept" onclick="ADMISSION.accept('${pAdmission.id}');"/>
         </c:when>
         <c:when test="${pAdmission.acceptStatus == 1}">
-        Accepted
+		<input type="button" class="ui-button ui-corner-all" value="Accepted" style="font-weight: bold;"/>
         </c:when>
         </c:choose>
         </span>

@@ -24,18 +24,18 @@
 
 
 
-<b class="boxHeader">Dashboard Ipd</b>
+<b class="boxHeader">IPD Dashboard</b>
 <input type="hidden" id="pageId" value="Ipd"/>
 <div class="box" >
 <form method="get"  id="IpdMainForm">
 <input type="hidden" name="tab" id="tab" value="${tab}">
 <table >
 		<tr valign="top">
-			<td><spring:message code="ipd.patient.search"/></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="ipd.patient.search"/></td>
 			<td>
 				<input type="text" name="searchPatient" id="searchPatient" value="${searchPatient }"/>
 			</td>
-			<td><spring:message code="ipd.ipdWard.name"/></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="ipd.ipdWard.name"/></td>
 			<td>
 				<select id="ipdWard"  name="ipdWard" multiple="multiple" style="width: 150px;" size="10">
 					<option value=""></option>
@@ -55,7 +55,7 @@
 		       		</c:if>
 	  			</select> 
 	  		</td>
-	  		<td><spring:message code="ipd.doctor.name"/></td>	
+	  		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="ipd.doctor.name"/>&nbsp;</td>	
 	  		<td>
 				<select id="doctor"  name="doctor" multiple="multiple" style="width: 150px;" size="10">
 					<option value=""></option>
@@ -75,11 +75,11 @@
 		       		</c:if>
 	  			</select> 
 	  		</td>	
-			<td><spring:message code="ipd.fromDate"/></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="ipd.fromDate"/></td>
 			<td><input type="text" id="fromDate" class="date-pick left" readonly="readonly" style="width: 80px;" name="fromDate" value="${fromDate}" title="Double Click to Clear" ondblclick="this.value='';"/></td>
-			<td><spring:message code="ipd.toDate"/></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="ipd.toDate"/></td>
 			<td><input type="text" id="toDate" class="date-pick left" readonly="readonly" style="width: 80px;" name="toDate" value="${toDate}" title="Double Click to Clear" ondblclick="this.value='';"/></td>
-			<td ><input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Search" onclick="IPD.submit(this);"/></td>
+			<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Search" onclick="IPD.submit(this);"/></td>
 			
 			<input type="hidden" id="ipdWardString" name="ipdWardString" value="${ipdWardString }"/>
 			<input type="hidden" id="doctorString" name="doctorString" value="${doctorString }"/>
@@ -90,7 +90,7 @@
 <input type="hidden" id="intervalId" value=""/>
 <div id="tabs">
      <ul>
-         <li><a href="patientsForAdmission.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Patients for admission"><span >Patients for admission</span></a></li>
+         <li><a href="patientsForAdmission.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Patients for admission"><span>Patients for admission</span></a></li>
          <li><a href="admittedPatientIndex.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Admitted patient index"><span>Admitted patient index</span></a></li>
      </ul>
      
