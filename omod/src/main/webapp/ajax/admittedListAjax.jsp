@@ -72,7 +72,7 @@
 		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		    </c:when>
 		    </c:choose>
 		    <c:choose>
