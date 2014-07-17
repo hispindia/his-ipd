@@ -57,7 +57,7 @@
 		<td width="50">${queue.admittedWard.name}</td>
 		<td>${queue.bed}</td>
 		<c:set var="person" value="${queue.ipdAdmittedUser.person }"/>
-		<td width="50">${person.givenName} ${fn:replace(person.middleName,',',' ')} ${person.familyName }</td>
+		<td width="50">${person.givenName}  ${person.familyName } ${fn:replace(person.middleName,',',' ')}</td>
 		<td>
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
 		    <c:choose>

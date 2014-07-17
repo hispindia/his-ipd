@@ -48,7 +48,7 @@
 		<td>${pAdmission.admissionWard.name}</td>
 		
 		<c:set var="person" value="${pAdmission.opdAmittedUser.person }"/>
-		<td>${person.givenName} ${fn:replace(person.middleName,',',' ')} ${person.familyName }</td>
+		<td>${person.givenName}  ${person.familyName } ${fn:replace(person.middleName,',',' ')}</td>
 		
 		<td>
 		<span id="acceptButton_${pAdmission.id}">
