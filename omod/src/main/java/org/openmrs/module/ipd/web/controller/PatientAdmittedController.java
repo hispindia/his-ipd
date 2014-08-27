@@ -300,6 +300,8 @@ public class PatientAdmittedController {
 			patient.setDeathDate(new Date());
 			patient.setCauseOfDeath(causeOfDeath);
 			ps.savePatient(patient);
+			patientSearch.setDead(true);
+			hospitalCoreService.savePatientSearch(patientSearch);
 		}
 		
 		//star
