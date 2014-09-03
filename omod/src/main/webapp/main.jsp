@@ -90,8 +90,8 @@
 <input type="hidden" id="intervalId" value=""/>
 <div id="tabs">
      <ul>
-         <li><a href="patientsForAdmission.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Patients for admission"><span>Patients for admission</span></a></li>
-         <li><a href="admittedPatientIndex.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Admitted patient index"><span>Admitted patient index</span></a></li>
+         <li><a href="patientsForAdmission.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Patients for admission"><span>Patients for Admission</span></a></li>
+         <li><a href="admittedPatientIndex.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Admitted patient index"><span>Admitted Patient Index</span></a></li>
      </ul>
      
      <div id="Patients_for_admission">

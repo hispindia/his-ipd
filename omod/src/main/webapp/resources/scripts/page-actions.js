@@ -69,8 +69,8 @@ var CHECK =
 	    //		var selected = $( ".selector" ).tabs( "option", "selected" );
 		//setter
 		//$( ".selector" ).tabs( "option", "selected", 3 );
-		$("select#ipdWard").multiselect({noneSelectedText: "Select ipd ward"});
-		$("select#doctor").multiselect({noneSelectedText: "Select treating doctor"});
+		$("select#ipdWard").multiselect({noneSelectedText: "Select IPD Ward"});
+		$("select#doctor").multiselect({noneSelectedText: "Select Treating Doctor"});
 		jQuery('.date-pick').datepicker({yearRange:'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
 		jQuery("#tabs").tabs({cache: true, 
             load : function(event, ui)

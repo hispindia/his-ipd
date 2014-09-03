@@ -22,6 +22,7 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
@@ -91,23 +92,32 @@ MODEL = {
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${fn:replace(admission.patientName,',',' ')}</b></td>
-		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admission.patientIdentifier}</b></td>
+		<td><b><spring:message code="ipd.patient.patientName"/></b>:&nbsp;${fn:replace(admission.patientName,',',' ')}</td>
+		<td><b><spring:message code="ipd.patient.patientId"/></b>:&nbsp;${admission.patientIdentifier}</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admission.age }</b></td>
-		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admission.gender }</b></td>
+		<td><b><spring:message code="ipd.patient.age"/></b>:&nbsp;${admission.age }</td>
+		<td><b><spring:message code="ipd.patient.gender"/></b>:&nbsp;
+		<c:choose>
+				<c:when test="${admission.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose>
+		</td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	<tr>
 		<%--
 		<td><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
 		--%>
-		<td>${relationType }:&nbsp;${relationName }</td>
+		<td><b>Relative Name</b>:&nbsp;${relationName }</td>
 	</tr>
 	<tr>
 	    <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
-		<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
+		<td><b><spring:message code="ipd.patient.address"/></b>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 	<%--
@@ -117,7 +127,7 @@ MODEL = {
 	</tr>
 	--%>
 	<tr>
-		<td><spring:message code="ipd.patient.admittedWard"/><em>*</em></td>
+		<td><b><spring:message code="ipd.patient.admittedWard"/></b><em>*</em></td>
 		<td>
 		<select  id="admittedWard" name="admittedWard" onchange="BEDSTRENGTH.getBedStrength(this);">
 			  <option value=""></option>
@@ -134,7 +144,7 @@ MODEL = {
 		</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.treatingDoctor"/><em>*</em></td>
+		<td><b><spring:message code="ipd.patient.treatingDoctor"/></b><em>*</em></td>
 		<td>
 			<select  id="treatingDoctor" name="treatingDoctor" >
 			  <option value=""></option>
@@ -153,7 +163,7 @@ MODEL = {
 		</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
+		<td><b><spring:message code="ipd.patient.bedNumber"/></b><em>*</em></td>
 		<td><input type="text" id="bedNumber" name="bedNumber" readonly="readonly" /></td>
 		<td>
 		<div id="divBedStrength"></div>
@@ -161,44 +171,43 @@ MODEL = {
 	</tr>
 	<!-- ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability -->
 	<tr>
-		<td><spring:message code="ipd.patient.comments"/></td>
+		<td><b><spring:message code="ipd.patient.comments"/></b></td>
 		<td><input type="text" id="comments" name="comments" /></td>
 	</tr>
 	<tr> <!-- MARTA -->
-		<td><spring:message code="ipd.patient.dateTime"/>: </td>
-		<td>
-		<openmrs:formatDate date="${dateAdmission}" type="long" /></td>  
+		<td><b><spring:message code="ipd.patient.dateTime"/></b>: </td>
+		<td><fmt:formatDate value="${dateAdmission}" pattern="dd-MM-yyyy HH:mm:ss" /></td> 
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.chief"/></td>
+		<td><b><spring:message code="ipd.patient.chief"/></b></td>
 		<td><input type="text" id="chief" name="chief" /></td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.subChief"/></td>
+		<td><b><spring:message code="ipd.patient.subChief"/></b></td>
 		<td><input type="text" id="subChief" name="subChief" /></td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.religion"/></td>
+		<td><b><spring:message code="ipd.patient.religion"/></b></td>
 		<td><input type="text" id="religion" name="religion" /></td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.maritalStatus"/>: </td>
+		<td><b><spring:message code="ipd.patient.maritalStatus"/></b>: </td>
 		<td> ${maritalStatus}</td>  
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.contactNumber"/>: </td>
+		<td><b><spring:message code="ipd.patient.contactNumber"/></b>: </td>
 		<td> ${contactNumber}</td>  
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.emailAddress"/>: </td>
+		<td><b><spring:message code="ipd.patient.emailAddress"/></b>: </td>
 		<td> ${emailAddress}</td>  
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.nationalID"/>: </td>
+		<td><b><spring:message code="ipd.patient.nationalID"/></b>: </td>
 		<td> ${nationalID}</td>  
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.patientCategory"/>: </td>
+		<td><b><spring:message code="ipd.patient.patientCategory"/></b>: </td>
 		<td> ${patientCategory}</td>  
 	</tr>
 </table>
