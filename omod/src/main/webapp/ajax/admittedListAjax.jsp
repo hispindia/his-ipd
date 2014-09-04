@@ -18,6 +18,7 @@
  *
 --%> 
 <%@ include file="/WEB-INF/template/include.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
@@ -90,28 +91,39 @@
 			 -->
 			
 			<table width="100%" >
-			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${fn:replace(queue.patientName,',',' ')}</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${queue.patientIdentifier}</strong></td></tr>
-						<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${queue.patientCategory }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${queue.age}</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${queue.gender }</strong></td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.patientName"/></strong>:&nbsp;${fn:replace(queue.patientName,',',' ')}</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.patientId"/></strong>:&nbsp;${queue.patientIdentifier}</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.category"/></strong>:&nbsp;${queue.patientCategory }</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.age"/></strong>:&nbsp;${queue.age}</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.gender"/></strong>:&nbsp;
+			<c:choose>
+				<c:when test="${queue.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose>
+			</td></tr>
 			<%-- ghanshyam 30/07/2012 [IPD - Bug #325] [IPD] Inconsistency in print slip--%>
-			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
+			<tr><td><strong>Relative Name</strong>:&nbsp;${mapRelationName[queue.id]}</td></tr>
 			<c:set var="personAddress" value="${queue.patient.personAddress }"/>
-			<tr><td ><spring:message code="ipd.patient.address"/>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
+			<tr><td ><strong><spring:message code="ipd.patient.address"/></strong>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
 			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 		    <%--
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${queue.monthlyIncome}</td></tr>
 			--%>
 			<tr></tr>
-			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${queue.admittedWard.name}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${queue.ipdAdmittedUser.givenName}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: <strong>${queue.bed }</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.date/time"/>: <strong>${dateTime }</strong></td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.admittedWard"/></strong>:${queue.admittedWard.name}</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.treatingDoctor"/></strong>:${queue.ipdAdmittedUser.givenName}</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.bedNumber"/></strong>:${queue.bed }</td></tr>
+			<tr><td><strong><spring:message code="ipd.patient.date/time"/></strong>:
+			<fmt:formatDate value="${dateTime}" pattern="dd-MM-yyyy HH:mm:ss" />
+			</td></tr>
 		</table>
 		<br/><br/><br/><br/><br/><br/>
-	    <span style="float:right;font-size: 1.5em">Signature of ward sister/attending Doctor / Stamp</span>
+	    <span style="float:right;font-size: 1.5em">Signature of Ward Sister/Attending Doctor / Stamp</span>
 		</div>
 		</td>
 		

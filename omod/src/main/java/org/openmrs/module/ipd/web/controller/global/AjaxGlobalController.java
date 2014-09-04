@@ -195,7 +195,7 @@ public class AjaxGlobalController {
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
-		model.addAttribute("dateTime", new Date().toString());
+		model.addAttribute("dateTime", new Date());
 
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 

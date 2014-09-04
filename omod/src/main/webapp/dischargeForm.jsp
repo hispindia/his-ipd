@@ -20,6 +20,7 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="includes/js_css.jsp" %>
 
 <style>
@@ -44,10 +45,19 @@
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${fn:replace(admitted.patientName,',',' ')}</b></td>
-		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admitted.patientIdentifier}</b></td>
-		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admitted.age}</b></td>
-		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admitted.gender }</b></td>
+		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;${fn:replace(admitted.patientName,',',' ')}</td>
+		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;${admitted.patientIdentifier}</td>
+		<td><spring:message code="ipd.patient.age"/>:&nbsp;${admitted.age}</td>
+		<td><spring:message code="ipd.patient.gender"/>:&nbsp;
+		<c:choose>
+				<c:when test="${admitted.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose>
+		</td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
@@ -59,7 +69,7 @@
 	--%>
 	<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 	<tr>
-		<td>${relationType }:&nbsp;${relationName }</td>
+		<td>Relative Name:&nbsp;${relationName }</td>
 		<td colspan="2"><spring:message code="ipd.patient.bedNumber"/>: ${admitted.bed }</td>
 	</tr>
 	<tr>
@@ -71,7 +81,7 @@
 		<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td> 
 	</tr>
 	<tr>
-		<td colspan="4"><spring:message code="ipd.patient.date/time"/>: ${dateTime }</td>
+		<td colspan="4"><spring:message code="ipd.patient.date/time"/>:<fmt:formatDate value="${dateTime}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
 	</tr>
 </table>
 
@@ -143,7 +153,7 @@
         </td>
   </tr>
 	<tr>
-		<td colspan="2">Out come<em>*</em>
+		<td colspan="2">Outcome<em>*</em>
 		<select  id="outCome" name="outCome" >
 			  <option value="">[Please Select]</option>
 					<c:forEach items="${listOutCome}" var="outCome" >

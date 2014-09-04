@@ -148,7 +148,7 @@ public class PatientAdmittedController {
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
-		model.addAttribute("dateTime", new Date().toString());
+		model.addAttribute("dateTime", new Date());
 //		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
@@ -498,7 +498,7 @@ public class PatientAdmittedController {
 		else{
 			model.addAttribute("relationType", "Relative Name");
 		}
-		model.addAttribute("dateTime", new Date().toString());
+		model.addAttribute("dateTime", new Date());
 		
 		Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
 		

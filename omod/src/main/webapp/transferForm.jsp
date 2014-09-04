@@ -60,10 +60,19 @@ function validateForm(){
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${fn:replace(admitted.patientName,',',' ')}</b></td>
-		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admitted.patientIdentifier}</b></td>
-		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admitted.age }</b></td>
-		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admitted.gender }</b></td>
+		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;${fn:replace(admitted.patientName,',',' ')}</td>
+		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;${admitted.patientIdentifier}</td>
+		<td><spring:message code="ipd.patient.age"/>:&nbsp;${admitted.age }</td>
+		<td><spring:message code="ipd.patient.gender"/>:&nbsp;
+		<c:choose>
+				<c:when test="${admitted.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose>
+		</td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
@@ -90,9 +99,9 @@ function validateForm(){
 <br/>
 <table class="box">
 	<tr>
-		<td>Select ward<em>*</em></td>
-		<td>Bed number<em>*</em></td>
-		<td>Select doctor<em>*</em></td>
+		<td>Select Ward<em>*</em></td>
+		<td>Bed Number<em>*</em></td>
+		<td>Select Doctor<em>*</em></td>
 	</tr>
 	<tr>
 		<td>
