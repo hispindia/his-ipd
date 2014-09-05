@@ -1,3 +1,9 @@
+0.9.10
+IPD
+- #Indoor patient billing queue
+- #Discharge summary and print out
+- #module upgradation
+
 0.9.9
 - #2398             remove "Patient ID" link from "Admitted patient index" in Bangladesh module
 - #1970             Prompt message to be changed
