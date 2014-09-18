@@ -347,7 +347,7 @@ public class PatientAdmittedController {
 		for (Integer cId : command.getSelectedDiagnosisList()) {
 			Concept cons = conceptService.getConcept(cId);
 			listConceptDiagnosis.add(cons);
-			if (!listConceptDianosisOfIpdEncounter.contains(cons)) {
+			//if (!listConceptDianosisOfIpdEncounter.contains(cons)) {
 				Obs obsDiagnosis = new Obs();
 				//obsDiagnosis.setObsGroup(obsGroup);
 				obsDiagnosis.setConcept(cDiagnosis);
@@ -360,7 +360,7 @@ public class PatientAdmittedController {
 				obsDiagnosis.setEncounter(ipdEncounter);
 				obsDiagnosis = Context.getObsService().saveObs(obsDiagnosis, "update obs diagnosis if need");
 				obses.add(obsDiagnosis);
-			}
+			//}
 		}
 	}
 		List<Concept> listConceptProcedure = new ArrayList<Concept>();
@@ -378,7 +378,7 @@ public class PatientAdmittedController {
 			for (Integer pId : command.getSelectedProcedureList()) {
 				Concept cons = conceptService.getConcept(pId);
 				listConceptProcedure.add(cons);
-				if (!listConceptProcedureOfIpdEncounter.contains(cons)) {
+				//if (!listConceptProcedureOfIpdEncounter.contains(cons)) {
 					Obs obsProcedure = new Obs();
 					//obsDiagnosis.setObsGroup(obsGroup);
 					obsProcedure.setConcept(cProcedure);
@@ -392,13 +392,13 @@ public class PatientAdmittedController {
 					obsProcedure = Context.getObsService().saveObs(obsProcedure, "update obs diagnosis if need");
 					//ipdEncounter.addObs(obsProcedure);
 					obses.add(obsProcedure);
-				}
+				//}
 			}
 			
 		}
 		
 		// Remove obs diagnosis and procedure 
-		
+		/*
 		for (Concept con : listConceptDianosisOfIpdEncounter) {
 			if (!listConceptDiagnosis.contains(con)) {
 				for (Obs obx : listObsOfIpdEncounter) {
@@ -420,7 +420,7 @@ public class PatientAdmittedController {
 				}
 			}
 		}
-		
+		*/
 		ipdEncounter.setObs(obses);
 		
 		Context.getEncounterService().saveEncounter(ipdEncounter);
