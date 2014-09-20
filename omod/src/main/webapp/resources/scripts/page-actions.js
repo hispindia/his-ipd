@@ -70,7 +70,7 @@ var CHECK =
 		//setter
 		//$( ".selector" ).tabs( "option", "selected", 3 );
 		$("select#ipdWard").multiselect({noneSelectedText: "Select IPD Ward"});
-		$("select#doctor").multiselect({noneSelectedText: "Select Treating Doctor"});
+		$("select#doctor").multiselect({noneSelectedText: "Select Doctor on Call"});
 		jQuery('.date-pick').datepicker({yearRange:'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
 		jQuery("#tabs").tabs({cache: true, 
             load : function(event, ui)

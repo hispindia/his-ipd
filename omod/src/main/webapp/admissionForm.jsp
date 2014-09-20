@@ -43,7 +43,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
   
   if (treatingdoctor==null || treatingdoctor=="")
   {
-  alert("Please select treating Doctor");
+  alert("Please select Doctor on Call");
   return false;
   }
   if (bednumber==null || bednumber=="")

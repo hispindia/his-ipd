@@ -116,7 +116,7 @@ if (temperature==null || temperature=="")
 					value="Pulse Rate(/min)" size="16" readonly="readonly">
 				</td>
 				<td><input type="text" id="hTemperature" name="hTemperature"
-					value="Temperature(F)" size="15" readonly="readonly"></td>
+					value="Temperature(C)" size="15" readonly="readonly"></td>
 				<td><input type="text" id="hDietAdvised" name="hDietAdvised"
 					value="Diet Advised" size="11" readonly="readonly"></td>
 				<td><input type="text" id="hNotes" name="hNotes"
