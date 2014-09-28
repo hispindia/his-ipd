@@ -93,7 +93,7 @@ ADMISSION={
 		{
 			if(SESSION.checkSession())
 			{
-				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=500&width=850";
+				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=650&width=850";
 				tb_show("Admission",url,false);
 			}
 		},

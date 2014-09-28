@@ -19,8 +19,12 @@
 --%> 
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
-
-
+<script type="text/javascript">
+function givePrompt(){
+alert("Kindly pay admission file charges");
+return false;
+}
+</script>
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
 <tr align="center" >
 	<th>#</th>
@@ -63,7 +67,7 @@
         </span>
         <c:choose>
 		<c:when test="${pAdmission.initialDepositStatus == 0}">
-		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" disabled="disabled" onclick="ADMISSION.admit('${pAdmission.id}');"/>
+		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="givePrompt();"/>
 		</c:when>
 		<c:when test="${pAdmission.initialDepositStatus == 1}">
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>

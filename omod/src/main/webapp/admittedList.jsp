@@ -20,6 +20,12 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
+<script type="text/javascript">
+function givePrompt(){
+alert("Kindly clear patients pending bill charges");
+return false;
+}
+</script>
 
 
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
@@ -81,7 +87,7 @@
 		    </c:choose>
 			<c:choose>
 		    <c:when test="${queue.billingStatus == 0}">
-		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" disabled="disabled" onclick="ADMITTED.discharge('${queue.id}');"/>
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="givePrompt();"/>
 		    </c:when>
 		    <c:when test="${queue.billingStatus == 1}">
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
