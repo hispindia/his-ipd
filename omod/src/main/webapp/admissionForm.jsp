@@ -115,9 +115,35 @@ MODEL = {
 		--%>
 		<td><b>Relative Name</b>:&nbsp;${relationName }</td>
 	</tr>
+		<tr>
+		<td><b><spring:message code="ipd.patient.maritalStatus"/></b>: </td>
+		<td> ${maritalStatus}</td>  
+	</tr>
+	<tr>
+		<td><b><spring:message code="ipd.patient.patientCategory"/></b>: </td>
+		<td> ${patientCategory}</td>  
+	</tr>
+	<c:if test="${not empty contactNumber}">
+	<tr>
+		<td><b><spring:message code="ipd.patient.contactNumber"/></b>: </td>
+		<td> ${contactNumber}</td>  
+	</tr>
+	</c:if>
+	<c:if test="${not empty emailAddress}">
+	<tr>
+		<td><b><spring:message code="ipd.patient.emailAddress"/></b>: </td>
+		<td> ${emailAddress}</td>  
+	</tr>
+	</c:if>
+	<c:if test="${not empty nationalID}">
+	<tr>
+		<td><b><spring:message code="ipd.patient.nationalID"/></b>: </td>
+		<td> ${nationalID}</td>  
+	</tr>
+	</c:if>
 	<tr>
 	    <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
-		<td><b><spring:message code="ipd.patient.address"/></b>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
+		<td><b><spring:message code="ipd.patient.address"/></b></td><td>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
 	</tr>
 	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 	<%--
@@ -169,47 +195,21 @@ MODEL = {
 		<div id="divBedStrength"></div>
 		</td>
 	</tr>
-	<!-- ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability -->
+
 	<tr>
 		<td><b><spring:message code="ipd.patient.comments"/></b></td>
 		<td><input type="text" id="comments" name="comments" /></td>
-	</tr>
-	<tr> <!-- MARTA -->
+	</tr
+	<tr>
+		<td>&nbsp;</td>
+		
+	</tr
+	
+	<tr> 
 		<td><b><spring:message code="ipd.patient.dateTime"/></b>: </td>
 		<td><fmt:formatDate value="${dateAdmission}" pattern="dd-MM-yyyy HH:mm:ss" /></td> 
 	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.chief"/></b></td>
-		<td><input type="text" id="chief" name="chief" /></td>
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.subChief"/></b></td>
-		<td><input type="text" id="subChief" name="subChief" /></td>
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.religion"/></b></td>
-		<td><input type="text" id="religion" name="religion" /></td>
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.maritalStatus"/></b>: </td>
-		<td> ${maritalStatus}</td>  
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.contactNumber"/></b>: </td>
-		<td> ${contactNumber}</td>  
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.emailAddress"/></b>: </td>
-		<td> ${emailAddress}</td>  
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.nationalID"/></b>: </td>
-		<td> ${nationalID}</td>  
-	</tr>
-	<tr>
-		<td><b><spring:message code="ipd.patient.patientCategory"/></b>: </td>
-		<td> ${patientCategory}</td>  
-	</tr>
+
 </table>
 
 <br/>
