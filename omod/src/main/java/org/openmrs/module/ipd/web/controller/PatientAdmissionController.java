@@ -264,9 +264,9 @@ public class PatientAdmissionController {
 			encounter.setEncounterDatetime(date);
 			encounter.setEncounterType(encounterType);
 			encounter.setLocation(location);
-			//encounter = Context.getEncounterService().saveEncounter(encounter);
+			encounter = Context.getEncounterService().saveEncounter(encounter);
 			//done save ipd encounter
-			patientAdmissionLog.setIpdEncounter(admission.getIpdEncounter());
+			patientAdmissionLog.setIpdEncounter(encounter);
 			//Get Opd Obs Group
 			Obs obsGroup = Context.getService(HospitalCoreService.class).getObsGroup(admission.getPatient());
 			patientAdmissionLog.setOpdObsGroup(obsGroup);

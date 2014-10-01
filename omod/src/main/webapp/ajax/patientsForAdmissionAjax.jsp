@@ -55,24 +55,7 @@ return false;
 		<c:set var="person" value="${pAdmission.opdAmittedUser.person }"/>
 		<td>${person.givenName}  ${person.familyName } ${fn:replace(person.middleName,',',' ')}</td>
 		<td>
-		<span id="acceptButton_${pAdmission.id}">
-        <c:choose>
-        <c:when test="${pAdmission.acceptStatus == 0}">
-        <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Accept" onclick="ADMISSION.accept('${pAdmission.id}');"/>
-        </c:when>
-        <c:when test="${pAdmission.acceptStatus == 1}">
-		<input type="button" class="ui-button ui-corner-all" value="Accepted" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>
-        </c:when>
-        </c:choose>
-        </span>
-        <c:choose>
-		<c:when test="${pAdmission.initialDepositStatus == 0}">
-		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="givePrompt();"/>
-		</c:when>
-		<c:when test="${pAdmission.initialDepositStatus == 1}">
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Admit" onclick="ADMISSION.admit('${pAdmission.id}');"/>
-		</c:when>
-		</c:choose>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Remove" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','1');"/>
 		<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="No Bed" onclick="ADMISSION.removeOrNoBed('${pAdmission.id}','2');"/>
 		</td>
