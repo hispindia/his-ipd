@@ -443,6 +443,7 @@ public class PatientAdmittedController {
 		model.addAttribute("ipdPatientAdmittedLog", ipdPatientAdmittedLog);
 		model.addAttribute("dischargeDate",new Date());
 		model.addAttribute("diagnosisList",diagnosisList);
+		model.addAttribute("comments",ipdPatientAdmittedLog.getComments());
 		model.addAttribute("procedureList",procedureList);
 		model.addAttribute("personAddress",personAddress);
 		model.addAttribute("urlS", "main.htm?tab=1");

@@ -35,6 +35,7 @@
 <div id="printArea" style="margin: 10px auto; width: 981px; font-size: 1.5em;font-family:'Dot Matrix Normal',Arial,Helvetica,sans-serif;">
 			<p><b><center><h1> DISCHARGE SUMMARY </h1></center></b></p>
 			<table width="100%" >
+			<tr><td><strong>Admission File Number:</strong>${comments}</td></tr>
 			<tr><td><strong>Name:</strong>${ipdPatientAdmittedLog.patientName }</td></tr>
 			<tr><td><strong>Patient Identifier:</strong>${ipdPatientAdmittedLog.patientIdentifier }</td></tr>
 			<c:choose>
