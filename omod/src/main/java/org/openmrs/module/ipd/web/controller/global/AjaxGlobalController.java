@@ -121,7 +121,8 @@ public class AjaxGlobalController {
 																							// identifier
 			@RequestParam(value = "fromDate", required = false) String fromDate,
 			@RequestParam(value = "toDate", required = false) String toDate,
-			@RequestParam(value = "ipdWardString", required = false) String ipdWardString, // ipdWard
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+		//	@RequestParam(value = "ipdWardString", required = false) String ipdWardString, // ipdWard
 																							// multiselect
 			@RequestParam(value = "doctorString", required = false) String doctorString,
 			Model model) {
@@ -131,9 +132,8 @@ public class AjaxGlobalController {
 		List<IpdPatientAdmission> listPatientAdmission = ipdService
 				.searchIpdPatientAdmission(searchPatient,
 						IpdUtils.convertStringToList(doctorString),
-						fromDate, toDate,
-						IpdUtils.convertStringToList(ipdWardString), "");
-
+						fromDate, toDate,ipdWard, "");
+		model.addAttribute("ipdWard", ipdWard);
 		model.addAttribute("listPatientAdmission", listPatientAdmission);
 
 		return "module/ipd/ajax/patientsForAdmissionAjax";
@@ -148,10 +148,11 @@ public class AjaxGlobalController {
 																							// identifier
 			@RequestParam(value = "fromDate", required = false) String fromDate,
 			@RequestParam(value = "toDate", required = false) String toDate,
-			@RequestParam(value = "ipdWardString", required = false) String ipdWardString, // note
+			/*@RequestParam(value = "ipdWardString", required = false) String ipdWardString, */// note
 																							// ipdWardString
 																							// =
 																							// 1,2,3,4.....
+			@RequestParam(value = "ipdWard", required = false) String ipdWard, 
 			@RequestParam(value = "tab", required = false) Integer tab, // If
 																		// that
 																		// tab
@@ -176,8 +177,7 @@ public class AjaxGlobalController {
 		List<IpdPatientAdmitted> listPatientAdmitted = ipdService
 				.searchIpdPatientAdmitted(searchPatient,
 						IpdUtils.convertStringToList(doctorString),
-						fromDate, toDate,
-						IpdUtils.convertStringToList(ipdWardString), "");
+						fromDate, toDate, ipdWard, "");
 
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
 		//ghanshyam 30/07/2012 [IPD - Bug #325] [IPD] Inconsistency in print slip
@@ -195,6 +195,7 @@ public class AjaxGlobalController {
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
+		model.addAttribute("ipdWard", ipdWard);
 		model.addAttribute("dateTime", new Date());
 
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
@@ -205,6 +206,8 @@ public class AjaxGlobalController {
 	@RequestMapping(value = "/module/ipd/getBedStrength.htm", method = RequestMethod.GET)
 	public String getBedStrength(@RequestParam(value="wardId",required=false) Integer wardId, Model model) {
 		
+		
+		System.out.println("in getBedStrength: wardId = "+wardId);
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
 		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();

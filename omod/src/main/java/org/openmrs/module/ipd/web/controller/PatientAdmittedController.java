@@ -110,13 +110,14 @@ public class PatientAdmittedController {
 	public String firstView(@RequestParam(value = "searchPatient", required = false) String searchPatient,//patient name or patient identifier
 	                        @RequestParam(value = "fromDate", required = false) String fromDate,
 	                        @RequestParam(value = "toDate", required = false) String toDate,
-	                        @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //note ipdWardString = 1,2,3,4.....
+	                    /*    @RequestParam(value = "ipdWardString", required = false) String ipdWardString,*/ //note ipdWardString = 1,2,3,4.....
+	                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
 	                        @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
 	                        @RequestParam(value = "doctorString", required = false) String doctorString,// note: doctorString= 1,2,3,4.....
 	                        Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		List<IpdPatientAdmitted> listPatientAdmitted = ipdService.searchIpdPatientAdmitted(searchPatient,
-		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
+		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, ipdWard, "");
 		
 		/*Sagar Bele 08-08-2012 Support #327 [IPD] (DDU(SDMX)instance) snapshot- age column in IPD admitted patient index */
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
@@ -149,6 +150,7 @@ public class PatientAdmittedController {
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
 		model.addAttribute("dateTime", new Date());
+		model.addAttribute("ipdWard", ipdWard);
 //		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
@@ -157,7 +159,12 @@ public class PatientAdmittedController {
 	//ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
 	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.GET)
 	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, 
-			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,Model model) {
+			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			Model model) {
+		
+		
+		System.out.println("in vitalSatatisticsView   get method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -189,6 +196,7 @@ public class PatientAdmittedController {
 		model.addAttribute("dat", formatter.format(new Date()));
 		List<Concept> dietConcept= ipdService.getDiet();
 		model.addAttribute("dietList", dietConcept);
+		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/vitalStatisticsForm";
 	}
 	
@@ -201,7 +209,12 @@ public class PatientAdmittedController {
 	                           @RequestParam(value = "temperature", required = false) String temperature,
 	                           //@RequestParam(value = "dietAdvised", required = false) String dietAdvised,
 	                           @RequestParam(value = "notes", required = false) String notes,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
 	                           Model model,HttpServletRequest request) {
+		
+		
+		
+		System.out.println("in vitalSatatisticsView   POST method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientService patientService = Context.getPatientService();
 		Patient patient = patientService.getPatient(patientId);
@@ -225,7 +238,7 @@ public class PatientAdmittedController {
 		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
 		ipdPatientVitalStatistics.setCreatedOn(new Date());
 		ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
-		model.addAttribute("urlS", "main.htm?tab=1");
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
@@ -235,18 +248,23 @@ public class PatientAdmittedController {
 	                           @RequestParam("doctor") Integer doctorId,
 	                           @RequestParam(value = "bedNumber", required = false) String bed, 
 	                           //ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
-	                           @RequestParam(value = "comments", required = false) String comments,Model model) {
+	                           @RequestParam(value = "comments", required = false) String comments,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                           Model model) {
+		System.out.println("in transferView   post method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
 		ipdService.transfer(id, toWardId, doctorId, bed,comments);
-		model.addAttribute("urlS", "main.htm?tab=1");
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
 	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.GET)
-	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId, Model model) {
-		
+	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId, 
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			Model model) {
+		System.out.println("in transferView   get method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -259,6 +277,7 @@ public class PatientAdmittedController {
 		Role doctorRole = Context.getUserService().getRole(doctorRoleProps);
 		if (doctorRole != null) {
 			List<User> listDoctor = Context.getUserService().getUsersByRole(doctorRole);
+			
 			model.addAttribute("listDoctor", listDoctor);
 		}
 		
@@ -278,7 +297,7 @@ public class PatientAdmittedController {
 		
 		//Patient category
 		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
-		
+		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/transferForm";
 	}
 	
@@ -580,7 +599,10 @@ public class PatientAdmittedController {
 	}
 	
 	@RequestMapping(value = "/module/ipd/requestForDischarge.htm", method = RequestMethod.GET)
-	public String requestForDischarge(Model model,@RequestParam(value = "id", required = false) Integer admittedId) {
+	public String requestForDischarge(Model model,@RequestParam(value = "id", required = false) Integer admittedId,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard) {
+		
+		System.out.println("in get method of requestForDischarge   ipdWard   "+ipdWard);
 	int requestForDischargeStatus = 1;
 	IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 	IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
@@ -590,7 +612,7 @@ public class PatientAdmittedController {
 	ipdPatientAdmissionLog.setRequestForDischargeStatus(requestForDischargeStatus);
 	ipdService.saveIpdPatientAdmissionLog(ipdPatientAdmissionLog);
 	
-	model.addAttribute("urlS", "main.htm?tab=1");
+	model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 	model.addAttribute("message", "Succesfully");
 	return "/module/ipd/thickbox/success";
 

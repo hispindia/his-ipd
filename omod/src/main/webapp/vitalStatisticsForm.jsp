@@ -28,6 +28,7 @@
 <%@ include file="/WEB-INF/template/headerMinimal.jsp"%>
 <script type="text/javascript">
 function validate(){
+
 var bloodpressure=document.forms["vitalStatisticsForm"]["bloodPressure"].value;
 var pulserate=document.forms["vitalStatisticsForm"]["pulseRate"].value;
 var temperature=document.forms["vitalStatisticsForm"]["temperature"].value;
@@ -48,10 +49,12 @@ if (temperature==null || temperature=="")
   }	
 }
 </script>
+
 <input type="hidden" id="pageId" value="vitalStatisticsPage" />
 <form method="post" id="vitalStatisticsForm"
-	action="vitalStatistics.htm?patientId=${admitted.patient.patientId}"
+	action="vitalStatistics.htm?patientId=${admitted.patient.patientId}";
 	onsubmit="javascript:return validate();">
+	<input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
 	<input type="hidden" id="admittedId" name="admittedId"
 		value="${admitted.id }" />
 	<div class="box">

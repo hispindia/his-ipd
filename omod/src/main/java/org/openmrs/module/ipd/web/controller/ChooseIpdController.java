@@ -48,30 +48,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller("IpdMainController")
-@RequestMapping("/module/ipd/main.htm")
-public class MainController {
+@Controller("ChooseIpdController")
+@RequestMapping("/module/ipd/chooseIpdWard.htm")
+public class ChooseIpdController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String firstView(
-			@RequestParam(value ="searchPatient",required=false) String searchPatient,//patient name or patient identifier
-			@RequestParam(value ="fromDate",required=false) String fromDate,
-			@RequestParam(value ="toDate",required=false) String toDate,
-			@RequestParam(value ="ipdWard",required=false) String ipdWard,
-			@RequestParam(value ="tab",required=false) Integer tab, //If that tab is active we will set that tab active when page load.
-			@RequestParam(value ="doctor",required=false) String[] doctor,
+			@RequestParam(value ="ipdWard",required=false) String[] ipdWard, 
+			@RequestParam(value ="tab",required=false) Integer tab, 
 			Model model){
-		
-		//HospitalCoreService coreService = Context.getService(HospitalCoreService.class);
-		//Concept conOutcome =conse.getConcept(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
-		/*System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 1");
-			conOutcome = coreService.insertConceptUnlessExist(HospitalCoreConstants.CONCEPT_DATATYPE_CODED, HospitalCoreConstants.CONCEPT_CLASS_QUESTION, HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
-			String [] xxx=  new String[]{ "Improve", "Cured" , "Discharge on request" ,"LAMA", "Absconding", "Death"};
-			coreService.addConceptAnswers(conse , conOutcome,xxx , user);
-			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 2");*/
-		//System.out.println("=========================================================");
 		creatConceptQuestionAndAnswer(Context.getConceptService() , Context.getAuthenticatedUser() ,HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME,  new String[]{ "Improve", "Cured" , "Discharge on request" ,"LAMA", "Absconding", "Death"});
-		//	System.out.println("=====================xong====================================");
 		Concept ipdConcept = Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
 		List<ConceptAnswer> list = (ipdConcept!= null ?  new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
 		if(CollectionUtils.isNotEmpty(list)){
@@ -84,16 +70,10 @@ public class MainController {
 			List<User> listDoctor = Context.getUserService().getUsersByRole(doctorRole);
 			model.addAttribute("listDoctor",listDoctor);
 		}
-		
-		model.addAttribute("fromDate",fromDate);
-		model.addAttribute("toDate",toDate);
-		model.addAttribute("tab",tab == null? 0 : tab.intValue());
-		model.addAttribute("searchPatient",searchPatient);
+		tab =0;
 		model.addAttribute("ipdWard",ipdWard);
-	
-		model.addAttribute("doctor",doctor);
-		model.addAttribute("doctorString",IpdUtils.convertStringArraytoString(doctor));
-		return "module/ipd/main";
+		model.addAttribute("tab",tab.intValue());
+		return "module/ipd/chooseIpdWard";
 	}
 	private Concept insertConcept(ConceptService conceptService,
 			String dataTypeName, String conceptClassName, String concept) {

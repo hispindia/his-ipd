@@ -48,8 +48,10 @@ function validateForm(){
 
 
 <input type="hidden" id="pageId" value="transferPage"/>
+<input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
 <form method="post" id="transferForm" onsubmit="javascript:return validateForm();">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
+
 <div class="box">
 <c:if test ="${not empty message }">
 <div class="error">

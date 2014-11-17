@@ -94,13 +94,17 @@ public class PatientAdmissionController {
 	public String firstView(@RequestParam(value = "searchPatient", required = false) String searchPatient,//patient name or patient identifier
 	                        @RequestParam(value = "fromDate", required = false) String fromDate,
 	                        @RequestParam(value = "toDate", required = false) String toDate,
-	                        @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
+	                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                    //    @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
 	                        @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
 	                        @RequestParam(value = "doctorString", required = false) String doctorString, Model model) {
 		
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+	/*	List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
+		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");*/
+		
 		List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
-		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
+			    IpdUtils.convertStringToList(doctorString), fromDate, toDate, ipdWard, "");
 		
 		model.addAttribute("listPatientAdmission", listPatientAdmission);
 		

@@ -136,41 +136,41 @@ QUEUE={
 		},
 		refreshQueue : function()
 		{
-			jQuery("#Patients_for_admission").load("patientsForAdmissionAjax.htm?ipdWardString="+jQuery("#ipdWardString").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
+				jQuery("#Patients_for_admission").load("patientsForAdmissionAjax.htm?ipdWard="+jQuery("#ipdWard").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
 		},
 		refreshAdmittedQueue : function()
 		{
-			jQuery("#Admitted_patient_index").load("admittedPatientIndexAjax.htm?ipdWardString="+jQuery("#ipdWardString").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
+				jQuery("#Admitted_patient_index").load("admittedPatientIndexAjax.htm?ipdWard="+jQuery("#ipdWard").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
 		}
 		
 };	
 
 ADMITTED = {
        //ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd
-		vitalStatistics : function(id,patientAdmissionLogId)
+		vitalStatistics : function(id,patientAdmissionLogId,ipdWard)
 		{
 			if(SESSION.checkSession())
 			{
 				
-				var url = "vitalStatistics.htm?id="+id+"&patientAdmissionLogId="+patientAdmissionLogId+"&keepThis=false&TB_iframe=true&height=500&width=1000";
+				var url = "vitalStatistics.htm?id="+id+"&patientAdmissionLogId="+patientAdmissionLogId+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=500&width=1000";
 				tb_show("Daily Vital Statistics",url,false);
 			}
 		},
-		transfer : function(id)
+		transfer : function(id,ipdWard)
 		{
 			if(SESSION.checkSession())
 			{
 				
-				var url = "transfer.htm?id="+id+"&keepThis=false&TB_iframe=true&height=555&width=1000";
+				var url = "transfer.htm?id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=555&width=1000";
 				tb_show("Transfer",url,false);
 			}
 		},
-		requestForDischarge: function(id)
+		requestForDischarge: function(id,ipdWard)
 		{
 			if(SESSION.checkSession())
 			{
 				
-				var url = "requestForDischarge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+				var url = "requestForDischarge.htm?id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
 				tb_show("Discharge",url,false);
 			}
 		},

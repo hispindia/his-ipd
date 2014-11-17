@@ -26,7 +26,7 @@ alert("Kindly clear patients pending bill charges");
 return false;
 }
 </script>
-	
+<input type="hidden" name="ipdWard" id="ipdWard" value="${ipdWard}">
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
 <tr align="center" >
 	<th>#</th>
@@ -66,8 +66,8 @@ return false;
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
 		    <c:choose>
 		    <c:when test="${queue.requestForDischargeStatus == 0}">
-		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
-		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Transfer" onclick="ADMITTED.transfer('${queue.id}');"/>
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}',${ipdWard});"/>
+		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Transfer" onclick="ADMITTED.transfer('${queue.id}',${ipdWard});"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" disabled="disabled" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}');"/>
@@ -76,7 +76,7 @@ return false;
 		    </c:choose>
 		    <c:choose>
 		    <c:when test="${queue.requestForDischargeStatus == 0}">
-		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}');"/>
+		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}',${ipdWard});"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

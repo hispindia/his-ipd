@@ -30,6 +30,7 @@
 </style>
 
 <input type="hidden" id="pageId" value="dischagePage"/>
+<input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
 <form method="post" id="dischargeForm">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 <!-- harsh 14/6/2012: to get patient ID -->
