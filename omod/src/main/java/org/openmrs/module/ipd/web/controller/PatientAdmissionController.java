@@ -146,7 +146,7 @@ public class PatientAdmissionController {
 			
 			PersonAttribute nationalID  = admission.getPatient().getAttribute("National ID");
 			
-			PersonAttribute patientCategory  = admission.getPatient().getAttribute("Patient Category");
+			PersonAttribute patientCategory  = admission.getPatient().getAttribute("Payment Category");
 			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
 			// ghansham 25-june-2013 issue no # 1924 Change in the address format
