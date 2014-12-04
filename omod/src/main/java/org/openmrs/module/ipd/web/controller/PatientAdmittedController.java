@@ -600,13 +600,20 @@ public class PatientAdmittedController {
 	
 	@RequestMapping(value = "/module/ipd/requestForDischarge.htm", method = RequestMethod.GET)
 	public String requestForDischarge(Model model,@RequestParam(value = "id", required = false) Integer admittedId,
-			@RequestParam(value = "ipdWard", required = false) String ipdWard) {
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			@RequestParam(value = "obStatus", required = false) Integer obStatus){
 		
 		System.out.println("in get method of requestForDischarge   ipdWard   "+ipdWard);
 	int requestForDischargeStatus = 1;
 	IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 	IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+	
+	IpdPatientAdmissionLog ipal = admitted.getPatientAdmissionLog();
+	ipal.setAbsconded(obStatus);
+	
 	admitted.setRequestForDischargeStatus(requestForDischargeStatus);
+	admitted.setAbsconded(obStatus);
+	
 	admitted=ipdService.saveIpdPatientAdmitted(admitted);
 	IpdPatientAdmissionLog ipdPatientAdmissionLog=admitted.getPatientAdmissionLog();
 	ipdPatientAdmissionLog.setRequestForDischargeStatus(requestForDischargeStatus);

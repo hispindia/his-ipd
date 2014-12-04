@@ -26,6 +26,8 @@ alert("Kindly clear patients pending bill charges");
 return false;
 }
 </script>
+
+
 <input type="hidden" name="ipdWard" id="ipdWard" value="${ipdWard}">
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
 <tr align="center" >
@@ -38,6 +40,7 @@ return false;
 	<th><spring:message code="ipd.patient.admissionWard"/></th>
 	<th><spring:message code="ipd.patient.bedNumber"/></th>
 	<th><spring:message code="ipd.patient.admissionBy"/></th>
+    
 	<th><spring:message code="ipd.patient.action"/></th>
 </tr>
 <c:choose>
@@ -62,10 +65,13 @@ return false;
 		<td>${queue.bed}</td>
 		<c:set var="person" value="${queue.ipdAdmittedUser.person }"/>
 		<td width="50">${person.givenName}${person.familyName }  ${fn:replace(person.middleName,',',' ')} </td>
+        
 		<td>
 		    <!-- ghanshyam 10-june-2013 New Requirement #1847 Capture Vital statistics for admitted patient in ipd -->
 		    <c:choose>
 		    <c:when test="${queue.requestForDischargeStatus == 0}">
+            
+            
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Vital Statistics" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}',${ipdWard});"/>
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all"  value="Transfer" onclick="ADMITTED.transfer('${queue.id}',${ipdWard});"/>
 		    </c:when>
@@ -76,13 +82,21 @@ return false;
 		    </c:choose>
 		    <c:choose>
 		    <c:when test="${queue.requestForDischargeStatus == 0}">
-		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}',${ipdWard});"/>
+		    &nbsp;<input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Abscond" onclick="ADMITTED.requestForDischarge('${queue.id}','${ipdWard}',1);"/>&nbsp;
+		    <input type="button"  class="ui-button ui-widget ui-state-default ui-corner-all" value="Request For Discharge" onclick="ADMITTED.requestForDischarge('${queue.id}','${ipdWard}',0);"/>
 		    </c:when>
 		    <c:when test="${queue.requestForDischargeStatus == 1}">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <c:choose>
+		<c:when test="${queue.absconded ==1}">
+        <input type="button"  class="ui-button ui-widget ui-corner-all" value="Absconded" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>
+        </c:when>
+        <c:otherwise>    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="ui-button ui-widget ui-corner-all" value="Request sent" style="font-weight: bold; color:#FFFFFF; background-color:#1AAD9B"/>
+            </c:otherwise>
+            </c:choose>
 		    </c:when>
 		    </c:choose>
-		    <c:choose>
+			<c:choose>
 		    <c:when test="${queue.billingStatus == 0}">
 			    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="givePrompt();"/>
 		    </c:when>

@@ -165,14 +165,19 @@ ADMITTED = {
 				tb_show("Transfer",url,false);
 			}
 		},
-		requestForDischarge: function(id,ipdWard)
-		{
-			if(SESSION.checkSession())
-			{
-				
-				var url = "requestForDischarge.htm?id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
-				tb_show("Discharge",url,false);
-			}
+		requestForDischarge: function(id,ipdWard,obStatus)
+		{	if(obStatus==1){
+				if(confirm("Are You Sure?")){
+					if(SESSION.checkSession())
+					{
+					
+						var url = "requestForDischarge.htm?obStatus="+obStatus+"&id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+						tb_show("Discharge",url,false);
+					}
+				}
+				else return false;
+		}
+		
 		},
 		discharge: function(id)
 		{
