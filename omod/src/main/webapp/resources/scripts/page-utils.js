@@ -166,7 +166,8 @@ ADMITTED = {
 			}
 		},
 		requestForDischarge: function(id,ipdWard,obStatus)
-		{	if(obStatus==1){
+		{	
+			if(obStatus==1){
 				if(confirm("Are You Sure?")){
 					if(SESSION.checkSession())
 					{
@@ -176,7 +177,13 @@ ADMITTED = {
 					}
 				}
 				else return false;
-		}
+			}
+			else {
+				
+					var url = "requestForDischarge.htm?obStatus="+obStatus+"&id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+					tb_show("Discharge",url,false);
+				}
+		
 		
 		},
 		discharge: function(id)
