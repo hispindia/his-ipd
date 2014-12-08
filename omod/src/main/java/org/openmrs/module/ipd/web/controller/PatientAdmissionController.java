@@ -198,7 +198,7 @@ public class PatientAdmissionController {
 			
 			return "module/ipd/admissionForm";
 		}
-		System.out.println("admission is NULL");
+	
 		return "redirect:/module/ipd/main.htm";
 	}
 	
@@ -443,7 +443,7 @@ public class PatientAdmissionController {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientQueueService queueService = Context.getService(PatientQueueService.class);
 		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
-		
+		IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
 		User user = Context.getAuthenticatedUser();
 		EncounterType encounterType = Context.getService(HospitalCoreService.class).insertEncounterTypeByKey(
 		    HospitalCoreConstants.PROPERTY_IPDENCOUNTER);
@@ -453,7 +453,7 @@ public class PatientAdmissionController {
 			//remove
 			Date date = new Date();
 			//copy admission to log
-			IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
+			
 			patientAdmissionLog.setAdmissionDate(date);
 			patientAdmissionLog.setAdmissionWard(admission.getAdmissionWard());
 			patientAdmissionLog.setBirthDate(admission.getBirthDate());
@@ -465,6 +465,7 @@ public class PatientAdmissionController {
 			patientAdmissionLog.setPatientName(admission.getPatientName());
 			patientAdmissionLog.setStatus(IpdConstants.STATUS[action]);
 			patientAdmissionLog.setIndoorStatus(1);
+			
 			
 			//save ipd encounter
 			
@@ -533,7 +534,7 @@ public class PatientAdmissionController {
 			opdPatientQueueLog.setVisitOutCome("no bed");
 			queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
 		}
-		return "redirect:/module/ipd/main.htm";
+		return "redirect:/module/ipd/main.htm?ipdWard="+patientAdmissionLog.getAdmissionWard().getConceptId();
 	}
 	
 	@RequestMapping(value = "/module/ipd/accept.htm", method = RequestMethod.GET)

@@ -164,7 +164,6 @@ public class PatientAdmittedController {
 			Model model) {
 		
 		
-		System.out.println("in vitalSatatisticsView   get method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -214,7 +213,6 @@ public class PatientAdmittedController {
 		
 		
 		
-		System.out.println("in vitalSatatisticsView   POST method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientService patientService = Context.getPatientService();
 		Patient patient = patientService.getPatient(patientId);
@@ -603,7 +601,7 @@ public class PatientAdmittedController {
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			@RequestParam(value = "obStatus", required = false) Integer obStatus){
 		
-		System.out.println("in get method of requestForDischarge   ipdWard   "+ipdWard);
+
 	int requestForDischargeStatus = 1;
 	IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 	IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
