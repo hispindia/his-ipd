@@ -305,7 +305,6 @@ public class PatientAdmittedController {
 		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
 		PatientQueueService queueService = Context.getService(PatientQueueService.class);
 		PatientSearch patientSearch = hospitalCoreService.getPatient(command.getPatientId());
-		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
 			
 			ConceptService conceptService = Context.getConceptService();
@@ -318,11 +317,14 @@ public class PatientAdmittedController {
 			patient.setCauseOfDeath(causeOfDeath);
 			ps.savePatient(patient);
 			patientSearch.setDead(true);
+			patientSearch.setAdmitted(false);
+			hospitalCoreService.savePatientSearch(patientSearch);
+		}
+		else{
+			patientSearch.setAdmitted(false);
 			hospitalCoreService.savePatientSearch(patientSearch);
 		}
 		
-		//star
-		//
 		AdministrationService administrationService = Context.getAdministrationService();
 		GlobalProperty gpDiagnosis = administrationService
 		        .getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);

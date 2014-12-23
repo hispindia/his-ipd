@@ -53,6 +53,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
+import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.Money;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
@@ -210,18 +211,10 @@ public class PatientAdmissionController {
 		int id = NumberUtils.toInt(request.getParameter("id"));
 		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(id);
 		
-		/*	String patientName = request.getParameter("patientName");
-			String patientId = request.getParameter("patientId");
-			String age = request.getParameter("age");
-			String gender = request.getParameter("gender");*/
 		String caste = request.getParameter("caste");
-		//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
-		//BigDecimal monthlyIncome = NumberUtils.createBigDecimal(request.getParameter("monthlyIncome"));
-		//String fatherName = request.getParameter("fatherName");
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
 		String bedNumber = request.getParameter("bedNumber");
-		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
 		String comments = request.getParameter("comments");
 		String chief = request.getParameter("chief");
 		String subChief = request.getParameter("subChief");
@@ -237,9 +230,6 @@ public class PatientAdmissionController {
 		try {
 			
 			Date date = new Date();
-			
-			//ghanshyam 25-oct-2012 Bug #425 [IPD Module] Admission Date fetched incorrectly.(note:commented below line date = admission.getAdmissionDate())
-			//date = admission.getAdmissionDate();
 			
 			//copy admission to log
 			IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
@@ -341,7 +331,6 @@ public class PatientAdmissionController {
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			model.addAttribute("relationName", relationNameattr.getValue());
-			//ghanshyam 02/08/2012 [IPD - Bug #331] (New) DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
 			if(relationTypeattr!=null){
 				model.addAttribute("relationType", relationTypeattr.getValue());
 			}
@@ -358,7 +347,6 @@ public class PatientAdmissionController {
 			admitted.setAdmittedWard(Context.getConceptService().getConcept(admittedWard));
 			admitted.setBasicPay(basicPay);
 			admitted.setBed(bedNumber);
-			//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
 			admitted.setComments(comments);
 			admitted.setBirthDate(admission.getPatient().getBirthdate());
 			admitted.setCaste(caste);
@@ -370,7 +358,6 @@ public class PatientAdmissionController {
 				relationshipType = relationTypeattr.getValue();
 				
 			}
-			//ghanshyam 02/08/2012 [IPD - Bug #331] (New) DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
 			else{
 				relationshipType = "Relative Name";
 			}
@@ -381,9 +368,6 @@ public class PatientAdmissionController {
 			treatingD = Context.getUserService().getUser(treatingDoctor);
 			
 			admitted.setIpdAdmittedUser(treatingD);
-			//ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module
-			//admitted.setMonthlyIncome(monthlyIncome);
-			//ghanshyam 7-august-2013 code review bug
 			if(patientAdmissionLog!=null){
 			admitted.setPatient(patientAdmissionLog.getPatient());
 			}
@@ -397,6 +381,10 @@ public class PatientAdmissionController {
 			admitted.setSubChief(subChief);
 			admitted.setReligion(religion);
 			admitted = ipdService.saveIpdPatientAdmitted(admitted);
+			HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+			PatientSearch patientSearch = hospitalCoreService.getPatient(patientAdmissionLog.getPatient().getPatientId());
+			patientSearch.setAdmitted(true);
+			hospitalCoreService.savePatientSearch(patientSearch);
 			model.addAttribute("admitted", admitted);
 			
 			//delete admission
