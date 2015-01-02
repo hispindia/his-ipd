@@ -249,7 +249,6 @@ public class PatientAdmittedController {
 	                           @RequestParam(value = "comments", required = false) String comments,
 	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
 	                           Model model) {
-		System.out.println("in transferView   post method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		//ghanshyam 11-july-2013 feedback # 1724 Introducing bed availability
 		ipdService.transfer(id, toWardId, doctorId, bed,comments);
@@ -262,7 +261,6 @@ public class PatientAdmittedController {
 	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId, 
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
-		System.out.println("in transferView   get method ***** ipdWard"+ipdWard);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
