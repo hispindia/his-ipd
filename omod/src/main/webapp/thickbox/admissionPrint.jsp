@@ -56,7 +56,7 @@
 			</td></tr>
 			<tr><td align="left"><strong>Relative Name</strong></td><td>:${relationType}</td>  </tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.address"/></strong> </td><td>:${address } &nbsp;${upazila } &nbsp;${district } </td></tr>
-			<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+			<%--  Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 			<%--
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td></tr>
@@ -64,6 +64,7 @@
 			<tr></tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.admittedWard"/></strong></td><td>:${admitted.admittedWard.name}</td></tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.treatingDoctor"/></strong></td><td>:${treatingDoctor.givenName}</td></tr>
+			<tr><td align="left"><strong><spring:message code="ipd.patient.fileNumber"/></strong></td><td>:${fileNumber}</td></tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.bedNumber"/></strong></td><td>:${admitted.bed }</td></tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.contactNumber"/></strong></td><td>:${contactNumber}</td></tr>
 			<tr><td align="left"><strong><spring:message code="ipd.patient.emailAddress"/></strong></td><td>:${emailAddress}</td></tr>

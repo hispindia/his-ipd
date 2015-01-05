@@ -38,6 +38,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
@@ -149,13 +150,19 @@ public class PatientAdmissionController {
 			
 			PersonAttribute patientCategory  = admission.getPatient().getAttribute("Payment Category");
 			
+			PersonAttribute fileNumber = admission.getPatient().getAttribute("File Number");
+			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
-			// ghansham 25-june-2013 issue no # 1924 Change in the address format
+			//  issue no # 1924 Change in the address format
 			model.addAttribute("district", district);
 			model.addAttribute("upazila", upazila);
 			model.addAttribute("relationName", relationNameattr.getValue());
+			if(fileNumber!=null){
+				model.addAttribute("fileNumber", fileNumber.getValue());				
+			}
+
 			
-			/*ghanshyam 30/07/2012 this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
+			/* this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
 			                       exception.*/
 			if(relationTypeattr!=null){
 				model.addAttribute("relationType", relationTypeattr.getValue());
@@ -166,7 +173,7 @@ public class PatientAdmissionController {
 			
 			model.addAttribute("admission", admission);
 			
-			//ghanshyam 25-oct-2012 Bug #425 [IPD Module] Admission Date fetched incorrectly.
+			// Bug #425 [IPD Module] Admission Date fetched incorrectly.
 			model.addAttribute("dateAdmission", new Date());
 			
 			// patient category
@@ -215,6 +222,7 @@ public class PatientAdmissionController {
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
 		String bedNumber = request.getParameter("bedNumber");
+		String fileNumber = request.getParameter("fileNumber");
 		String comments = request.getParameter("comments");
 		String chief = request.getParameter("chief");
 		String subChief = request.getParameter("subChief");
@@ -330,6 +338,7 @@ public class PatientAdmissionController {
 			
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
+
 			model.addAttribute("relationName", relationNameattr.getValue());
 			if(relationTypeattr!=null){
 				model.addAttribute("relationType", relationTypeattr.getValue());
@@ -337,7 +346,23 @@ public class PatientAdmissionController {
 			else{
 				model.addAttribute("relationType", "Relative Name");
 			}
-			//model.addAttribute("relationType", relationTypeattr.getValue());
+			
+
+			
+			PersonAttribute fileNumber_old = admission.getPatient().getAttribute("File Number");			
+			if(fileNumber_old!=null){
+				model.addAttribute("fileNumber", fileNumber_old.getValue());
+			}
+			else{
+				PersonAttributeType type = Context.getPersonService().getPersonAttributeTypeByName("File Number");
+				PersonAttribute attribute = new PersonAttribute();
+				attribute.setAttributeType(type);
+				attribute.setValue(fileNumber);
+				Patient patient=admission.getPatient();
+				patient.addAttribute(attribute);
+				model.addAttribute("fileNumber", fileNumber);
+			}
+			
 			
 			model.addAttribute("dateAdmission", date);
 			

@@ -108,7 +108,7 @@ MODEL = {
 			</c:choose>
 		</td>
 	</tr>
-	<%-- ghanshyam 27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
+	<%--  Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
 	<tr>
 		<%--
 		<td><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
@@ -142,10 +142,10 @@ MODEL = {
 	</tr>
 	</c:if>
 	<tr>
-	    <!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
+	    <!--  issue no # 1924 Change in the address format -->
 		<td><b><spring:message code="ipd.patient.address"/></b></td><td>: ${address } &nbsp;${upazila } &nbsp;${district } </td>
 	</tr>
-	<%-- ghanshyam 27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
+	<%--  Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
 	<%--
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
@@ -195,7 +195,17 @@ MODEL = {
 		<div id="divBedStrength"></div>
 		</td>
 	</tr>
-
+	<tr>
+		<td><b><spring:message code="ipd.patient.fileNumber"/></b></td>
+		<c:choose>
+				<c:when test="${not empty fileNumber}">
+					<td>${fileNumber}</td>
+				</c:when>
+				<c:otherwise>
+					<td><input type="text" id="fileNumber" name="fileNumber" /></td>
+				</c:otherwise>
+		</c:choose>
+	</tr
 	<tr>
 		<td><b><spring:message code="ipd.patient.comments"/></b></td>
 		<td><input type="text" id="comments" name="comments" /></td>
