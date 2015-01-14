@@ -156,6 +156,15 @@ ADMITTED = {
 				tb_show("Daily Vital Statistics",url,false);
 			}
 		},
+		treatment: function(id)
+		{
+			if(SESSION.checkSession())
+			{
+				
+				var url = "treatment.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+				tb_show("Treatment",url,false);
+			}
+		},
 		transfer : function(id,ipdWard)
 		{
 			if(SESSION.checkSession())

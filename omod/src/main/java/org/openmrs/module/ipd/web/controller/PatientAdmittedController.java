@@ -241,6 +241,97 @@ public class PatientAdmittedController {
 		return "/module/ipd/thickbox/success";
 	}
 	
+	@RequestMapping(value = "/module/ipd/treatment.htm", method = RequestMethod.GET)
+	public String treatment(@RequestParam(value = "id", required = false) Integer admittedId,
+	                            @ModelAttribute("ipdCommand") IpdFinalResultCommand command, Model model) {
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		
+		Patient patient = admitted.getPatient();
+		model.addAttribute("patientId", patient.getId());
+		
+		PersonAddress add = patient.getPersonAddress();
+		String address = add.getAddress1();
+		// ghansham 25-june-2013 issue no # 1924 Change in the address format
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+		//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out
+		PersonAttribute relationTypeattr = patient.getAttribute("Relative Name Type");
+		model.addAttribute("relationName", relationNameattr.getValue());
+		//ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #312
+		if(relationTypeattr!=null){
+			model.addAttribute("relationType", relationTypeattr.getValue());
+		}
+		else{
+			model.addAttribute("relationType", "Relative Name");
+		}
+		model.addAttribute("dateTime", new Date());
+		
+		model.addAttribute("admitted", admitted);
+		
+		//change CHUYEN
+		
+		//
+		ConceptService conceptService = Context.getConceptService();
+		AdministrationService administrationService = Context.getAdministrationService();
+		String gpDiagnosis = administrationService
+		        .getGlobalProperty(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
+		String gpProcedure = administrationService.getGlobalProperty(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		List<Obs> obsList = new ArrayList<Obs>(admitted.getPatientAdmissionLog().getIpdEncounter().getAllObs());
+		Concept conDiagnosis = conceptService.getConcept(gpDiagnosis);
+		
+		Concept conProcedure = conceptService.getConcept(gpProcedure);
+		
+		List<Concept> selectedDiagnosisList = new ArrayList<Concept>();
+		List<Concept> selectedProcedureList = new ArrayList<Concept>();
+		if (CollectionUtils.isNotEmpty(obsList)) {
+			for (Obs obs : obsList) {
+				if (obs.getConcept().getConceptId().equals(conDiagnosis.getConceptId())) {
+					selectedDiagnosisList.add(obs.getValueCoded());
+				}
+				if (obs.getConcept().getConceptId().equals(conProcedure.getConceptId())) {
+					selectedProcedureList.add(obs.getValueCoded());
+				}
+			}
+		}
+		
+		//
+		PatientDashboardService dashboardService = Context.getService(PatientDashboardService.class);
+		List<Concept> diagnosis = dashboardService.listByDepartmentByWard(admitted.getAdmittedWard().getId(),
+		    DepartmentConcept.TYPES[0]);
+		if (CollectionUtils.isNotEmpty(diagnosis) && CollectionUtils.isNotEmpty(selectedDiagnosisList)) {
+			diagnosis.removeAll(selectedDiagnosisList);
+		}
+		if (CollectionUtils.isNotEmpty(diagnosis)) {
+			Collections.sort(diagnosis, new ConceptComparator());
+		}
+		model.addAttribute("listDiagnosis", diagnosis);
+		List<Concept> procedures = dashboardService.listByDepartmentByWard(admitted.getAdmittedWard().getId(),
+		    DepartmentConcept.TYPES[1]);
+		if (CollectionUtils.isNotEmpty(procedures) && CollectionUtils.isNotEmpty(selectedProcedureList)) {
+			procedures.removeAll(selectedProcedureList);
+		}
+		if (CollectionUtils.isNotEmpty(procedures)) {
+			Collections.sort(procedures, new ConceptComparator());
+		}
+		model.addAttribute("listProcedures", procedures);
+		
+		Collections.sort(selectedDiagnosisList, new ConceptComparator());
+		Collections.sort(selectedProcedureList, new ConceptComparator());
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
+		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
+		model.addAttribute("sProcedureList", selectedProcedureList);
+		
+		return "module/ipd/treatmentForm";
+	}
+	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)
 	public String transferPost(@RequestParam("admittedId") Integer id, @RequestParam("toWard") Integer toWardId,
 	                           @RequestParam("doctor") Integer doctorId,
