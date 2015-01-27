@@ -51,7 +51,7 @@
 			<tr><td><strong>Consultant:</strong>${ipdPatientAdmittedLog.ipdAdmittedUser.username }</td></tr>
 			<tr><td><strong>DOA:</strong><openmrs:formatDate date="${ipdPatientAdmittedLog.patientAdmissionLog.admissionDate}" type="long" /></td></tr>
 			<tr><td><strong>DOD:</strong><openmrs:formatDate date="${dischargeDate}" type="long" /></td></tr>
-			<tr></tr>
+			<tr><td><strong>File Number:</strong>${fileNumber}</td></tr>
 			<tr></tr>
 			<tr></tr>
 			<tr></tr>

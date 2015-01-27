@@ -155,7 +155,9 @@ public class PatientAdmittedController {
 			else{
 				mapRelationType.put(admit.getId(), "Relative Name");
 			}
-			mapRelationName.put(admit.getId(), relationNameattr.getValue());	
+			mapRelationName.put(admit.getId(), relationNameattr.getValue());
+			PersonAttribute fileNumber = admit.getPatient().getAttribute("File Number");
+			model.addAttribute("fileNumber", fileNumber);
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
@@ -913,9 +915,11 @@ public class PatientAdmittedController {
 		model.addAttribute("message", "Succesfully");
 		
         PersonAttribute contactNumber = ipdPatientAdmittedLog.getPatient().getAttribute("Phone Number");
-		
+        PersonAttribute fileNumber = ipdPatientAdmittedLog.getPatient().getAttribute("File Number");
 		PersonAttribute emailAddress = ipdPatientAdmittedLog.getPatient().getAttribute("Patient E-mail Address");
 		
+			model.addAttribute("fileNumber", fileNumber.getValue());
+			
 		if(contactNumber!=null){
 			model.addAttribute("contactNumber", contactNumber.getValue());
 		}
