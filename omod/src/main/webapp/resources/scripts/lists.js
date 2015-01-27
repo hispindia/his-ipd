@@ -18,6 +18,7 @@
  *
 */
 var NS4 = (navigator.appName == "Netscape" && parseInt(navigator.appVersion) < 5);
+var pl;
 
 function addValue( theSel, theText, theValue ) {
     var newOpt = new Option( theText, theValue );
@@ -41,6 +42,7 @@ function deleteValue( theSel, theIndex ) {
 function moveSelectedById( fromListId, targetListId ) {
     var fromList = document.getElementById( fromListId );
     var targetList = document.getElementById( targetListId );
+    pl=targetListId;
     moveSelected( fromList, targetList );
 }
 
@@ -61,11 +63,18 @@ function moveSelected( fromList, targetList ) {
         var selectedValues = new Array();
         var selectedCount = 0;
         var i;
-
+        
         for(i=selLength-1; i>=0; i--) {
             if(fromList.options[i].selected) {
                 selectedText[selectedCount] = fromList.options[i].text;
                 selectedValues[selectedCount] = fromList.options[i].value;
+                if(pl=="availableProcedureList"){
+	            var sv=selectedValues[selectedCount];
+                var svts=sv.toString();
+                var svtswh="#".concat(svts); 
+                var svtswhrid=svtswh.concat("rid"); 
+	            $(svtswhrid).remove();
+                }
                 deleteValue(fromList, i);
                 selectedCount++;
             }
@@ -75,6 +84,10 @@ function moveSelected( fromList, targetList ) {
             addValue(targetList, selectedText[i], selectedValues[i]);
         }
 
+        if(pl=="selectedProcedureList"){
+        addSchedule();
+        }
+        
         if(NS4) history.go(0)
     }
 }
@@ -415,4 +428,45 @@ function sortList( id, type ) {
     for (var i=0; i<o.length; i++) {
         obj.options[i] = new Option(o[i].text, o[i].value);
     }
+}
+
+function addSchedule(){
+var procedId = new Array();
+var procedName = new Array();
+var selLen = selectedProcedureList.length;
+var minorOtLen = minorOTProcedures.length;
+var majorOtLen = majorOTProcedures.length;
+var i,j,k;
+$('#tableSchedule').empty();
+for(i=selLen-1; i>=0; i--){
+
+for(j=0; j<minorOtLen; j++){
+if ( minorOTProcedures[j] == selectedProcedureList.options[i].value){
+var spl=selectedProcedureList.options[i].value;
+var splts=spl.toString();
+var spltswhs="#".concat(splts); 
+var spltswhswimg=spltswhs.concat("imgId");
+var splt=selectedProcedureList.options[i].text;		
+$('#tableSchedule').append('<tr id='+splts+'rid><td>'+splt+'</td><td><input type="text" id='+splts+' name='+splts+' class="date-pick" readonly="readonly"></td></tr>');
+}
+}
+
+for(k=0; k<majorOtLen; k++){
+if ( majorOTProcedures[k] == selectedProcedureList.options[i].value){
+var spl=selectedProcedureList.options[i].value;
+var splts=spl.toString();
+var spltswhs="#".concat(splts); 
+var spltswhswimg=spltswhs.concat("imgId");
+var splt=selectedProcedureList.options[i].text;		
+$('#tableSchedule').append('<tr id='+splts+'rid><td>'+splt+'</td><td><input type="text" id='+splts+' name='+splts+' class="date-pick" readonly="readonly"></td></tr>');
+}
+}
+
+}
+var date = new Date();
+var currentMonth = date.getMonth();
+//var currentDate = date.getDate()+1;
+var currentDate = date.getDate();
+var currentYear = date.getFullYear();
+jQuery('.date-pick').datepicker({yearRange:'c-30:c+30', dateFormat: 'dd/mm/yy',minDate: new Date(currentYear, currentMonth, currentDate)});	
 }

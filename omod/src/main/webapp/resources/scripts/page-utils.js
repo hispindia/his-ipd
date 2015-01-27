@@ -156,12 +156,12 @@ ADMITTED = {
 				tb_show("Daily Vital Statistics",url,false);
 			}
 		},
-		treatment: function(id)
+		treatment: function(id,patientAdmissionLogId,ipdWard)
 		{
 			if(SESSION.checkSession())
 			{
 				
-				var url = "treatment.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
+				var url = "treatment.htm?id="+id+"&patientAdmissionLogId="+patientAdmissionLogId+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1240";
 				tb_show("Treatment",url,false);
 			}
 		},
@@ -207,6 +207,15 @@ ADMITTED = {
 		print : function(id)
 		{
 			jQuery("#printArea"+id).printArea({mode: "popup", popClose: true, popTitle: "Support by HISP india(hispindia.org)"});
+		},
+		submitIpdTreatmentResult : function(){
+			jQuery('#selectedProcedureList option').each(function(i) {  
+				 jQuery(this).attr("selected", "selected");  
+			}); 
+			jQuery('#selectedInvestigationList option').each(function(i) {  
+				 jQuery(this).attr("selected", "selected");  
+			}); 
+			jQuery("#treatmentForm").submit();
 		},
 		submitIpdFinalResult : function(){
 			jQuery('#selectedDiagnosisList option').each(function(i) {  
@@ -279,9 +288,10 @@ ADMITTED = {
 				if(exists){
 					jQuery("#availableProcedureList option[value=" +id+ "]").appendTo("#selectedProcedureList");
 					jQuery("#availableProcedureList option[value=" +id+ "]").remove();
+					addSchedule();
 				}else{
 					jQuery('#selectedProcedureList').append('<option value="' + id + '">' + name + '</option>');
-					// June 12th 2012: Thai Chuong Fixed issue #51
+					addSchedule();
 					if(confirm("Do you want also add this procedure to ipd procedure?"))
 					{
 						jQuery.ajax({
@@ -292,6 +302,71 @@ ADMITTED = {
 					}
 				}
 			}
+			
+			if(container == 'investigation'){
+				
+				var exists = false;
+				jQuery('#selectedInvestigationList option').each(function(){
+				    if (this.value == id) {
+				        exists = true;
+				        return false;
+				    }
+				});
+				if(exists){
+					alert('It\'s existed!');
+					return false;
+				}
+				exists = false;
+				jQuery('#availableInvestigationList option').each(function(){
+				    if (this.value == id) {
+				        exists = true;
+				        return false;
+				    }
+				});
+				jQuery("#investigation").val("");
+				if(exists){
+					jQuery("#availableInvestigationList option[value=" +id+ "]").appendTo("#selectedInvestigationList");
+					jQuery("#availableInvestigationList option[value=" +id+ "]").remove();
+				}else{
+					jQuery('#selectedInvestigationList').append('<option value="' + id + '">' + name + '</option>');
+					if(confirm("Do you want also add this investigation to ipd investigation?"))
+					{
+						jQuery.ajax({
+							  type: 'POST',
+							  url: 'addConceptToWard.htm',
+							  data: {opdId: jQuery("#"+container).attr("title"), conceptId: id, typeConcept: 3}
+							});
+					}
+				}
+			}
+			
 		}
 		
+};
+
+
+ISSUE={
+		onBlur : function(thiz)
+		{
+			var x = jQuery(thiz).val();
+			if(x != null && x != '' ){
+				if(SESSION.checkSession()){
+					var data = jQuery.ajax(
+							{
+								type:"GET"
+								,url: "formulationByDrugNameForIssue.form"
+								,data: ({drugName :x})	
+								,async: false
+								, cache : false
+							}).responseText;
+					if(data != undefined  && data != null && data != ''){
+						jQuery("#divFormulation").html(data);
+					}else{
+						alert('Please refresh page!');
+					}
+				}
+			}
+		}
+		
+	
 };

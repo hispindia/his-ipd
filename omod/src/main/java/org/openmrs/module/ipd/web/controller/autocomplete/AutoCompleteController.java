@@ -21,13 +21,17 @@
 
 package org.openmrs.module.ipd.web.controller.autocomplete;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.hospitalcore.InventoryCommonService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
+import org.openmrs.module.hospitalcore.model.InventoryDrug;
+import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,5 +74,31 @@ public class AutoCompleteController {
 		
 		model.addAttribute("procedures",procedures);
 		return "module/ipd/autocomplete/autoCompleteProcedure";
+	}
+	
+	@RequestMapping(value="/module/ipd/autoCompleteInvestigation.htm", method=RequestMethod.GET)
+	public String autoCompleteInvestigation(@RequestParam(value="q",required=false) String name, Model model) {
+		List<Concept> investigation = Context.getService(PatientDashboardService.class).searchInvestigation(name);
+		model.addAttribute("investigation",investigation);
+		return "module/ipd/autocomplete/autoCompleteInvestigation";
+	}
+	
+	@RequestMapping(value="/module/ipd/autoCompleteDrug.htm", method=RequestMethod.GET)
+	public String autoCompleteDrug(@RequestParam(value="q",required=false) String name, Model model) {
+		List<InventoryDrug> drugs = Context.getService(PatientDashboardService.class).findDrug(name);
+		model.addAttribute("drugs",drugs);
+		return "module/ipd/autocomplete/autoCompleteDrug";
+	}
+	
+	@RequestMapping(value="/module/ipd/formulationByDrugNameForIssue.form",method=RequestMethod.GET)
+	public String formulationByDrugNameForIssueDrug(@RequestParam(value="drugName",required=false)String drugName, Model model) {
+		InventoryCommonService inventoryCommonService = (InventoryCommonService) Context.getService(InventoryCommonService.class);
+		InventoryDrug drug = inventoryCommonService.getDrugByName(drugName);
+		if(drug != null){
+			List<InventoryDrugFormulation> formulations = new ArrayList<InventoryDrugFormulation>(drug.getFormulations());
+			model.addAttribute("formulations", formulations);
+			model.addAttribute("drugId", drug.getId());
+		}
+		return "/module/ipd/autocomplete/formulationByDrugForIssue";
 	}
 }

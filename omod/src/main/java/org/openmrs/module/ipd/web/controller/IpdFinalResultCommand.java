@@ -33,9 +33,11 @@ package org.openmrs.module.ipd.web.controller;
 public class IpdFinalResultCommand {
 	private Integer[] selectedDiagnosisList;
 	private Integer[] selectedProcedureList;
+	private Integer[] selectedInvestigationList;
 	private Integer admissionLogId;
 	private Integer admittedId;
     private Integer outCome;
+    private String note;
 
 	//harsh 14/6/2012 need patient id for setting patient "dead" when death occurs
 	private Integer patientId;
@@ -57,6 +59,12 @@ public class IpdFinalResultCommand {
 	public void setSelectedProcedureList(Integer[] selectedProcedureList) {
 		this.selectedProcedureList = selectedProcedureList;
 	}
+	public Integer[] getSelectedInvestigationList() {
+		return selectedInvestigationList;
+	}
+	public void setSelectedInvestigationList(Integer[] selectedInvestigationList) {
+		this.selectedInvestigationList = selectedInvestigationList;
+	}
 	public Integer getAdmissionLogId() {
 		return admissionLogId;
 	}
@@ -75,7 +83,12 @@ public class IpdFinalResultCommand {
 	public void setAdmittedId(Integer admittedId) {
 		this.admittedId = admittedId;
 	}
-	
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 	
 	
 }
