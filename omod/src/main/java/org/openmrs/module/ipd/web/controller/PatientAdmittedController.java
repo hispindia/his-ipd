@@ -429,6 +429,61 @@ public class PatientAdmittedController {
 		encounter = admitted.getPatientAdmissionLog().getIpdEncounter();
 		
 		if (admitted != null) {
+			if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
+				Concept pDiagnosis = Context.getConceptService().getConceptByName(procedure
+						.getPropertyValue());
+				if (pDiagnosis == null) {
+					throw new Exception("Post for procedure concept null");
+				}
+				for (Integer pId : command.getSelectedProcedureList()) {
+					Obs obsDiagnosis = new Obs();
+					obsDiagnosis.setObsGroup(obsGroup);
+					obsDiagnosis.setConcept(pDiagnosis);
+					obsDiagnosis.setValueCoded( Context.getConceptService().getConcept(pId));
+					obsDiagnosis.setCreator(user);
+					obsDiagnosis.setDateCreated(date);
+					obsDiagnosis.setEncounter(encounter);
+					obsDiagnosis.setPatient(patient);
+					encounter.addObs(obsDiagnosis);
+				}
+
+			}
+
+			if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
+				Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
+						.getPropertyValue());
+				if (coninvt == null) {
+					throw new Exception("Investigation concept null");
+				}
+				for (Integer pId : command.getSelectedInvestigationList()) {
+					Obs obsInvestigation = new Obs();
+					obsInvestigation.setObsGroup(obsGroup);
+					obsInvestigation.setConcept(coninvt);
+					obsInvestigation.setValueCoded( Context.getConceptService().getConcept(pId));
+					obsInvestigation.setCreator(user);
+					obsInvestigation.setDateCreated(date);
+					obsInvestigation.setEncounter(encounter);
+					obsInvestigation.setPatient(patient);
+					encounter.addObs(obsInvestigation);
+				}
+
+			}
+			
+			if (StringUtils.isNotBlank(command.getNote())) {
+
+				Obs obs = new Obs();
+				obs.setObsGroup(obsGroup);
+				obs.setConcept(cOtherInstructions);
+				obs.setValueText(command.getNote());
+				obs.setCreator(user);
+				obs.setDateCreated(date);
+				obs.setEncounter(encounter);
+				obs.setPatient(patient);
+				encounter.addObs(obs);
+			}
+
+		}
+			
 			IndoorPatientServiceBill bill = new IndoorPatientServiceBill();
 
 			bill.setCreatedDate(new Date());
@@ -628,61 +683,6 @@ public class PatientAdmittedController {
 					}
 				}
 			}
-			
-			if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
-				Concept pDiagnosis = Context.getConceptService().getConceptByName(procedure
-						.getPropertyValue());
-				if (pDiagnosis == null) {
-					throw new Exception("Post for procedure concept null");
-				}
-				for (Integer pId : command.getSelectedProcedureList()) {
-					Obs obsDiagnosis = new Obs();
-					obsDiagnosis.setObsGroup(obsGroup);
-					obsDiagnosis.setConcept(pDiagnosis);
-					obsDiagnosis.setValueCoded( Context.getConceptService().getConcept(pId));
-					obsDiagnosis.setCreator(user);
-					obsDiagnosis.setDateCreated(date);
-					obsDiagnosis.setEncounter(encounter);
-					obsDiagnosis.setPatient(patient);
-					encounter.addObs(obsDiagnosis);
-				}
-
-			}
-
-			if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
-				Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
-						.getPropertyValue());
-				if (coninvt == null) {
-					throw new Exception("Investigation concept null");
-				}
-				for (Integer pId : command.getSelectedInvestigationList()) {
-					Obs obsInvestigation = new Obs();
-					obsInvestigation.setObsGroup(obsGroup);
-					obsInvestigation.setConcept(coninvt);
-					obsInvestigation.setValueCoded( Context.getConceptService().getConcept(pId));
-					obsInvestigation.setCreator(user);
-					obsInvestigation.setDateCreated(date);
-					obsInvestigation.setEncounter(encounter);
-					obsInvestigation.setPatient(patient);
-					encounter.addObs(obsInvestigation);
-				}
-
-			}
-			
-			if (StringUtils.isNotBlank(command.getNote())) {
-
-				Obs obs = new Obs();
-				obs.setObsGroup(obsGroup);
-				obs.setConcept(cOtherInstructions);
-				obs.setValueText(command.getNote());
-				obs.setCreator(user);
-				obs.setDateCreated(date);
-				obs.setEncounter(encounter);
-				obs.setPatient(patient);
-				encounter.addObs(obs);
-			}
-
-		}
 		
 		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
 		model.addAttribute("message", "Succesfully");

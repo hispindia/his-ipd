@@ -192,7 +192,6 @@ return true;
 </script>
 
 <input type="hidden" id="pageId" value="dischagePage"/>
-<input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
 <form method="post" id="treatmentForm" onsubmit="return validateOnSubmit();">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 <input type="hidden" id="patientId" name="patientId" value="${patientId}" />
@@ -385,26 +384,20 @@ return true;
 							</div>
 						</td>
 					</tr>
-<div class="ui-widget">
-	<table>
-	<b>Other Instructions:
-	<tr>
-	 <td><input id="note" class="ui-autocomplete-input ui-widget-content ui-corner-all ac_input" name="note" 
-				style="width:910px; height:50px" title="" autocomplete="off"></td>
+<tr>
+	 <td colspan="3"><strong>Other Instructions:</strong><input id="note" name="note" class="ui-autocomplete-input ui-widget-content ui-corner-all ac_input"  
+				style="width:1035px; height:50px" title="" autocomplete="off"></td>
 	</tr>
-	</table>
-</div>
+</table>
 <div id="scheduleDiv">
 <table id="tableSchedule">
 </table>
 </div>
-</table>
 
-<table  width="98%">
 <div align="left">
+<table  width="98%">
 	<input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Conclude" onclick="ADMITTED.submitIpdTreatmentResult();">
 	<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Cancel" onclick="tb_cancel();">
-</div>	
 </table>
-
+</div>
 </form>
