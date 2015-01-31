@@ -389,7 +389,7 @@ return true;
 				style="width:1035px; height:50px" title="" autocomplete="off"></td>
 	</tr>
 </table>
-<div id="scheduleDiv">
+<div id="scheduleDiv" style="visibility:hidden;">
 <table id="tableSchedule">
 </table>
 </div>
