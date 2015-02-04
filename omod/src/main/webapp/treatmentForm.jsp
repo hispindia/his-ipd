@@ -29,19 +29,19 @@
 }
 
 .drugs {
-	width: 16%;
+	width: 18%;
 	height: 10%;
 	float: left;
 }
 
 .formulation {
-	width: 23%;
+	width: 26%;
 	height: 10%;
 	float: left;
 }
 
 .frequency {
-	width: 23%;
+	width: 24%;
 	height: 10%;
 	float: left;
 }
@@ -64,6 +64,10 @@
 
 .container {
 	overflow: hidden;
+}
+
+#comments {
+    resize: none;
 }
 </style>
 
@@ -357,7 +361,7 @@ return true;
 								 
 								<div class="comments">
 									<TEXTAREA id="comments" name="comments" placeholder="Comments"
-										rows=1 cols=15></TEXTAREA>
+										rows=1 cols=8></TEXTAREA>
 								</div>
 								
 							</div>
