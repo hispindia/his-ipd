@@ -225,8 +225,16 @@ public class AjaxGlobalController {
 		{
 			if (ipdAdmittedPatient.getAdmittedWard().getId().equals(wardId))
 			{
-			Long bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
-//			System.out.println("bedno="+bedNo+"ward=" + wardId);
+			
+				
+			Long bedNo = new Long(0);
+			try {
+				bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("bedno="+bedNo+"ward=" + wardId);
 			Integer bedCount = bedStrengthMap.get(bedNo);
 			if (bedCount==null){
 				bedCount = 1;

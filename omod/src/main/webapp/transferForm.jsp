@@ -26,8 +26,15 @@
 <script type="text/javascript">
 
 function validateForm(){
+	
 	var bednumber=document.forms["transferForm"]["bedNumber"].value;
-
+	
+	
+  if (bednumber==null || bednumber=="")
+  {
+  alert("Please enter bed Number");
+  return false;
+  } 		
   if (bednumber!=null)
   {
 	var checkMaxBed=parseInt(document.forms["BedStrength"]["bedMax"].value);
@@ -40,7 +47,8 @@ function validateForm(){
 	  return false;
 	  }
   }
-
+  
+  
 }
 
 </script>
