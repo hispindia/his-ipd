@@ -177,7 +177,7 @@ ADMITTED = {
 		requestForDischarge: function(id,ipdWard,obStatus)
 		{	
 			if(obStatus==1){
-				if(confirm("Are You Sure?")){
+				if(confirm("Are you sure this patient has absconded?")){
 					if(SESSION.checkSession())
 					{
 					
@@ -188,7 +188,7 @@ ADMITTED = {
 				else return false;
 			}
 			else {
-				if(confirm("Are You Sure?")){
+				if(confirm("Are you sure you want to send request for discharge for this patient?")){
 					var url = "requestForDischarge.htm?obStatus="+obStatus+"&id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
 					tb_show("Discharge",url,false);
 				}
