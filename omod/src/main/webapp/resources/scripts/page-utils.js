@@ -188,11 +188,12 @@ ADMITTED = {
 				else return false;
 			}
 			else {
-				
+				if(confirm("Are You Sure?")){
 					var url = "requestForDischarge.htm?obStatus="+obStatus+"&id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=655&width=1000";
 					tb_show("Discharge",url,false);
 				}
-		
+				else return false;
+			}
 		
 		},
 		discharge: function(id)
