@@ -153,29 +153,14 @@ var url = "#TB_inline?height=400&width=400&inlineId=scheduleDiv";
 tb_show("Schedule the procedues",url,false);
 }
 
-function validate(){
-var i;
-if(selectedProcedureList.length>0){
-for(i=selectedProcedureList.length-1; i>=0; i--){
-var spl=selectedProcedureList.options[i].value;
-var splts=spl.toString();
-if(document.getElementById(splts)!=null){
-var procedure=document.getElementById(splts).value;
-if(procedure==null || procedure==""){
-   alert("Please schedule the procedure");
-   return false;
-   }
-  }
- }
-
-}
-
-return true;
-}
-
-
 function validateOnSubmit(){
 var i;
+
+if(selectedProcedureList.length==0 && selectedInvestigationList.length==0 && drugIssuedList.length==0 && document.getElementById('note').value==""){
+alert("No treatment/investigation entered. Please click on 'Cancel' to go the patient list");
+return false;
+}
+else{
 if(selectedProcedureList.length>0){
 for(i=selectedProcedureList.length-1; i>=0; i--){
 var spl=selectedProcedureList.options[i].value;
@@ -183,12 +168,12 @@ var splts=spl.toString();
 if(document.getElementById(splts)!=null){
 var procedure=document.getElementById(splts).value;
 if(procedure==null || procedure==""){
-//   alert("Please schedule the procedure");
+alert("Please schedule the procedure");
    return false;
+    }
    }
   }
  }
-
 }
 
 return true;
@@ -272,9 +257,11 @@ return true;
         <td>
           <!-- List of all selected DataElements -->
           <select size="4" style="width:550px;" id="selectedProcedureList" name="selectedProcedureList" multiple="multiple" style="min-width:25em;height:5em" ondblclick="moveSelectedById( 'selectedProcedureList', 'availableProcedureList' )">
+         	  <!--
          	 <c:forEach items="${sProcedureList}" var="xx">
               	 <option value="${xx.id}" >${xx.name}</option>
               </c:forEach>
+              -->
           </select>
         </td>
         <td>

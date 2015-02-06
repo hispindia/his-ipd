@@ -216,7 +216,7 @@ ADMITTED = {
 			jQuery('#selectedInvestigationList option').each(function(i) {  
 				 jQuery(this).attr("selected", "selected");  
 			}); 
-			jQuery("#treatmentForm").submit();
+			//jQuery("#treatmentForm").submit();
 		},
 		submitIpdFinalResult : function(){
 			jQuery('#selectedDiagnosisList option').each(function(i) {  
