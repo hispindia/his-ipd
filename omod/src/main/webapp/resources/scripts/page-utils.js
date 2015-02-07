@@ -225,7 +225,7 @@ ADMITTED = {
 			jQuery('#selectedProcedureList option').each(function(i) {  
 				 jQuery(this).attr("selected", "selected");  
 			}); 
-			jQuery("#finalResultForm").submit();
+			//jQuery("#finalResultForm").submit();
 		},
 		onChangeDiagnosis : function(container, id, name)
 		{

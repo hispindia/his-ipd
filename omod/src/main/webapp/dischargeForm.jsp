@@ -29,11 +29,21 @@
 	.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
 </style>
 
+<script type="text/javascript">
+function validateDischargeForm(){
+
+if (jQuery("#otherInstructions").val().length>250) {
+alert("Other Instruction should not exceed more than 250 characters");
+return false;
+}
+
+}
+</script>
+
 <input type="hidden" id="pageId" value="dischagePage"/>
 <input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
-<form method="post" id="dischargeForm">
+<form method="post" id="dischargeForm" onsubmit="return validateDischargeForm();">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
-<!-- harsh 14/6/2012: to get patient ID -->
 <input type="hidden" id="patientId" name="patientId" value="${patientId}" />
 
 <div class="box">
@@ -60,15 +70,6 @@
 			</c:choose>
 		</td>
 	</tr>
-	<%--  27-02-2013 Feedback #966[Billing]Add Paid Bill/Add Free Bill for Bangladesh module(remove category from registration,OPD,IPD,Inventory) --%>
-	<%--  27-02-2013 Support #965[IPD]change Tehsil TO Upazila,reomve monthly income field,remove IST Time for Bangladesh module --%>
-	<%--
-	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.category"/>: ${patCategory }</td>
-		<td colspan="2"><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td>
-	</tr>
-	--%>
-	<%--  10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 	<tr>
 		<td>Relative Name:&nbsp;${relationName }</td>
 		<td colspan="2"><spring:message code="ipd.patient.bedNumber"/>: ${admitted.bed }</td>
