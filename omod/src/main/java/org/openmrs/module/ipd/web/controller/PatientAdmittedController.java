@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -337,11 +338,16 @@ public class PatientAdmittedController {
 		model.addAttribute("listDiagnosis", diagnosis);
 		
 		List<Obs> pDiagnosis=new ArrayList<Obs>();
+		Set<String> lhs=new LinkedHashSet<String>();
 		pDiagnosis=hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS")));
 		String pd="";
 		if(pDiagnosis.size()>0){
 		for(Obs pDiagnos:pDiagnosis){
-			pd=pd+pDiagnos.getValueCoded().getName().toString()+",";
+			lhs.add(pDiagnos.getValueCoded().getName().getName());
+		}
+		for(String lh:lhs){
+			pd=pd+lh+",";
 		}
 		pd = pd.substring(0, pd.length()-1); 
 		}
