@@ -81,7 +81,7 @@ MODEL = {
 </script>
 
 <input type="hidden" id="pageId" value="admissionPage"/>
-<form method="post" id="admissionForm" class="box" onsubmit="javascript:return validate();">
+<form method="post" id="admissionForm" class="box" onsubmit="return validate();">
 <input type="hidden" id="id" name="id" value="${admission.id }"/>
 <c:if test ="${not empty message }">
 <div class="error">
@@ -205,15 +205,15 @@ MODEL = {
 					<td><input type="text" id="fileNumber" name="fileNumber" /></td>
 				</c:otherwise>
 		</c:choose>
-	</tr
+	</tr>
 	<tr>
 		<td><b><spring:message code="ipd.patient.comments"/></b></td>
 		<td><input type="text" id="comments" name="comments" /></td>
-	</tr
+	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		
-	</tr
+	</tr>
 	
 	<tr> 
 		<td><b><spring:message code="ipd.patient.dateTime"/></b>: </td>

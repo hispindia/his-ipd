@@ -20,13 +20,20 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 
 <script type="text/javascript">
-function validateCheck(checkAlert){
+function validateCheck(checkAlert,maxPatientOnBed){
 	if(document.forms["transferForm"] != undefined)
 	{
 	document.forms["transferForm"]["bedNumber"].value=checkAlert;	
 	}
 	else {
+	var mpob=parseInt(maxPatientOnBed);
+	if(mpob>2){
+	alert("This bed already has 3 patients admitted. Please select another bed.");
+	return false;
+	}
+	else{
 	document.forms["admissionForm"]["bedNumber"].value=checkAlert;
+	 }
 	}
 }
 </script>
@@ -62,12 +69,12 @@ function validateCheck(checkAlert){
 							
 							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied >= bedMax}">
 								<td>
-									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count});" />
+									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count},${bedStrengthMap[count]});" />
 							</c:when>
 							
 							<c:otherwise>
 								<td style="background-color:green" onMouseOver="this.bgColor='#00CC11'">
-									<input id="validate" name="validateName" size="4" style="background-color:green" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count});" />
+									<input id="validate" name="validateName" size="4" style="background-color:green" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count},${bedStrengthMap[count]});" />
 							</c:otherwise>
 						</c:choose>
 
