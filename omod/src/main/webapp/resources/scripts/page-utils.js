@@ -153,7 +153,7 @@ ADMITTED = {
 			{
 				
 				var url = "vitalStatistics.htm?id="+id+"&patientAdmissionLogId="+patientAdmissionLogId+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=500&width=1000";
-				tb_show("Daily Vital Statistics",url,false);
+				tb_show("Daily Vitals",url,false);
 			}
 		},
 		treatment: function(id,patientAdmissionLogId,ipdWard)
