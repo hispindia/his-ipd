@@ -1,3 +1,14 @@
+0.10.0
+- #Functionality to provide treatment (Procedures, Investigations and Drugs) by Nurse Role with Doctors approval has been added.
+- #Inpatient hospital administration statistics report.
+- #Inpatient worksheet report.
+- #Filter added to select Ward at the beginning of module to avoid confusion in selecting patients. 
+- #Print-out is provided for admitted patients current status. 
+- #Name-wise patient admission report
+- #Name-wise patient discharge report
+- #IPD – Daily bed return
+- #24 hours summary report
+
 0.9.10
 IPD
 - #Indoor patient billing queue
