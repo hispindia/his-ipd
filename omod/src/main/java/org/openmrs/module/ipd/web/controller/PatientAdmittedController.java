@@ -922,10 +922,13 @@ public class PatientAdmittedController {
 		
         PersonAttribute contactNumber = ipdPatientAdmittedLog.getPatient().getAttribute("Phone Number");
         PersonAttribute fileNumber = ipdPatientAdmittedLog.getPatient().getAttribute("File Number");
+        
 		PersonAttribute emailAddress = ipdPatientAdmittedLog.getPatient().getAttribute("Patient E-mail Address");
 		
-			model.addAttribute("fileNumber", fileNumber.getValue());
-			
+			if(null != fileNumber)
+			{
+				model.addAttribute("fileNumber", fileNumber.getValue());
+			}
 		if(contactNumber!=null){
 			model.addAttribute("contactNumber", contactNumber.getValue());
 		}
