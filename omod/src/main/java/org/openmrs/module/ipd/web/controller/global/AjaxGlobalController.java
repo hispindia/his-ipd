@@ -234,7 +234,7 @@ public class AjaxGlobalController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("bedno="+bedNo+"ward=" + wardId);
+		//	System.out.println("bedno="+bedNo+"ward=" + wardId);
 			Integer bedCount = bedStrengthMap.get(bedNo);
 			if (bedCount==null){
 				bedCount = 1;
