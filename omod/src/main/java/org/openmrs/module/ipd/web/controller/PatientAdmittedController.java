@@ -642,6 +642,7 @@ public class PatientAdmittedController {
 				opdTestOrder.setValueCoded(Context.getConceptService().getConcept(iId));
 				opdTestOrder.setCreator(user);
 				opdTestOrder.setCreatedOn(date);
+				opdTestOrder.setBillingStatus(1);
 				opdTestOrder.setBillableService(billableService);
 				opdTestOrder.setScheduleDate(date);
 				opdTestOrder.setIndoorStatus(1);
