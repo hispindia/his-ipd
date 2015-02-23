@@ -436,21 +436,21 @@ public class PatientAdmittedController {
 		
 		if (admitted != null) {
 			if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
-				Concept pDiagnosis = Context.getConceptService().getConceptByName(procedure
+				Concept cProcedure = Context.getConceptService().getConceptByName(procedure
 						.getPropertyValue());
-				if (pDiagnosis == null) {
+				if (cProcedure == null) {
 					throw new Exception("Post for procedure concept null");
 				}
 				for (Integer pId : command.getSelectedProcedureList()) {
-					Obs obsDiagnosis = new Obs();
-					obsDiagnosis.setObsGroup(obsGroup);
-					obsDiagnosis.setConcept(pDiagnosis);
-					obsDiagnosis.setValueCoded( Context.getConceptService().getConcept(pId));
-					obsDiagnosis.setCreator(user);
-					obsDiagnosis.setDateCreated(date);
-					obsDiagnosis.setEncounter(encounter);
-					obsDiagnosis.setPatient(patient);
-					encounter.addObs(obsDiagnosis);
+					Obs oProcedure = new Obs();
+					oProcedure.setObsGroup(obsGroup);
+					oProcedure.setConcept(cProcedure);
+					oProcedure.setValueCoded( Context.getConceptService().getConcept(pId));
+					oProcedure.setCreator(user);
+					oProcedure.setDateCreated(date);
+					oProcedure.setEncounter(encounter);
+					oProcedure.setPatient(patient);
+					encounter.addObs(oProcedure);
 				}
 
 			}
@@ -607,15 +607,15 @@ public class PatientAdmittedController {
 					if (id.contains(conId)) {
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"dd/MM/yyyy");
-						//Date scheduleDate = sdf.parse(OTscheduleDate);
-						opdTestOrder.setScheduleDate(date);
+						Date scheduleDate = sdf.parse(OTscheduleDate);
+						opdTestOrder.setScheduleDate(scheduleDate);
 					}
 
 					if (id2.contains(conId)) {
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"dd/MM/yyyy");
-						//Date scheduleDate = sdf.parse(OTscheduleDate);
-						opdTestOrder.setScheduleDate(date);
+						Date scheduleDate = sdf.parse(OTscheduleDate);
+						opdTestOrder.setScheduleDate(scheduleDate);
 					}
 					opdTestOrder.setIndoorStatus(1);
 					opdTestOrder.setFromDept(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
