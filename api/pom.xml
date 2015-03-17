@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>ipd</artifactId>
-		<version>0.9.9</version>
+		<version>0.9.10</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>ipd-api</artifactId>
@@ -23,7 +23,7 @@
     	<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>hospitalcore-api</artifactId>
-			<version>1.5.0</version>
+			<version>1.5.1</version>
 			<scope>provided</scope>
 		</dependency>
 		
