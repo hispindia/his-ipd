@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -60,7 +62,7 @@ public class MainController {
 			@RequestParam(value ="ipdWard",required=false) String[] ipdWard, //ipdWard multiselect
 			@RequestParam(value ="tab",required=false) Integer tab, //If that tab is active we will set that tab active when page load.
 			@RequestParam(value ="doctor",required=false) String[] doctor,
-			Model model){
+			Model model,HttpServletRequest request){
 		
 		//HospitalCoreService coreService = Context.getService(HospitalCoreService.class);
 		//Concept conOutcome =conse.getConcept(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
@@ -94,6 +96,15 @@ public class MainController {
 
 		model.addAttribute("doctor",doctor);
 		model.addAttribute("doctorString",IpdUtils.convertStringArraytoString(doctor));
+		String[] selecttype=request.getParameterValues("ipdWard");
+		if (selecttype != null) {
+			for (int i = 0; i < selecttype.length; i++) {
+				 request.setAttribute("selectedModule",selecttype[i] );
+			}
+		}
+		
+		 
+		
 		return "module/ipd/main";
 	}
 	private Concept insertConcept(ConceptService conceptService,
