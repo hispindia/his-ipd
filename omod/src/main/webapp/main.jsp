@@ -23,12 +23,12 @@
 <%@ include file="includes/js_css.jsp" %>
 
 
-
-<b class="boxHeader">Dashboard Ipd</b>
+         
+<b class="boxHeader">Dashboard </b>
 <input type="hidden" id="pageId" value="Ipd"/>
 <div class="box" >
 <form method="get"  id="IpdMainForm">
-<input type="hidden" name="tab" id="tab" value="${tab}">
+<input type="hidden" name="tab" id="tab" value="${tab}"  >
 <table >
 		<tr valign="top">
 			<td><spring:message code="ipd.patient.search"/></td>
@@ -37,20 +37,15 @@
 			</td>
 			<td><spring:message code="ipd.ipdWard.name"/></td>
 			<td>
-				<select id="ipdWard"  name="ipdWard" multiple="multiple" style="width: 150px;" size="10">
-					<option value=""></option>
+				<select id="ipdWard"  name="ipdWard" multiple="multiple" style="width: 150px;" size="10"    >
+				
+					<option value="0"></option>
 					<c:if test="${not empty listIpd }">
-			  			<c:forEach items="${listIpd}" var="ipd" >
-			          			<option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
-			          			${ipd.answerConcept.name}
+			  			<c:forEach items="${listIpd}" var="ipd"  >
+			          			<option title="${ipd.answerConcept.name}"  value="${ipd.answerConcept.id}" ${ipd.answerConcept.id == selectedModule ? 'selected':''}> 
+			          			${ipd.answerConcept.name} 
 			          			</option>  
-			          			<c:if test="${not empty ipdWard}">
-			          				<c:forEach items="${ipdWard}" var="x" >
-			          				    <c:if test="${x ==  ipd.answerConcept.id}">
-			          				    	selected
-			          				    </c:if>
-			          				</c:forEach>
-			          			</c:if>
+			          			
 			       		</c:forEach>
 		       		</c:if>
 	  			</select> 
@@ -91,6 +86,7 @@
 <div id="tabs">
      <ul>
          <li><a href="patientsForAdmission.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Patients for admission"><span >Patients for admission</span></a></li>
+         
          <li><a href="admittedPatientIndex.htm?searchPatient=${searchPatient}&ipdWardString=${ipdWardString}&doctorString=${doctorString }&fromDate=${fromDate}&toDate=${toDate}"  title="Admitted patient index"><span>Admitted patient index</span></a></li>
      </ul>
      
@@ -100,6 +96,7 @@
 </div>
 
 </div>
+</body>
 
 
 <%@ include file="/WEB-INF/template/footer.jsp" %> 
