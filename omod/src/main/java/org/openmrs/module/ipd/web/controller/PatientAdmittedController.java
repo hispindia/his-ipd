@@ -338,9 +338,12 @@ public class PatientAdmittedController {
 		model.addAttribute("listDiagnosis", diagnosis);
 		
 		List<Obs> pDiagnosis=new ArrayList<Obs>();
+		List<Obs> pFinalDiagnosis=new ArrayList<Obs>();
 		Set<String> lhs=new LinkedHashSet<String>();
 		pDiagnosis=hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
 		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS")));
+		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS")));
 		String pd="";
 		if(pDiagnosis.size()>0){
 		for(Obs pDiagnos:pDiagnosis){
@@ -351,6 +354,7 @@ public class PatientAdmittedController {
 		}
 		pd = pd.substring(0, pd.length()-1); 
 		}
+		
 		model.addAttribute("provisionalDiagnosis", pd);
 		
 		List<Concept> procedures = dashboardService.listByDepartmentByWard(
