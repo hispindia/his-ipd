@@ -42,9 +42,11 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
+import org.openmrs.module.hospitalcore.PatientQueueService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipd.util.IpdConstants;
@@ -85,13 +87,17 @@ public class PatientAdmissionController {
 	public String firstView(@RequestParam(value = "searchPatient", required = false) String searchPatient,//patient name or patient identifier
 	                        @RequestParam(value = "fromDate", required = false) String fromDate,
 	                        @RequestParam(value = "toDate", required = false) String toDate,
-	                        @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
+	                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                       // @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
 	                        @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
 	                        @RequestParam(value = "doctorString", required = false) String doctorString, Model model) {
 		
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+	/*	List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
+		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");*/
+		
 		List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
-		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
+			    IpdUtils.convertStringToList(doctorString), fromDate, toDate, ipdWard, "");
 		
 		model.addAttribute("listPatientAdmission", listPatientAdmission);
 		
@@ -269,6 +275,9 @@ public class PatientAdmissionController {
 			treatingD = Context.getUserService().getUser(treatingDoctor);
 			
 			admitted.setIpdAdmittedUser(treatingD);
+			if(patientAdmissionLog!=null){
+				admitted.setPatient(patientAdmissionLog.getPatient());
+				}
 			admitted.setMonthlyIncome(monthlyIncome);
 			admitted.setPatient(patientAdmissionLog.getPatient());
 			admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
@@ -305,8 +314,9 @@ public class PatientAdmissionController {
 	                            @RequestParam(value = "action", required = false) Integer action, Model model) {
 		
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		PatientQueueService queueService = Context.getService(PatientQueueService.class);
 		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
-		
+		IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
 		User user = Context.getAuthenticatedUser();
 		EncounterType encounterType = Context.getService(HospitalCoreService.class).insertEncounterTypeByKey(
 		    HospitalCoreConstants.PROPERTY_IPDENCOUNTER);
@@ -316,7 +326,7 @@ public class PatientAdmissionController {
 			//remove
 			Date date = new Date();
 			//copy admission to log
-			IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
+			
 			patientAdmissionLog.setAdmissionDate(date);
 			patientAdmissionLog.setAdmissionWard(admission.getAdmissionWard());
 			patientAdmissionLog.setBirthDate(admission.getBirthDate());
@@ -391,7 +401,10 @@ public class PatientAdmissionController {
 					ipdService.removeIpdPatientAdmission(admission);
 				}
 			}*/
+			OpdPatientQueueLog opdPatientQueueLog=patientAdmissionLog.getOpdLog();
+			//opdPatientQueueLog.setVisitOutCome("no bed");
+			queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
 		}
-		return "redirect:/module/ipd/main.htm";
+		return "redirect:/module/ipd/main.htm?ipdWard="+patientAdmissionLog.getAdmissionWard().getConceptId();
 	}
 }

@@ -37,6 +37,6 @@ public class IpdHeader extends Extension {
 	}
 
 	public String getUrl() {
-		return "module/ipd/main.htm";
+		return "module/ipd/chooseIpdWard.htm";
 	}
 }

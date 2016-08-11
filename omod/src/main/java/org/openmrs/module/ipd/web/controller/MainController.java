@@ -57,7 +57,7 @@ public class MainController {
 			@RequestParam(value ="searchPatient",required=false) String searchPatient,//patient name or patient identifier
 			@RequestParam(value ="fromDate",required=false) String fromDate,
 			@RequestParam(value ="toDate",required=false) String toDate,
-			@RequestParam(value ="ipdWard",required=false) String[] ipdWard, //ipdWard multiselect
+			@RequestParam(value ="ipdWard",required=false) String ipdWard,
 			@RequestParam(value ="tab",required=false) Integer tab, //If that tab is active we will set that tab active when page load.
 			@RequestParam(value ="doctor",required=false) String[] doctor,
 			Model model){
@@ -90,8 +90,7 @@ public class MainController {
 		model.addAttribute("tab",tab == null? 0 : tab.intValue());
 		model.addAttribute("searchPatient",searchPatient);
 		model.addAttribute("ipdWard",ipdWard);
-		model.addAttribute("ipdWardString",IpdUtils.convertStringArraytoString(ipdWard));
-
+	
 		model.addAttribute("doctor",doctor);
 		model.addAttribute("doctorString",IpdUtils.convertStringArraytoString(doctor));
 		return "module/ipd/main";

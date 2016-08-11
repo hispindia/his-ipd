@@ -20,7 +20,7 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
 
-
+<input type="hidden" name="ipdWard" id="ipdWard" value="${ipdWard}">
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
 <tr align="center" >
 	<th>#</th>
@@ -58,7 +58,7 @@
 		<td>${queue.bed}</td>
 		<c:set var="person" value="${queue.ipdAdmittedUser.person }"/>
 		<td width="50">${person.givenName} ${person.middleName } ${person.familyName }</td>
-		<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Transfer" onclick="ADMITTED.transfer('${queue.id}');"/>
+		<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Transfer" onclick="ADMITTED.transfer('${queue.id}',${ipdWard});"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Print" onclick="ADMITTED.print('${queue.id}');"/>
 			<div id="printArea${queue.id}" style="display:none; margin: 10px auto; width: 981px; font-size: 1.5em;font-family:'Dot Matrix Normal',Arial,Helvetica,sans-serif;">

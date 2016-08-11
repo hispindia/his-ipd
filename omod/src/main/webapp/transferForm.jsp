@@ -22,6 +22,7 @@
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
 <%@ include file="includes/js_css.jsp" %>
 <input type="hidden" id="pageId" value="transferPage"/>
+<input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
 <form method="post" id="transferForm">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 <div class="box">

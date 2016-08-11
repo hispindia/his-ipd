@@ -19,6 +19,7 @@
 --%> 
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <openmrs:require privilege="Manage IPD" otherwise="/login.htm" redirect="index.htm" />
+<input type="hidden" name="ipdWard" id="ipdWard" value="${ipdWard}">
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
 <tr align="center" >
 	<th>#</th>

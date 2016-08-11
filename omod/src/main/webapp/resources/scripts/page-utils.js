@@ -32,7 +32,7 @@ ADMISSION={
 		{
 			if(SESSION.checkSession())
 			{
-				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=300&width=600";
+				url = "admission.htm?admissionId="+id+"&keepThis=false&TB_iframe=true&height=650&width=850";
 				tb_show("Admission",url,false);
 			}
 		},
@@ -73,22 +73,22 @@ QUEUE={
 		},
 		refreshQueue : function()
 		{
-			jQuery("#Patients_for_admission").load("patientsForAdmissionAjax.htm?ipdWardString="+jQuery("#ipdWardString").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
+			jQuery("#Patients_for_admission").load("patientsForAdmissionAjax.htm?ipdWard="+jQuery("#ipdWard").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
 		},
 		refreshAdmittedQueue : function()
 		{
-			jQuery("#Admitted_patient_index").load("admittedPatientIndexAjax.htm?ipdWardString="+jQuery("#ipdWardString").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
+			jQuery("#Admitted_patient_index").load("admittedPatientIndexAjax.htm?ipdWard="+jQuery("#ipdWard").val()+"&doctorString="+jQuery("#doctorString").val()+"&fromDate="+jQuery("#fromDate").val()+"&toDate="+jQuery("#toDate").val()+"&searchPatient="+jQuery("#searchPatient").val(), function(){	QUEUE.initTableHover(); });
 		}
 		
 };	
 
 ADMITTED = {
-		transfer : function(id)
+		transfer : function(id,ipdWard)
 		{
 			if(SESSION.checkSession())
 			{
 				
-				var url = "transfer.htm?id="+id+"&keepThis=false&TB_iframe=true&height=500&width=1000";
+				var url = "transfer.htm?id="+id+"&ipdWard="+ipdWard+"&keepThis=false&TB_iframe=true&height=555&width=1000";
 				tb_show("Transfer",url,false);
 			}
 		},
@@ -97,7 +97,7 @@ ADMITTED = {
 			if(SESSION.checkSession())
 			{
 				
-				var url = "discharge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=600&width=1000";
+				var url = "discharge.htm?id="+id+"&keepThis=false&TB_iframe=true&height=655&width=1000";
 				tb_show("Discharge",url,false);
 			}
 		},

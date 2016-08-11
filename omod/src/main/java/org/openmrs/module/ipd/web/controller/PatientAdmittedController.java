@@ -99,13 +99,14 @@ public class PatientAdmittedController {
 	public String firstView(@RequestParam(value = "searchPatient", required = false) String searchPatient,//patient name or patient identifier
 	                        @RequestParam(value = "fromDate", required = false) String fromDate,
 	                        @RequestParam(value = "toDate", required = false) String toDate,
-	                        @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //note ipdWardString = 1,2,3,4.....
+	                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                   //     @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //note ipdWardString = 1,2,3,4.....
 	                        @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
 	                        @RequestParam(value = "doctorString", required = false) String doctorString,// note: doctorString= 1,2,3,4.....
 	                        Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		List<IpdPatientAdmitted> listPatientAdmitted = ipdService.searchIpdPatientAdmitted(searchPatient,
-		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");
+		    IpdUtils.convertStringToList(doctorString), fromDate, toDate,  ipdWard, "");
 		
 		/*Sagar Bele 08-08-2012 Support #327 [IPD] (DDU(SDMX)instance) snapshot- age column in IPD admitted patient index */
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
@@ -138,6 +139,7 @@ public class PatientAdmittedController {
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
 		model.addAttribute("dateTime", new Date().toString());
+		model.addAttribute("ipdWard", ipdWard);
 //		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
@@ -146,16 +148,20 @@ public class PatientAdmittedController {
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)
 	public String transferPost(@RequestParam("admittedId") Integer id, @RequestParam("toWard") Integer toWardId,
 	                           @RequestParam("doctor") Integer doctorId,
-	                           @RequestParam(value = "bedNumber", required = false) String bed, Model model) {
+	                           @RequestParam(value = "bedNumber", required = false) String bed,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                           Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		ipdService.transfer(id, toWardId, doctorId, bed);
-		model.addAttribute("urlS", "main.htm?tab=1");
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
 	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.GET)
-	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId, Model model) {
+	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			Model model) {
 		
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
@@ -184,7 +190,7 @@ public class PatientAdmittedController {
 		
 		//Patient category
 		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
-		
+		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/transferForm";
 	}
 	
@@ -301,7 +307,7 @@ public class PatientAdmittedController {
 		}
 		
 		// Remove obs diagnosis and procedure 
-		
+		/*
 		for (Concept con : listConceptDianosisOfIpdEncounter) {
 			if (!listConceptDiagnosis.contains(con)) {
 				for (Obs obx : listObsOfIpdEncounter) {
@@ -323,7 +329,7 @@ public class PatientAdmittedController {
 				}
 			}
 		}
-		
+		*/
 		ipdEncounter.setObs(obses);
 		
 		Context.getEncounterService().saveEncounter(ipdEncounter);

@@ -24,6 +24,12 @@
 <%@ include file="includes/js_css.jsp" %>
 <%-- ghanshyam 22-april-2013 Bug #1411 [IPD]inconsistency in form validation For Patient Admission --%>
 <script type="text/javascript">
+
+jQuery(document).ready(function() {
+	var wardId= ${admission.admissionWard.id};
+	});
+
+
 function validate(){
 var monthlyincome=document.forms["admissionForm"]["monthlyIncome"].value;
 var admittedward=document.forms["admissionForm"]["admittedWard"].value;
