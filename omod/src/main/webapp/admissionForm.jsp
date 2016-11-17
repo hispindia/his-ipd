@@ -26,8 +26,9 @@
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-	var wardId= ${admission.admissionWard.id};
-	});
+var wardId= ${admission.admissionWard.id};
+FIRSTBEDSTRENGTH.getFirstBedStrength(wardId);
+});
 
 
 function validate(){
@@ -79,7 +80,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 </c:if>
 <table width="100%">
 	<tr>
-		<td><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admission.patientName }</b></td>
+		<td colspan="2"><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admission.patientName }</b></td>
 		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admission.patientIdentifier}</b></td>
 	</tr>
 	<tr>
@@ -101,7 +102,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	<tr>
 		<td><spring:message code="ipd.patient.admittedWard"/><em>*</em></td>
 		<td>
-		<select  id="admittedWard" name="admittedWard" >
+		<select  id="admittedWard" name="admittedWard" onchange="BEDSTRENGTH.getBedStrength(this);">
 			  <option value=""></option>
 				<c:if test="${not empty listIpd }">
 			  			<c:forEach items="${listIpd}" var="ipd" >
@@ -131,10 +132,14 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		       		</c:if>
 			</select>
 		</td>
+		<td>Click To Select Bed Number</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
-		<td><input type="text" id="bedNumber" name="bedNumber"  /></td>
+		<td><b><spring:message code="ipd.patient.bedNumber"/></b><em>*</em></td>
+		<td><input type="text" id="bedNumber" name="bedNumber" readonly="readonly" /></td>
+		<td>
+		<div id="divBedStrength"></div>
+		</td>
 	</tr>
 	<tr> <!-- MARTA -->
 		<td><spring:message code="ipd.patient.dateTime"/>: </td>

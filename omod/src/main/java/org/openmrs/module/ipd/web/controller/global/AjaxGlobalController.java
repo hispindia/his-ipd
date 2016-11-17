@@ -38,6 +38,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
+import org.openmrs.module.hospitalcore.model.WardBedStrength;
 import org.openmrs.module.ipd.util.IpdUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -200,5 +201,60 @@ public class AjaxGlobalController {
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 
 		return "module/ipd/ajax/admittedListAjax";
+	}
+	
+	@RequestMapping(value = "/module/ipd/getBedStrength.htm", method = RequestMethod.GET)
+	public String getBedStrength(@RequestParam(value="wardId",required=false) Integer wardId, Model model) {
+		IpdService ipdService = (IpdService) Context
+				.getService(IpdService.class);
+		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();
+		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(wardId);
+
+		if (wardBedStrength!=null){
+		Integer bedStrength = wardBedStrength.getBedStrength();
+		List<IpdPatientAdmitted> allAdmittedPatients = ipdService.getAllIpdPatientAdmitted();
+		
+		for (Long i =1L ;i<=bedStrength;i++){
+			bedStrengthMap.put(i, 0);
+			
+		}
+		
+		for (IpdPatientAdmitted ipdAdmittedPatient: allAdmittedPatients)
+		{
+			if (ipdAdmittedPatient.getAdmittedWard().getId().equals(wardId))
+			{
+			
+				
+			Long bedNo = new Long(0);
+			try {
+				bedNo = Long.parseLong(ipdAdmittedPatient.getBed());
+			} catch (NumberFormatException e) {
+				
+				e.printStackTrace();
+			}
+		
+			Integer bedCount = bedStrengthMap.get(bedNo);
+			if (bedCount==null){
+				bedCount = 1;
+			}else {
+				bedCount = bedCount + 1;
+			}
+			bedStrengthMap.put(bedNo, bedCount);
+			}
+		}
+		}else{
+			model.addAttribute("bedStrengthValueAvailable", "false");
+		}
+		
+		for (Long key : bedStrengthMap.keySet()){
+
+		}
+		
+		
+		model.addAttribute("bedStrengthMap", bedStrengthMap);
+		model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
+		float bedStrengthSize= bedStrengthMap.size();
+		model.addAttribute("bedMax", Math.round(bedStrengthSize));
+		return "module/ipd/ajax/bedStrength";
 	}
 }

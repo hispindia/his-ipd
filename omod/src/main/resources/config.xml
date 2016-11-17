@@ -24,12 +24,11 @@
 	
 	<require_version>1.6.1</require_version>
 	
-	<!-- Extensions 
 	<extension>
 		<point>org.openmrs.admin.list</point>
 		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
 	</extension>
-	-->
+	
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
 		<class>@MODULE_PACKAGE@.extension.html.IpdHeader</class>

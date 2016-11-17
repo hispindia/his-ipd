@@ -152,7 +152,7 @@ public class PatientAdmissionController {
 			
 			return "module/ipd/admissionForm";
 		}
-		System.out.println("admission is NULL");
+		
 		return "redirect:/module/ipd/main.htm";
 	}
 	
