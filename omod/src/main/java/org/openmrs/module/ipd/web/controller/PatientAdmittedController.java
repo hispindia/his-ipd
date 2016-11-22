@@ -21,16 +21,21 @@
 package org.openmrs.module.ipd.web.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -51,10 +56,14 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.ipd.util.IpdConstants;
 import org.openmrs.module.ipd.util.IpdUtils;
 import org.openmrs.module.hospitalcore.HospitalCoreService;
+import org.openmrs.module.hospitalcore.InventoryCommonService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
+import org.openmrs.module.hospitalcore.model.InventoryDrug;
+import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.OpdDrugOrder;
 import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
@@ -143,6 +152,292 @@ public class PatientAdmittedController {
 //		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
 		
 		return "module/ipd/admittedList";
+	}
+	
+	@RequestMapping(value = "/module/ipd/treatment.htm", method = RequestMethod.GET)
+	public String treatmentView(
+			@RequestParam(value = "id", required = false) Integer admittedId,
+			@ModelAttribute("ipdCommand") IpdFinalResultCommand command,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			Model model) {
+
+		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		IpdPatientAdmitted admitted = ipdService
+				.getIpdPatientAdmitted(admittedId);
+
+		Patient patient = admitted.getPatient();
+		model.addAttribute("patientId", patient.getId());
+
+		PersonAddress add = patient.getPersonAddress();
+		String address = add.getAddress1();
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
+				: "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
+
+		PersonAttribute relationNameattr = patient
+				.getAttribute("Father/Husband Name");
+		PersonAttribute relationTypeattr = patient
+				.getAttribute("Relative Name Type");
+		model.addAttribute("relationName", relationNameattr.getValue());
+		if (relationTypeattr != null) {
+			model.addAttribute("relationType", relationTypeattr.getValue());
+		} else {
+			model.addAttribute("relationType", "Relative Name");
+		}
+		model.addAttribute("dateTime", new Date());
+
+		model.addAttribute("admitted", admitted);
+
+		// change CHUYEN
+
+		//
+		ConceptService conceptService = Context.getConceptService();
+		AdministrationService administrationService = Context
+				.getAdministrationService();
+		String gpDiagnosis = administrationService
+				.getGlobalProperty(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
+		String gpProcedure = administrationService
+				.getGlobalProperty(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		List<Obs> obsList = new ArrayList<Obs>(admitted
+				.getPatientAdmissionLog().getIpdEncounter().getAllObs());
+		Concept conDiagnosis = conceptService.getConcept(gpDiagnosis);
+
+		Concept conProcedure = conceptService.getConcept(gpProcedure);
+
+		List<Concept> selectedDiagnosisList = new ArrayList<Concept>();
+		List<Concept> selectedProcedureList = new ArrayList<Concept>();
+		if (CollectionUtils.isNotEmpty(obsList)) {
+			for (Obs obs : obsList) {
+				if (obs.getConcept().getConceptId()
+						.equals(conDiagnosis.getConceptId())) {
+					selectedDiagnosisList.add(obs.getValueCoded());
+				}
+				if (obs.getConcept().getConceptId()
+						.equals(conProcedure.getConceptId())) {
+					selectedProcedureList.add(obs.getValueCoded());
+				}
+			}
+		}
+
+		//
+		PatientDashboardService dashboardService = Context
+				.getService(PatientDashboardService.class);
+		List<Concept> diagnosis = dashboardService.listByDepartmentByWard(
+				admitted.getAdmittedWard().getId(), DepartmentConcept.TYPES[0]);
+		if (CollectionUtils.isNotEmpty(diagnosis)
+				&& CollectionUtils.isNotEmpty(selectedDiagnosisList)) {
+			diagnosis.removeAll(selectedDiagnosisList);
+		}
+		if (CollectionUtils.isNotEmpty(diagnosis)) {
+			Collections.sort(diagnosis, new ConceptComparator());
+		}
+		model.addAttribute("listDiagnosis", diagnosis);
+		
+		List<Obs> pDiagnosis=new ArrayList<Obs>();
+		List<Obs> pFinalDiagnosis=new ArrayList<Obs>();
+		Set<String> lhs=new LinkedHashSet<String>();
+		pDiagnosis=hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS")));
+		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS")));
+		String pd="";
+		if(pDiagnosis.size()>0){
+		for(Obs pDiagnos:pDiagnosis){
+			lhs.add(pDiagnos.getValueCoded().getName().getName());
+		}
+		for(String lh:lhs){
+			pd=pd+lh+",";
+		}
+		pd = pd.substring(0, pd.length()-1); 
+		}
+		
+		model.addAttribute("provisionalDiagnosis", pd);
+		
+		List<Concept> procedures = dashboardService.listByDepartmentByWard(
+				admitted.getAdmittedWard().getId(), DepartmentConcept.TYPES[1]);
+		if (CollectionUtils.isNotEmpty(procedures)
+				&& CollectionUtils.isNotEmpty(selectedProcedureList)) {
+			procedures.removeAll(selectedProcedureList);
+		}
+		if (CollectionUtils.isNotEmpty(procedures)) {
+			Collections.sort(procedures, new ConceptComparator());
+		}
+		model.addAttribute("listProcedures", procedures);
+
+		Collections.sort(selectedDiagnosisList, new ConceptComparator());
+		Collections.sort(selectedProcedureList, new ConceptComparator());
+		// Patient category
+		model.addAttribute("patCategory",
+				PatientUtils.getPatientCategory(patient));
+		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
+		model.addAttribute("sProcedureList", selectedProcedureList);
+
+		InventoryCommonService inventoryCommonService = Context
+				.getService(InventoryCommonService.class);
+		List<Concept> drugFrequencyConcept = inventoryCommonService
+				.getDrugFrequency();
+		model.addAttribute("drugFrequencyList", drugFrequencyConcept);
+
+		Concept concept = Context.getConceptService().getConcept(
+				"MINOR OPERATION");
+
+		Collection<ConceptAnswer> allMinorOTProcedures = null;
+		List<Integer> id = new ArrayList<Integer>();
+		if (concept != null) {
+			allMinorOTProcedures = concept.getAnswers();
+			for (ConceptAnswer c : allMinorOTProcedures) {
+				id.add(c.getAnswerConcept().getId());
+			}
+		}
+		model.addAttribute("allMinorOTProcedures", id);
+
+		Concept concept2 = Context.getConceptService().getConcept(
+				"MAJOR OPERATION");
+
+		Collection<ConceptAnswer> allMajorOTProcedures = null;
+		List<Integer> id2 = new ArrayList<Integer>();
+		if (concept2 != null) {
+			allMajorOTProcedures = concept2.getAnswers();
+			for (ConceptAnswer c : allMajorOTProcedures) {
+				id2.add(c.getAnswerConcept().getId());
+			}
+		}
+		model.addAttribute("allMajorOTProcedures", id2);
+		
+		model.addAttribute("ipdWard", ipdWard);
+
+		return "module/ipd/treatmentForm";
+	}
+	
+	@RequestMapping(value = "/module/ipd/treatment.htm", method = RequestMethod.POST)
+	public String treatmentPost(@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			@ModelAttribute("ipdCommand") IpdFinalResultCommand command,
+			HttpServletRequest request,Model model) throws Exception {
+		
+		HospitalCoreService hcs = (HospitalCoreService) Context
+		.getService(HospitalCoreService.class);
+		IpdService ipdService = Context.getService(IpdService.class);
+		IpdPatientAdmitted admitted = ipdService.getAdmittedByPatientId(command
+				.getPatientId());
+		Patient patient = Context.getPatientService().getPatient(command.getPatientId());
+		
+		AdministrationService administrationService = Context.getAdministrationService();
+		GlobalProperty procedure = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		GlobalProperty investigationn = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_FOR_INVESTIGATION);
+		User user = Context.getAuthenticatedUser();
+		Date date = new Date();
+		PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+		Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
+		Obs obsGroup = null;
+		obsGroup = hcs.getObsGroupCurrentDate(patient.getPersonId());
+		Encounter encounter = new Encounter();
+		encounter = admitted.getPatientAdmissionLog().getIpdEncounter();
+		
+		ConceptService conceptService = Context.getConceptService();
+		
+		if (admitted != null) {
+			if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
+				Concept cProcedure = Context.getConceptService().getConceptByName(procedure
+						.getPropertyValue());
+				if (cProcedure == null) {
+					throw new Exception("Post for procedure concept null");
+				}
+				for (Integer pId : command.getSelectedProcedureList()) {
+					Obs oProcedure = new Obs();
+					oProcedure.setObsGroup(obsGroup);
+					oProcedure.setConcept(cProcedure);
+					oProcedure.setValueCoded( Context.getConceptService().getConcept(pId));
+					oProcedure.setCreator(user);
+					oProcedure.setDateCreated(date);
+					oProcedure.setEncounter(encounter);
+					oProcedure.setPatient(patient);
+					encounter.addObs(oProcedure);
+				}
+
+			}
+
+			if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
+				Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
+						.getPropertyValue());
+				if (coninvt == null) {
+					throw new Exception("Investigation concept null");
+				}
+				for (Integer pId : command.getSelectedInvestigationList()) {
+					Obs obsInvestigation = new Obs();
+					obsInvestigation.setObsGroup(obsGroup);
+					obsInvestigation.setConcept(coninvt);
+					obsInvestigation.setValueCoded( Context.getConceptService().getConcept(pId));
+					obsInvestigation.setCreator(user);
+					obsInvestigation.setDateCreated(date);
+					obsInvestigation.setEncounter(encounter);
+					obsInvestigation.setPatient(patient);
+					encounter.addObs(obsInvestigation);
+				}
+
+			}
+			
+			if (StringUtils.isNotBlank(command.getNote())) {
+
+				Obs obs = new Obs();
+				obs.setObsGroup(obsGroup);
+				obs.setConcept(cOtherInstructions);
+				obs.setValueText(command.getNote());
+				obs.setCreator(user);
+				obs.setDateCreated(date);
+				obs.setEncounter(encounter);
+				obs.setPatient(patient);
+				encounter.addObs(obs);
+			}
+
+		}
+		
+		Integer formulationId;
+		Integer frequencyId;
+		Integer noOfDays;
+		String comments;
+		if (drugOrder != null) {
+			for (String drugName : drugOrder) {
+				InventoryCommonService inventoryCommonService = Context
+						.getService(InventoryCommonService.class);
+				InventoryDrug inventoryDrug = inventoryCommonService
+						.getDrugByName(drugName);
+				if (inventoryDrug != null) {
+					formulationId = Integer.parseInt(request
+							.getParameter(drugName + "_formulationId"));
+					frequencyId = Integer.parseInt(request
+							.getParameter(drugName + "_frequencyId"));
+					noOfDays = Integer.parseInt(request.getParameter(drugName
+							+ "_noOfDays"));
+					comments = request.getParameter(drugName + "_comments");
+					InventoryDrugFormulation inventoryDrugFormulation = inventoryCommonService
+							.getDrugFormulationById(formulationId);
+					Concept freCon = conceptService.getConcept(frequencyId);
+
+					OpdDrugOrder opdDrugOrder = new OpdDrugOrder();
+					opdDrugOrder.setPatient(patient);
+					opdDrugOrder.setEncounter(encounter);
+					opdDrugOrder.setInventoryDrug(inventoryDrug);
+					opdDrugOrder
+							.setInventoryDrugFormulation(inventoryDrugFormulation);
+					opdDrugOrder.setFrequency(freCon);
+					opdDrugOrder.setNoOfDays(noOfDays);
+					opdDrugOrder.setComments(comments);
+					opdDrugOrder.setCreator(user);
+					opdDrugOrder.setCreatedOn(date);
+					patientDashboardService
+							.saveOrUpdateOpdDrugOrder(opdDrugOrder);
+				}
+			}
+		}
+		
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
+		model.addAttribute("message", "Succesfully");
+		return "/module/ipd/thickbox/success";
 	}
 	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)
