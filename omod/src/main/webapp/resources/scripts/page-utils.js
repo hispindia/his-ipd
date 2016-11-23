@@ -175,6 +175,15 @@ ADMITTED = {
 			}); 
 			jQuery("#finalResultForm").submit();
 		},
+		submitIpdTreatmentResult : function(){
+				jQuery('#selectedProcedureList option').each(function(i) {  
+					 jQuery(this).attr("selected", "selected");  
+				}); 
+				jQuery('#selectedInvestigationList option').each(function(i) {  
+					 jQuery(this).attr("selected", "selected");  
+				}); 
+				//jQuery("#treatmentForm").submit();
+		},
 		onChangeDiagnosis : function(container, id, name)
 		{
 			if(container == 'diagnosis'){

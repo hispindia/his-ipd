@@ -337,6 +337,7 @@ public class PatientAdmittedController {
 		obsGroup = hcs.getObsGroupCurrentDate(patient.getPersonId());
 		Encounter encounter = new Encounter();
 		encounter = admitted.getPatientAdmissionLog().getIpdEncounter();
+		Location location = new Location(1);
 		
 		ConceptService conceptService = Context.getConceptService();
 		
@@ -355,13 +356,15 @@ public class PatientAdmittedController {
 					oProcedure.setCreator(user);
 					oProcedure.setDateCreated(date);
 					oProcedure.setEncounter(encounter);
+					oProcedure.setObsDatetime(encounter.getEncounterDatetime());
+					oProcedure.setLocation(location);
 					oProcedure.setPatient(patient);
-					encounter.addObs(oProcedure);
+					Context.getObsService().saveObs(oProcedure,"save procedure");
 				}
 
 			}
 
-			if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
+		if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
 				Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
 						.getPropertyValue());
 				if (coninvt == null) {
@@ -375,14 +378,15 @@ public class PatientAdmittedController {
 					obsInvestigation.setCreator(user);
 					obsInvestigation.setDateCreated(date);
 					obsInvestigation.setEncounter(encounter);
+					obsInvestigation.setObsDatetime(encounter.getEncounterDatetime());
+					obsInvestigation.setLocation(location);
 					obsInvestigation.setPatient(patient);
-					encounter.addObs(obsInvestigation);
+					Context.getObsService().saveObs(obsInvestigation,"save investigation");
 				}
 
 			}
 			
 			if (StringUtils.isNotBlank(command.getNote())) {
-
 				Obs obs = new Obs();
 				obs.setObsGroup(obsGroup);
 				obs.setConcept(cOtherInstructions);
@@ -390,8 +394,10 @@ public class PatientAdmittedController {
 				obs.setCreator(user);
 				obs.setDateCreated(date);
 				obs.setEncounter(encounter);
+				obs.setObsDatetime(encounter.getEncounterDatetime());
+				obs.setLocation(location);
 				obs.setPatient(patient);
-				encounter.addObs(obs);
+				Context.getObsService().saveObs(obs,"save other instruction");
 			}
 
 		}
