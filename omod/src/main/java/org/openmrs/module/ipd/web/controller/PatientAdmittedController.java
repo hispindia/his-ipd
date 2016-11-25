@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -63,6 +63,7 @@ import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.InventoryDrug;
 import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
 import org.openmrs.module.hospitalcore.model.OpdDrugOrder;
 import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
@@ -435,6 +436,7 @@ public class PatientAdmittedController {
 					opdDrugOrder.setComments(comments);
 					opdDrugOrder.setCreator(user);
 					opdDrugOrder.setCreatedOn(date);
+					opdDrugOrder.setOrderFrom(1);
 					patientDashboardService
 							.saveOrUpdateOpdDrugOrder(opdDrugOrder);
 				}
@@ -442,6 +444,91 @@ public class PatientAdmittedController {
 		}
 		
 		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
+		model.addAttribute("message", "Succesfully");
+		return "/module/ipd/thickbox/success";
+	}
+	// Requiremnt for record vitals
+	
+	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.GET)
+	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, 
+			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,
+			@RequestParam(value = "ipdWard", required = false) String ipdWard,
+			Model model) {
+		
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		Concept ipdConcept = Context.getConceptService().getConceptByName(
+		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
+		model.addAttribute("listIpd", ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		model.addAttribute("admitted", admitted);
+		
+		Patient patient = admitted.getPatient();
+		
+		PersonAddress add = patient.getPersonAddress();
+		String address = add.getAddress1();
+		// ghansham 25-june-2013 issue no # 1924 Change in the address format
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+		model.addAttribute("relationName", relationNameattr.getValue());
+		
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
+		List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patient.getPatientId(),patientAdmissionLogId);
+		model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
+		model.addAttribute("sizeOfipdPatientVitalStatistics", ipdPatientVitalStatistics.size()+1);
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		model.addAttribute("dat", formatter.format(new Date()));
+		List<Concept> dietConcept= ipdService.getDiet();
+		model.addAttribute("dietList", dietConcept);
+		model.addAttribute("ipdWard", ipdWard);
+		return "module/ipd/vitalStatisticsForm";
+	}
+	
+	//Capture Vital statistics for admitted patient in ipd
+	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.POST)
+	public String vitalSatatisticsPost(@RequestParam("admittedId") Integer admittedId, 
+			                   @RequestParam("patientId") Integer patientId, 
+	                           @RequestParam(value = "bloodPressure", required = false) String bloodPressure,
+	                           @RequestParam(value = "pulseRate", required = false) String pulseRate,
+	                           @RequestParam(value = "temperature", required = false) String temperature,
+	                           //@RequestParam(value = "dietAdvised", required = false) String dietAdvised,
+	                           @RequestParam(value = "notes", required = false) String notes,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                           Model model,HttpServletRequest request) {
+		
+		
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		PatientService patientService = Context.getPatientService();
+		Patient patient = patientService.getPatient(patientId);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		String dietAdvise = "";
+		String select[] = request.getParameterValues("dietAdvised");
+		if (select != null && select.length != 0) {
+			for (int i = 0; i < select.length; i++) {
+				dietAdvise = dietAdvise + select[i] + " ";
+			}
+		}
+		IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
+		ipdPatientVitalStatistics.setPatient(patient);
+		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
+		ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
+		ipdPatientVitalStatistics.setPulseRate(pulseRate);
+		ipdPatientVitalStatistics.setTemperature(temperature);
+		ipdPatientVitalStatistics.setDietAdvised(dietAdvise);
+		ipdPatientVitalStatistics.setNote(notes);
+		//User user =Context.getAuthenticatedUser();
+		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
+		ipdPatientVitalStatistics.setCreatedOn(new Date());
+		ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
@@ -496,7 +583,7 @@ public class PatientAdmittedController {
 	}
 	
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.POST)
-	public String dischargePost(IpdFinalResultCommand command, Model model) {
+	public String dischargePost(@RequestParam(value = "drugOrder", required = false) String[] drugOrder,IpdFinalResultCommand command,HttpServletRequest request,Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
@@ -637,6 +724,48 @@ public class PatientAdmittedController {
 		
 		//end
 		
+		//New requirement add drug row in discharge
+		
+		Integer formulationId;
+		Integer frequencyId;
+		Integer noOfDays;
+		String comments;
+		if (drugOrder != null) {
+			for (String drugName : drugOrder) {
+				PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+				InventoryCommonService inventoryCommonService = Context
+						.getService(InventoryCommonService.class);
+				InventoryDrug inventoryDrug = inventoryCommonService
+						.getDrugByName(drugName);
+				if (inventoryDrug != null) {
+					formulationId = Integer.parseInt(request
+							.getParameter(drugName + "_formulationId"));
+					frequencyId = Integer.parseInt(request
+							.getParameter(drugName + "_frequencyId"));
+					noOfDays = Integer.parseInt(request.getParameter(drugName
+							+ "_noOfDays"));
+					comments = request.getParameter(drugName + "_comments");
+					InventoryDrugFormulation inventoryDrugFormulation = inventoryCommonService
+							.getDrugFormulationById(formulationId);
+					Concept freCon = conceptService.getConcept(frequencyId);
+
+					OpdDrugOrder opdDrugOrder = new OpdDrugOrder();
+					opdDrugOrder.setPatient(ipdEncounter.getPatient());
+					opdDrugOrder.setEncounter(ipdEncounter);
+					opdDrugOrder.setInventoryDrug(inventoryDrug);
+					opdDrugOrder
+							.setInventoryDrugFormulation(inventoryDrugFormulation);
+					opdDrugOrder.setFrequency(freCon);
+					opdDrugOrder.setNoOfDays(noOfDays);
+					opdDrugOrder.setComments(comments);
+					opdDrugOrder.setCreator(user);
+					opdDrugOrder.setCreatedOn(date);
+					opdDrugOrder.setOrderFrom(2);
+					patientDashboardService
+							.saveOrUpdateOpdDrugOrder(opdDrugOrder);
+				}
+			}
+		}
 		ipdService.discharge(command.getAdmittedId(), command.getOutCome());
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
@@ -722,6 +851,12 @@ public class PatientAdmittedController {
 			Collections.sort(procedures, new ConceptComparator());
 		}
 		model.addAttribute("listProcedures", procedures);
+		//New Requirement add drug row in discharge slip
+		InventoryCommonService inventoryCommonService = Context
+				.getService(InventoryCommonService.class);
+		List<Concept> drugFrequencyConcept = inventoryCommonService
+				.getDrugFrequency();
+		model.addAttribute("drugFrequencyList", drugFrequencyConcept);
 		//
 		
 		/*		
