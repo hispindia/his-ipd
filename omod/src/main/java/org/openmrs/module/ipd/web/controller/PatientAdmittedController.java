@@ -537,10 +537,11 @@ public class PatientAdmittedController {
 	public String transferPost(@RequestParam("admittedId") Integer id, @RequestParam("toWard") Integer toWardId,
 	                           @RequestParam("doctor") Integer doctorId,
 	                           @RequestParam(value = "bedNumber", required = false) String bed,
+	                           @RequestParam(value = "comments", required = false) String comments,
 	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
 	                           Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
-		ipdService.transfer(id, toWardId, doctorId, bed);
+		ipdService.transfer(id, toWardId, doctorId, bed, comments);
 		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
