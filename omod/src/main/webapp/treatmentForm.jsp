@@ -148,40 +148,58 @@ var majorOTProcedures = new Array();
 			majorOTProcedures.push("${item}");
 </c:forEach>
 
-function showSchedule(){
-var url = "#TB_inline?height=400&width=400&inlineId=scheduleDiv";
-tb_show("Schedule the procedues",url,false);
+// Print the slip
+function print(){
+var selProLen = selectedProcedureList.length;
+for(i=selProLen-1; i>=0; i--){
+var pro=selectedProcedureList[i].text;
+jQuery("#printablePostForProcedure").append("<span style='margin:5px;'>" + pro + "<br/>" + "</span>");
 }
 
-function validateOnSubmit(){
-var i;
+var selInvgLen = selectedInvestigationList.length;
+var j=1;
+for(i=selInvgLen-1; i>=0; i--){
+var invg=selectedInvestigationList[i].text;
+jQuery("#printableInvestigation").append("<span style='margin:5px;'>" + j + "." + invg + "<br/>" + "</span>");
+j++;
+}
 
-if(selectedProcedureList.length==0 && selectedInvestigationList.length==0 && drugIssuedList.length==0 && document.getElementById('note').value==""){
-alert("No treatment/investigation entered. Please click on 'Cancel' to go the patient list");
-return false;
+
+var selDrugLen = drugIssuedList.length;
+var k=1;
+for(i=selDrugLen-1; i>=0; i--){
+var drug=drugIssuedList[i];
+var formulationName=document.getElementById(drug+"_formulationName").value;
+var frequencyName=document.getElementById(drug+"_frequencyName").value;
+var noOfDays=document.getElementById(drug+"_noOfDays").value;
+var comments=document.getElementById(drug+"_comments").value;
+jQuery("#printableSlNo").append("<span style='margin:5px;'>" + k + "<br/>" + "</span>");
+jQuery("#printableDrug").append("<span style='margin:5px;'>" + drug + "<br/>" + "</span>");
+jQuery("#printableFormulation").append("<span style='margin:5px;'>" + formulationName + "<br/>" + "</span>");
+jQuery("#printableFrequency").append("<span style='margin:5px;'>" + frequencyName + "<br/>" + "</span>");
+jQuery("#printableNoOfDays").append("<span style='margin:5px;'>" + noOfDays + "<br/>" + "</span>");
+jQuery("#printableComments").append("<span style='margin:5px;'>" + comments + "<br/>" + "</span>");
+k++;
+}
+
+
+var note = document.getElementById('note').value;
+if(note!=""){
+jQuery("#printableOtherInstructions").append("<span style='margin:5px;'>" + note + "</span>");
 }
 else{
-if(selectedProcedureList.length>0){
-for(i=selectedProcedureList.length-1; i>=0; i--){
-var spl=selectedProcedureList.options[i].value;
-var splts=spl.toString();
-if(document.getElementById(splts)!=null){
-var procedure=document.getElementById(splts).value;
-if(procedure==null || procedure==""){
-//alert("Please schedule the procedure");
-//   return false;
-    }
-   }
-  }
- }
+jQuery("#othInst").hide();
 }
 
-return true;
+jQuery("#printTreatmentSlip").printArea({
+mode : "popup",
+popClose : true
+});
 }
 </script>
 
 <input type="hidden" id="pageId" value="dischagePage"/>
-<form method="post" id="treatmentForm" onsubmit="return validateOnSubmit();">
+<form method="post" id="treatmentForm" onsubmit="return print();">
 <input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 <input type="hidden" id="patientId" name="patientId" value="${patientId}" />
 
@@ -382,6 +400,69 @@ return true;
 <table  width="98%">
 	<input type="submit" class="ui-button ui-widget ui-state-default ui-corner-all" value="Conclude" onclick="ADMITTED.submitIpdTreatmentResult();">
 	<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Cancel" onclick="tb_cancel();">
+</table>
+</div>
+
+<div id="printTreatmentSlip" style="visibility:hidden;">
+<table class="box">
+<tr>
+		<center>
+			<b><font size="4">${hospitalName}</font></b>
+		</center>
+	</tr>
+<tr>
+		<td><strong>Date & Time of the Visit:</strong></td>
+		<td>${currentDateTime}</td>
+		<td><strong>Patient Category:</strong></td>
+		<td>${selectedCategory}</td>
+	</tr>
+<tr>
+		<td><strong>Patient ID:</strong></td>
+		<td>${admitted.patientIdentifier}</td>
+		<td><strong>Name:</strong></td>
+		<td>${patientName}</td>
+	</tr>
+<tr>
+		<td><strong>Gender:</strong></td>
+		<td><c:choose>
+				<c:when test="${patient.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose></td>
+		<td><strong>Age:</strong></td>
+		<td>${age}</td>
+	</tr>
+<tr>
+<td><strong>Admitted IPD:</strong></td>
+<td>${admitted.admittedWard.name}</td>
+</tr>
+</table>
+<table class="box">
+<tr>
+<center>
+			<b><font size="2">CLINICAL SUMMARY</font></b>
+		</center>
+</tr>
+<tr><td><strong>Working Diagnosis:</strong></td><td>${provisionalDiagnosis}</td></tr>
+<tr><td><strong>Procedure:</strong></td><td><div id="printablePostForProcedure"></div></td></tr>
+<tr><td><strong>Investigation Advised :</strong></td><td><div id="printableInvestigation"></div></td></tr>
+</table>
+<table class="box">
+<br />
+<tr>
+<center>
+			<b><font size="2">TREATMENT ADVISED</font></b>
+		</center>
+</tr>
+<tr align="center"><th>S.No</th><th>Drug</th><th>Formulation</th><th>Frequency</th><th>No of Days</th><th>Comments</th></tr>
+<tr align="center"><td><div id="printableSlNo"></div></td><td><div id="printableDrug"></div></td><td><div id="printableFormulation"></div></td><td><div id="printableFrequency"></div></td>
+<td><div id="printableNoOfDays"></div></td><td><div id="printableComments"></div></td></tr>
+</table>
+<table class="box">
+<tr id="othInst"><td><strong>Other Instructions:</strong></td><td><div id="printableOtherInstructions"></div></td></tr>
 </table>
 </div>
 </form>

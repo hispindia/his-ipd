@@ -47,6 +47,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
@@ -310,6 +311,35 @@ public class PatientAdmittedController {
 		model.addAttribute("allMajorOTProcedures", id2);
 		
 		model.addAttribute("ipdWard", ipdWard);
+		
+		String hospitalName = Context.getAdministrationService().getGlobalProperty("hospital.location_user");
+        model.addAttribute("hospitalName", hospitalName);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
+		model.addAttribute("currentDateTime", sdf.format(new Date()));
+		
+		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
+		List<PersonAttribute> pas = hcs.getPersonAttributes(patient.getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("selectedCategory", pa.getValue());
+			}
+
+		}
+		
+		String patientName;
+		if (patient.getMiddleName() != null) {
+			patientName = patient.getGivenName() + " "
+					+ patient.getFamilyName() + " " + patient.getMiddleName();
+		} else {
+			patientName = patient.getGivenName() + " "
+					+ patient.getFamilyName();
+		}
+		model.addAttribute("patientName", patientName);
+		
+		Date birthday = patient.getBirthdate();
+		model.addAttribute("age", PatientUtils.estimateAge(birthday));
 
 		return "module/ipd/treatmentForm";
 	}
