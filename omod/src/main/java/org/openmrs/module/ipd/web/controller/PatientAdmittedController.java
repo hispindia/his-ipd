@@ -616,6 +616,7 @@ public class PatientAdmittedController {
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.POST)
 	public String dischargePost(@RequestParam(value = "drugOrder", required = false) String[] drugOrder,IpdFinalResultCommand command,HttpServletRequest request,Model model) {
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
 		
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
@@ -798,6 +799,21 @@ public class PatientAdmittedController {
 			}
 		}
 		ipdService.discharge(command.getAdmittedId(), command.getOutCome());
+		
+		if (StringUtils.isNotBlank(command.getNote())) {
+			Obs obs = new Obs();
+			//obs.setObsGroup(obsGroup);
+			obs.setConcept(cOtherInstructions);
+			obs.setValueText(command.getNote());
+			obs.setCreator(user);
+			obs.setDateCreated(date);
+			obs.setEncounter(ipdEncounter);
+			obs.setObsDatetime(ipdEncounter.getEncounterDatetime());
+			obs.setLocation(location);
+			obs.setPatient(ipdEncounter.getPatient());
+			Context.getObsService().saveObs(obs,"save other instruction");
+		}
+		
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
@@ -910,6 +926,35 @@ public class PatientAdmittedController {
 		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
 		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
 		model.addAttribute("sProcedureList", selectedProcedureList);
+		
+		String hospitalName = Context.getAdministrationService().getGlobalProperty("hospital.location_user");
+        model.addAttribute("hospitalName", hospitalName);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
+		model.addAttribute("currentDateTime", sdf.format(new Date()));
+		
+		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
+		List<PersonAttribute> pas = hcs.getPersonAttributes(patient.getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("selectedCategory", pa.getValue());
+			}
+
+		}
+		
+		String patientName;
+		if (patient.getMiddleName() != null) {
+			patientName = patient.getGivenName() + " "
+					+ patient.getFamilyName() + " " + patient.getMiddleName();
+		} else {
+			patientName = patient.getGivenName() + " "
+					+ patient.getFamilyName();
+		}
+		model.addAttribute("patientName", patientName);
+		
+		Date birthday = patient.getBirthdate();
+		model.addAttribute("age", PatientUtils.estimateAge(birthday));
 		
 		return "module/ipd/dischargeForm";
 	}

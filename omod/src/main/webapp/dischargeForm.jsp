@@ -126,10 +126,58 @@ function addDrugOrder() {
    jQuery("#comments").val("");
    }
 }
+
+// Print the slip
+function print(){
+var selDiagLen = selectedDiagnosisList.length;
+for(i=selDiagLen-1; i>=0; i--){
+var diag=selectedDiagnosisList[i].text;
+jQuery("#printableDiagnosis").append("<span style='margin:5px;'>" + diag + "<br/>" + "</span>");
+}
+
+var selProLen = selectedProcedureList.length;
+for(i=selProLen-1; i>=0; i--){
+var pro=selectedProcedureList[i].text;
+jQuery("#printablePostForProcedure").append("<span style='margin:5px;'>" + pro + "<br/>" + "</span>");
+}
+
+var selDrugLen = drugIssuedList.length;
+var k=1;
+for(i=selDrugLen-1; i>=0; i--){
+var drug=drugIssuedList[i];
+var formulationName=document.getElementById(drug+"_formulationName").value;
+var frequencyName=document.getElementById(drug+"_frequencyName").value;
+var noOfDays=document.getElementById(drug+"_noOfDays").value;
+var comments=document.getElementById(drug+"_comments").value;
+jQuery("#printableSlNo").append("<span style='margin:5px;'>" + k + "<br/>" + "</span>");
+jQuery("#printableDrug").append("<span style='margin:5px;'>" + drug + "<br/>" + "</span>");
+jQuery("#printableFormulation").append("<span style='margin:5px;'>" + formulationName + "<br/>" + "</span>");
+jQuery("#printableFrequency").append("<span style='margin:5px;'>" + frequencyName + "<br/>" + "</span>");
+jQuery("#printableNoOfDays").append("<span style='margin:5px;'>" + noOfDays + "<br/>" + "</span>");
+jQuery("#printableComments").append("<span style='margin:5px;'>" + comments + "<br/>" + "</span>");
+k++;
+}
+
+var note = document.getElementById('note').value;
+if(note!=""){
+jQuery("#printableOtherInstructions").append("<span style='margin:5px;'>" + note + "</span>");
+}
+else{
+jQuery("#othInst").hide();
+}
+
+var visitOutCome=jQuery("#outCome option:selected").text();
+jQuery("#printableOPDVisitOutCome").append("<span style='margin:5px;'>" + visitOutCome + "</span>");
+
+jQuery("#printDischargeSlip").printArea({
+mode : "popup",
+popClose : true
+});
+}
 </script>
 <input type="hidden" id="pageId" value="dischagePage" />
 <input type="hidden" id="ipdWard" name="ipdWard" value="${ipdWard}" />
-<form method="post" id="dischargeForm">
+<form method="post" id="dischargeForm" onsubmit="return print();">
 	<input type="hidden" id="id" name="admittedId" value="${admitted.id }" />
 	<!-- harsh 14/6/2012: to get patient ID -->
 	<input type="hidden" id="patientId" name="patientId"
@@ -359,6 +407,10 @@ function addDrugOrder() {
 			</select></td>
 			<td></td>
 		</tr>
+	<tr>
+	 <td colspan="3"><strong>Other Instructions:</strong><input id="note" name="note" class="ui-autocomplete-input ui-widget-content ui-corner-all ac_input"  
+				style="width:980px; height:50px" title="" autocomplete="off"></td>
+	</tr>
 	</table>
 
 	<table width="98%">
@@ -372,5 +424,68 @@ function addDrugOrder() {
 				value="Cancel" onclick="tb_cancel();">
 		</div>
 	</table>
+	
+<div id="printDischargeSlip" style="visibility:hidden;">
+<table class="box">
+<tr>
+		<center>
+			<b><font size="4">${hospitalName}</font></b>
+		</center>
+	</tr>
+<tr>
+		<td><strong>Date & Time of the Visit:</strong></td>
+		<td>${currentDateTime}</td>
+		<td><strong>Patient Category:</strong></td>
+		<td>${selectedCategory}</td>
+	</tr>
+<tr>
+		<td><strong>Patient ID:</strong></td>
+		<td>${admitted.patientIdentifier}</td>
+		<td><strong>Name:</strong></td>
+		<td>${patientName}</td>
+	</tr>
+<tr>
+		<td><strong>Gender:</strong></td>
+		<td><c:choose>
+				<c:when test="${patient.gender eq 'M'}">
+					Male
+				</c:when>
+				<c:otherwise>
+					Female
+				</c:otherwise>
+			</c:choose></td>
+		<td><strong>Age:</strong></td>
+		<td>${age}</td>
+	</tr>
+<tr>
+<td><strong>Admitted IPD:</strong></td>
+<td>${admitted.admittedWard.name}</td>
+</tr>
+</table>
+<table class="box">
+<tr>
+<center>
+			<b><font size="2">CLINICAL SUMMARY</font></b>
+		</center>
+</tr>
+<tr><td><strong>Diagnosis:</strong></td><td><div id="printableDiagnosis"></div></td></tr>
+<tr><td><strong>Procedure:</strong></td><td><div id="printablePostForProcedure"></div></td></tr>
+</table>
+<table class="box">
+<br />
+<tr>
+<center>
+			<b><font size="2">TREATMENT ADVISED</font></b>
+		</center>
+</tr>
+<tr align="center"><th>S.No</th><th>Drug</th><th>Formulation</th><th>Frequency</th><th>No of Days</th><th>Comments</th></tr>
+<tr align="center"><td><div id="printableSlNo"></div></td><td><div id="printableDrug"></div></td><td><div id="printableFormulation"></div></td><td><div id="printableFrequency"></div></td>
+<td><div id="printableNoOfDays"></div></td><td><div id="printableComments"></div></td></tr>
+</table>
+<table class="box">
+<tr id="othInst"><td><strong>Other Instructions:</strong></td><td><div id="printableOtherInstructions"></div></td></tr>
+<tr><td><strong>Visit Outcome:</strong></td><td><div id="printableOPDVisitOutCome"></div></td></tr>
+</table>
+</div>
 
 </form>
