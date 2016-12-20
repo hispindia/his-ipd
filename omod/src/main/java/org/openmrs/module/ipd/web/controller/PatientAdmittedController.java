@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -50,6 +51,7 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Role;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.PatientService;
@@ -63,9 +65,12 @@ import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.InventoryDrug;
 import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmittedLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
 import org.openmrs.module.hospitalcore.model.OpdDrugOrder;
+import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
 import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
@@ -103,93 +108,59 @@ import org.springframework.web.bind.annotation.RequestParam;
  **/
 @Controller("IPDPatientAdmittedController")
 public class PatientAdmittedController {
-
+	
 	Log log = LogFactory.getLog(getClass());
-
+	
 	@RequestMapping(value = "/module/ipd/admittedPatientIndex.htm", method = RequestMethod.GET)
-	public String firstView(
-			@RequestParam(value = "searchPatient", required = false) String searchPatient,// patient
-																							// name
-																							// or
-																							// patient
-																							// identifier
-			@RequestParam(value = "fromDate", required = false) String fromDate,
-			@RequestParam(value = "toDate", required = false) String toDate,
-			@RequestParam(value = "ipdWard", required = false) String ipdWard,
-			// @RequestParam(value = "ipdWardString", required = false) String
-			// ipdWardString, //note ipdWardString = 1,2,3,4.....
-			@RequestParam(value = "tab", required = false) Integer tab, // If
-																		// that
-																		// tab
-																		// is
-																		// active
-																		// we
-																		// will
-																		// set
-																		// that
-																		// tab
-																		// active
-																		// when
-																		// page
-																		// load.
-			@RequestParam(value = "doctorString", required = false) String doctorString,// note:
-																						// doctorString=
-																						// 1,2,3,4.....
-			Model model) {
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
-		List<IpdPatientAdmitted> listPatientAdmitted = ipdService
-				.searchIpdPatientAdmitted(searchPatient,
-						IpdUtils.convertStringToList(doctorString), fromDate,
-						toDate, ipdWard, "");
-
-		/*
-		 * Sagar Bele 08-08-2012 Support #327 [IPD] (DDU(SDMX)instance)
-		 * snapshot- age column in IPD admitted patient index
-		 */
+	public String firstView(@RequestParam(value = "searchPatient", required = false) String searchPatient,//patient name or patient identifier
+	                        @RequestParam(value = "fromDate", required = false) String fromDate,
+	                        @RequestParam(value = "toDate", required = false) String toDate,
+	                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                   //     @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //note ipdWardString = 1,2,3,4.....
+	                        @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
+	                        @RequestParam(value = "doctorString", required = false) String doctorString,// note: doctorString= 1,2,3,4.....
+	                        Model model) {
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		List<IpdPatientAdmitted> listPatientAdmitted = ipdService.searchIpdPatientAdmitted(searchPatient,
+		    IpdUtils.convertStringToList(doctorString), fromDate, toDate,  ipdWard, "");
+		
+		/*Sagar Bele 08-08-2012 Support #327 [IPD] (DDU(SDMX)instance) snapshot- age column in IPD admitted patient index */
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
-
+				
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
 		Map<Integer, String> mapRelationType = new HashMap<Integer, String>();
 		for (IpdPatientAdmitted admit : listPatientAdmitted) {
-			PersonAttribute relationNameattr = admit.getPatient().getAttribute(
-					"Father/Husband Name");
-			String address = admit.getPatientAddress();
-			model.addAttribute("address", StringUtils.isNotBlank(address) ? address
-					: "");
-			// ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the
-			// Discharge screen and print out
-			/*PersonAddress add = admit.getPatient().getPersonAddress();
+			PersonAttribute relationNameattr = admit.getPatient().getAttribute("Father/Husband Name");
+			//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out
+			PersonAddress add =admit.getPatient().getPersonAddress();
 			String address1 = add.getAddress1();
-			if (address1 != null) {
-				String address = " " + add.getAddress1() + " "
-						+ add.getCountyDistrict() + " " + add.getCityVillage();
+			if(address1!=null){
+			String address = " " + add.getAddress1() +" " + add.getCountyDistrict() + " " + add.getCityVillage();
+			model.addAttribute("address", address);
+			}
+			else{
+				String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
 				model.addAttribute("address", address);
-			} else {
-				String address = " " + add.getCountyDistrict() + " "
-						+ add.getCityVillage();
-				model.addAttribute("address", address);
-			}*/
-			PersonAttribute relationTypeattr = admit.getPatient().getAttribute(
-					"Relative Name Type");
-			// ghanshyam 30/07/2012 this code modified under feedback of 'New
-			// Requirement #313'
-			if (relationTypeattr != null) {
+			}
+			PersonAttribute relationTypeattr = admit.getPatient().getAttribute("Relative Name Type");
+			//ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #313'
+			if(relationTypeattr!=null){
 				mapRelationType.put(admit.getId(), relationTypeattr.getValue());
-			} else {
+			}
+			else{
 				mapRelationType.put(admit.getId(), "Relative Name");
 			}
-			mapRelationName.put(admit.getId(), relationNameattr.getValue());
+			mapRelationName.put(admit.getId(), relationNameattr.getValue());	
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
 		model.addAttribute("dateTime", new Date().toString());
 		model.addAttribute("ipdWard", ipdWard);
-		// model.addAttribute("listPatientAdmitted", listPatientAdmitted);
-
+//		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
+		
 		return "module/ipd/admittedList";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/treatment.htm", method = RequestMethod.GET)
 	public String treatmentView(
 			@RequestParam(value = "id", required = false) Integer admittedId,
@@ -197,27 +168,23 @@ public class PatientAdmittedController {
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
 
-		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context
-				.getService(HospitalCoreService.class);
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
+		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		IpdPatientAdmitted admitted = ipdService
 				.getIpdPatientAdmitted(admittedId);
 
 		Patient patient = admitted.getPatient();
 		model.addAttribute("patientId", patient.getId());
 
-		String address = admitted.getPatientAddress();
+		PersonAddress add = patient.getPersonAddress();
+		String address = add.getAddress1();
+		String district = add.getCountyDistrict();
+		String upazila = add.getCityVillage();
 		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
 				: "");
-		// PersonAddress add = patient.getPersonAddress();
-		/*
-		 * String district = add.getCountyDistrict(); String upazila =
-		 * add.getCityVillage();
-		 * 
-		 * model.addAttribute("district", district);
-		 * model.addAttribute("upazila", upazila);
-		 */
+		model.addAttribute("district", district);
+		model.addAttribute("upazila", upazila);
+
 		PersonAttribute relationNameattr = patient
 				.getAttribute("Father/Husband Name");
 		PersonAttribute relationTypeattr = patient
@@ -276,36 +243,27 @@ public class PatientAdmittedController {
 			Collections.sort(diagnosis, new ConceptComparator());
 		}
 		model.addAttribute("listDiagnosis", diagnosis);
-
-		List<Obs> pDiagnosis = new ArrayList<Obs>();
-		List<Obs> pFinalDiagnosis = new ArrayList<Obs>();
-		Set<String> lhs = new LinkedHashSet<String>();
-		pDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(admitted
-				.getPatientAdmissionLog().getOpdLog().getEncounter(), Context
-				.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
-		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(
-				admitted.getPatientAdmissionLog().getIpdEncounter(), Context
-						.getConceptService()
-						.getConcept("PROVISIONAL DIAGNOSIS")));
-		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(
-				admitted.getPatientAdmissionLog().getOpdLog().getEncounter(),
-				Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
-		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(
-				admitted.getPatientAdmissionLog().getIpdEncounter(), Context
-						.getConceptService().getConcept("FINAL DIAGNOSIS")));
-		String pd = "";
-		if (pDiagnosis.size() > 0) {
-			for (Obs pDiagnos : pDiagnosis) {
-				lhs.add(pDiagnos.getValueCoded().getName().getName());
-			}
-			for (String lh : lhs) {
-				pd = pd + lh + ",";
-			}
-			pd = pd.substring(0, pd.length() - 1);
+		
+		List<Obs> pDiagnosis=new ArrayList<Obs>();
+		List<Obs> pFinalDiagnosis=new ArrayList<Obs>();
+		Set<String> lhs=new LinkedHashSet<String>();
+		pDiagnosis=hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS")));
+		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getOpdLog().getEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
+		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(admitted.getPatientAdmissionLog().getIpdEncounter(), Context.getConceptService().getConcept("FINAL DIAGNOSIS")));
+		String pd="";
+		if(pDiagnosis.size()>0){
+		for(Obs pDiagnos:pDiagnosis){
+			lhs.add(pDiagnos.getValueCoded().getName().getName());
 		}
-
+		for(String lh:lhs){
+			pd=pd+lh+",";
+		}
+		pd = pd.substring(0, pd.length()-1); 
+		}
+		
 		model.addAttribute("provisionalDiagnosis", pd);
-
+		
 		List<Concept> procedures = dashboardService.listByDepartmentByWard(
 				admitted.getAdmittedWard().getId(), DepartmentConcept.TYPES[1]);
 		if (CollectionUtils.isNotEmpty(procedures)
@@ -356,19 +314,17 @@ public class PatientAdmittedController {
 			}
 		}
 		model.addAttribute("allMajorOTProcedures", id2);
-
+		
 		model.addAttribute("ipdWard", ipdWard);
-
-		String hospitalName = Context.getAdministrationService()
-				.getGlobalProperty("hospital.location_user");
-		model.addAttribute("hospitalName", hospitalName);
-
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
+		
+		String hospitalName = Context.getAdministrationService().getGlobalProperty("hospital.location_user");
+        model.addAttribute("hospitalName", hospitalName);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
 		model.addAttribute("currentDateTime", sdf.format(new Date()));
-
+		
 		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
-		List<PersonAttribute> pas = hcs.getPersonAttributes(patient
-				.getPatientId());
+		List<PersonAttribute> pas = hcs.getPersonAttributes(patient.getPatientId());
 		for (PersonAttribute pa : pas) {
 			PersonAttributeType attributeType = pa.getAttributeType();
 			if (attributeType.getPersonAttributeTypeId() == 14) {
@@ -376,7 +332,7 @@ public class PatientAdmittedController {
 			}
 
 		}
-
+		
 		String patientName;
 		if (patient.getMiddleName() != null) {
 			patientName = patient.getGivenName() + " "
@@ -386,52 +342,45 @@ public class PatientAdmittedController {
 					+ patient.getFamilyName();
 		}
 		model.addAttribute("patientName", patientName);
-
+		
 		Date birthday = patient.getBirthdate();
 		model.addAttribute("age", PatientUtils.estimateAge(birthday));
 
 		return "module/ipd/treatmentForm";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/treatment.htm", method = RequestMethod.POST)
-	public String treatmentPost(
-			@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
+	public String treatmentPost(@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			@ModelAttribute("ipdCommand") IpdFinalResultCommand command,
-			HttpServletRequest request, Model model) throws Exception {
-
+			HttpServletRequest request,Model model) throws Exception {
+		
 		HospitalCoreService hcs = (HospitalCoreService) Context
-				.getService(HospitalCoreService.class);
+		.getService(HospitalCoreService.class);
 		IpdService ipdService = Context.getService(IpdService.class);
 		IpdPatientAdmitted admitted = ipdService.getAdmittedByPatientId(command
 				.getPatientId());
-		Patient patient = Context.getPatientService().getPatient(
-				command.getPatientId());
-
-		AdministrationService administrationService = Context
-				.getAdministrationService();
-		GlobalProperty procedure = administrationService
-				.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
-		GlobalProperty investigationn = administrationService
-				.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_FOR_INVESTIGATION);
+		Patient patient = Context.getPatientService().getPatient(command.getPatientId());
+		
+		AdministrationService administrationService = Context.getAdministrationService();
+		GlobalProperty procedure = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		GlobalProperty investigationn = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_FOR_INVESTIGATION);
 		User user = Context.getAuthenticatedUser();
 		Date date = new Date();
-		PatientDashboardService patientDashboardService = Context
-				.getService(PatientDashboardService.class);
-		Concept cOtherInstructions = Context.getConceptService()
-				.getConceptByName("OTHER INSTRUCTIONS");
+		PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+		Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
 		Obs obsGroup = null;
 		obsGroup = hcs.getObsGroupCurrentDate(patient.getPersonId());
 		Encounter encounter = new Encounter();
 		encounter = admitted.getPatientAdmissionLog().getIpdEncounter();
 		Location location = new Location(1);
-
+		
 		ConceptService conceptService = Context.getConceptService();
-
+		
 		if (admitted != null) {
 			if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
-				Concept cProcedure = Context.getConceptService()
-						.getConceptByName(procedure.getPropertyValue());
+				Concept cProcedure = Context.getConceptService().getConceptByName(procedure
+						.getPropertyValue());
 				if (cProcedure == null) {
 					throw new Exception("Post for procedure concept null");
 				}
@@ -439,23 +388,21 @@ public class PatientAdmittedController {
 					Obs oProcedure = new Obs();
 					oProcedure.setObsGroup(obsGroup);
 					oProcedure.setConcept(cProcedure);
-					oProcedure.setValueCoded(Context.getConceptService()
-							.getConcept(pId));
+					oProcedure.setValueCoded( Context.getConceptService().getConcept(pId));
 					oProcedure.setCreator(user);
 					oProcedure.setDateCreated(date);
 					oProcedure.setEncounter(encounter);
 					oProcedure.setObsDatetime(encounter.getEncounterDatetime());
 					oProcedure.setLocation(location);
 					oProcedure.setPatient(patient);
-					Context.getObsService().saveObs(oProcedure,
-							"save procedure");
+					Context.getObsService().saveObs(oProcedure,"save procedure");
 				}
 
 			}
 
-			if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
-				Concept coninvt = Context.getConceptService().getConceptByName(
-						investigationn.getPropertyValue());
+		if (!ArrayUtils.isEmpty(command.getSelectedInvestigationList())) {
+				Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
+						.getPropertyValue());
 				if (coninvt == null) {
 					throw new Exception("Investigation concept null");
 				}
@@ -463,21 +410,18 @@ public class PatientAdmittedController {
 					Obs obsInvestigation = new Obs();
 					obsInvestigation.setObsGroup(obsGroup);
 					obsInvestigation.setConcept(coninvt);
-					obsInvestigation.setValueCoded(Context.getConceptService()
-							.getConcept(pId));
+					obsInvestigation.setValueCoded( Context.getConceptService().getConcept(pId));
 					obsInvestigation.setCreator(user);
 					obsInvestigation.setDateCreated(date);
 					obsInvestigation.setEncounter(encounter);
-					obsInvestigation.setObsDatetime(encounter
-							.getEncounterDatetime());
+					obsInvestigation.setObsDatetime(encounter.getEncounterDatetime());
 					obsInvestigation.setLocation(location);
 					obsInvestigation.setPatient(patient);
-					Context.getObsService().saveObs(obsInvestigation,
-							"save investigation");
+					Context.getObsService().saveObs(obsInvestigation,"save investigation");
 				}
 
 			}
-
+			
 			if (StringUtils.isNotBlank(command.getNote())) {
 				Obs obs = new Obs();
 				obs.setObsGroup(obsGroup);
@@ -489,11 +433,11 @@ public class PatientAdmittedController {
 				obs.setObsDatetime(encounter.getEncounterDatetime());
 				obs.setLocation(location);
 				obs.setPatient(patient);
-				Context.getObsService().saveObs(obs, "save other instruction");
+				Context.getObsService().saveObs(obs,"save other instruction");
 			}
 
 		}
-
+		
 		Integer formulationId;
 		Integer frequencyId;
 		Integer noOfDays;
@@ -533,93 +477,73 @@ public class PatientAdmittedController {
 				}
 			}
 		}
-
+		
 		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
-
 	// Requiremnt for record vitals
-
+	
 	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.GET)
-	public String vitalSatatisticsView(
-			@RequestParam(value = "id", required = false) Integer admittedId,
+	public String vitalSatatisticsView(@RequestParam(value = "id", required = false) Integer admittedId, 
 			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
-
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
+		
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
-				Context.getAdministrationService().getGlobalProperty(
-						IpdConstants.PROPERTY_IPDWARD));
-		model.addAttribute(
-				"listIpd",
-				ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept
-						.getAnswers()) : null);
-		IpdPatientAdmitted admitted = ipdService
-				.getIpdPatientAdmitted(admittedId);
+		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
+		model.addAttribute("listIpd", ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
 		model.addAttribute("admitted", admitted);
-
+		
 		Patient patient = admitted.getPatient();
-		//New requirement postal address
-		String address = admitted.getPatientAddress();
-		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
-				: "");
-		/*PersonAddress add = patient.getPersonAddress();
+		
+		PersonAddress add = patient.getPersonAddress();
 		String address = add.getAddress1();
 		// ghansham 25-june-2013 issue no # 1924 Change in the address format
 		String district = add.getCountyDistrict();
 		String upazila = add.getCityVillage();
-		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
-				: "");
+		model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
 		model.addAttribute("district", district);
 		model.addAttribute("upazila", upazila);
-*/
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		model.addAttribute("relationName", relationNameattr.getValue());
-
-		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
-		List<IpdPatientVitalStatistics> ipdPatientVitalStatistics = ipdService
-				.getIpdPatientVitalStatistics(patient.getPatientId(),
-						patientAdmissionLogId);
-		model.addAttribute("ipdPatientVitalStatistics",
-				ipdPatientVitalStatistics);
-		model.addAttribute("sizeOfipdPatientVitalStatistics",
-				ipdPatientVitalStatistics.size() + 1);
-		// SimpleDateFormat formatter = new
-		// SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
+		List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patient.getPatientId(),patientAdmissionLogId);
+		model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
+		model.addAttribute("sizeOfipdPatientVitalStatistics", ipdPatientVitalStatistics.size()+1);
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		model.addAttribute("dat", formatter.format(new Date()));
-		List<Concept> dietConcept = ipdService.getDiet();
+		List<Concept> dietConcept= ipdService.getDiet();
 		model.addAttribute("dietList", dietConcept);
 		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/vitalStatisticsForm";
 	}
-
-	// Capture Vital statistics for admitted patient in ipd
+	
+	//Capture Vital statistics for admitted patient in ipd
 	@RequestMapping(value = "/module/ipd/vitalStatistics.htm", method = RequestMethod.POST)
-	public String vitalSatatisticsPost(
-			@RequestParam("admittedId") Integer admittedId,
-			@RequestParam("patientId") Integer patientId,
-			@RequestParam(value = "bloodPressure", required = false) String bloodPressure,
-			@RequestParam(value = "pulseRate", required = false) String pulseRate,
-			@RequestParam(value = "temperature", required = false) String temperature,
-			// @RequestParam(value = "dietAdvised", required = false) String
-			// dietAdvised,
-			@RequestParam(value = "notes", required = false) String notes,
-			@RequestParam(value = "ipdWard", required = false) String ipdWard,
-			Model model, HttpServletRequest request) {
-
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
+	public String vitalSatatisticsPost(@RequestParam("admittedId") Integer admittedId, 
+			                   @RequestParam("patientId") Integer patientId, 
+	                           @RequestParam(value = "bloodPressure", required = false) String bloodPressure,
+	                           @RequestParam(value = "pulseRate", required = false) String pulseRate,
+	                           @RequestParam(value = "temperature", required = false) String temperature,
+	                           //@RequestParam(value = "dietAdvised", required = false) String dietAdvised,
+	                           @RequestParam(value = "notes", required = false) String notes,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                           Model model,HttpServletRequest request) {
+		
+		
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		PatientService patientService = Context.getPatientService();
 		Patient patient = patientService.getPatient(patientId);
-		IpdPatientAdmitted admitted = ipdService
-				.getIpdPatientAdmitted(admittedId);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
 		String dietAdvise = "";
 		String select[] = request.getParameterValues("dietAdvised");
 		if (select != null && select.length != 0) {
@@ -627,195 +551,160 @@ public class PatientAdmittedController {
 				dietAdvise = dietAdvise + select[i] + " ";
 			}
 		}
-		IpdPatientVitalStatistics ipdPatientVitalStatistics = new IpdPatientVitalStatistics();
+		IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
 		ipdPatientVitalStatistics.setPatient(patient);
-		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted
-				.getPatientAdmissionLog());
+		ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
 		ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
 		ipdPatientVitalStatistics.setPulseRate(pulseRate);
 		ipdPatientVitalStatistics.setTemperature(temperature);
 		ipdPatientVitalStatistics.setDietAdvised(dietAdvise);
 		ipdPatientVitalStatistics.setNote(notes);
-		// User user =Context.getAuthenticatedUser();
-		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser()
-				.getUserId());
+		//User user =Context.getAuthenticatedUser();
+		ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
 		ipdPatientVitalStatistics.setCreatedOn(new Date());
 		ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
-		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.POST)
-	public String transferPost(
-			@RequestParam("admittedId") Integer id,
-			@RequestParam("toWard") Integer toWardId,
-			@RequestParam("doctor") Integer doctorId,
-			@RequestParam(value = "bedNumber", required = false) String bed,
-			@RequestParam(value = "comments", required = false) String comments,
-			@RequestParam(value = "ipdWard", required = false) String ipdWard,
-			Model model) {
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
+	public String transferPost(@RequestParam("admittedId") Integer id, @RequestParam("toWard") Integer toWardId,
+	                           @RequestParam("doctor") Integer doctorId,
+	                           @RequestParam(value = "bedNumber", required = false) String bed,
+	                           @RequestParam(value = "comments", required = false) String comments,
+	                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
+	                           Model model) {
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		ipdService.transfer(id, toWardId, doctorId, bed, comments);
-		model.addAttribute("urlS", "main.htm?tab=1&ipdWard=" + ipdWard);
+		model.addAttribute("urlS", "main.htm?tab=1&ipdWard="+ipdWard);
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/transfer.htm", method = RequestMethod.GET)
-	public String transferView(
-			@RequestParam(value = "id", required = false) Integer admittedId,
+	public String transferView(@RequestParam(value = "id", required = false) Integer admittedId,
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
-
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
-				Context.getAdministrationService().getGlobalProperty(
-						IpdConstants.PROPERTY_IPDWARD));
-		model.addAttribute(
-				"listIpd",
-				ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept
-						.getAnswers()) : null);
-		IpdPatientAdmitted admitted = ipdService
-				.getIpdPatientAdmitted(admittedId);
+		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
+		model.addAttribute("listIpd", ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
 		model.addAttribute("admitted", admitted);
-
+		
 		String doctorRoleProps = Context.getAdministrationService()
-				.getGlobalProperty(IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
+		        .getGlobalProperty(IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
 		Role doctorRole = Context.getUserService().getRole(doctorRoleProps);
 		if (doctorRole != null) {
-			List<User> listDoctor = Context.getUserService().getUsersByRole(
-					doctorRole);
+			List<User> listDoctor = Context.getUserService().getUsersByRole(doctorRole);
 			model.addAttribute("listDoctor", listDoctor);
 		}
-
+		
 		Patient patient = admitted.getPatient();
-		String address = admitted.getPatientAddress();
-		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
-				: "");
-		/*PersonAddress add = patient.getPersonAddress();
-		String address = " " + add.getCountyDistrict() + " "
-				+ add.getCityVillage();
-
+		
+		PersonAddress add = patient.getPersonAddress();
+		String address = " " + add.getCountyDistrict() + " " + add.getCityVillage();
+		
 		model.addAttribute("address", address);
-*/
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		model.addAttribute("relationName", relationNameattr.getValue());
-
-		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
 		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/transferForm";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.POST)
-	public String dischargePost(
-			@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
-			IpdFinalResultCommand command, HttpServletRequest request,
-			Model model) {
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
-		Concept cOtherInstructions = Context.getConceptService()
-				.getConceptByName("OTHER INSTRUCTIONS");
-
+	public String dischargePost(@RequestParam(value = "drugOrder", required = false) String[] drugOrder,IpdFinalResultCommand command,HttpServletRequest request,Model model) {
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
+		
 		// harsh 6/14/2012 kill patient when "DEATH" is selected.
-		if (Context.getConceptService().getConcept(command.getOutCome())
-				.getName().getName().equalsIgnoreCase("DEATH")) {
-			PatientService ps = Context.getPatientService();
-			// ghanshyam,23-oct-2013,New Requirement #2937 Dealing with Dead
-			// Patient
-			HospitalCoreService hcs = (HospitalCoreService) Context
-					.getService(HospitalCoreService.class);
+		if (Context.getConceptService().getConcept(command.getOutCome()).getName().getName().equalsIgnoreCase("DEATH")) {
+			PatientService ps=Context.getPatientService();
+			//ghanshyam,23-oct-2013,New Requirement #2937 Dealing with Dead Patient
+			HospitalCoreService hcs = (HospitalCoreService) Context.getService(HospitalCoreService.class);
 			Patient patient = ps.getPatient(command.getPatientId());
-			PatientSearch patientSearch = hcs
-					.getPatient(command.getPatientId());
+			PatientSearch patientSearch = hcs.getPatient(command.getPatientId());
 			patient.setDead(true);
 			patient.setDeathDate(new Date());
-
+			
 			ps.savePatient(patient);
-
+			
 			patientSearch.setDead(true);
 			hcs.savePatientSearch(patientSearch);
 		}
-
-		// star
+		
+		//star
 		//
-		AdministrationService administrationService = Context
-				.getAdministrationService();
+		AdministrationService administrationService = Context.getAdministrationService();
 		GlobalProperty gpDiagnosis = administrationService
-				.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
+		        .getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
 		GlobalProperty procedure = administrationService
-				.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		        .getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
 		ConceptService conceptService = Context.getConceptService();
-		Concept cDiagnosis = conceptService.getConceptByName(gpDiagnosis
-				.getPropertyValue());
-		Concept cProcedure = conceptService.getConceptByName(procedure
-				.getPropertyValue());
-		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(command
-				.getAdmittedId());
-		Encounter ipdEncounter = admitted.getPatientAdmissionLog()
-				.getIpdEncounter();
-		List<Obs> listObsOfIpdEncounter = new ArrayList<Obs>(
-				ipdEncounter.getAllObs());
+		Concept cDiagnosis = conceptService.getConceptByName(gpDiagnosis.getPropertyValue());
+		Concept cProcedure = conceptService.getConceptByName(procedure.getPropertyValue());
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(command.getAdmittedId());
+		Encounter ipdEncounter = admitted.getPatientAdmissionLog().getIpdEncounter();
+		List<Obs> listObsOfIpdEncounter = new ArrayList<Obs>(ipdEncounter.getAllObs());
 		Location location = new Location(1);
-
+		
 		User user = Context.getAuthenticatedUser();
 		Date date = new Date();
-		// diagnosis
-
+		//diagnosis
+		
 		Set<Obs> obses = new HashSet(ipdEncounter.getAllObs());
-
+		
 		ipdEncounter.setObs(null);
-
+		
 		List<Concept> listConceptDianosisOfIpdEncounter = new ArrayList<Concept>();
 		List<Concept> listConceptProcedureOfIpdEncounter = new ArrayList<Concept>();
 		if (CollectionUtils.isNotEmpty(listObsOfIpdEncounter)) {
 			for (Obs obx : obses) {
-				if (obx.getConcept().getConceptId()
-						.equals(cDiagnosis.getConceptId())) {
+				if (obx.getConcept().getConceptId().equals(cDiagnosis.getConceptId())) {
 					listConceptDianosisOfIpdEncounter.add(obx.getValueCoded());
 				}
-
-				if (obx.getConcept().getConceptId()
-						.equals(cProcedure.getConceptId())) {
+				
+				if (obx.getConcept().getConceptId().equals( cProcedure.getConceptId())) {
 					listConceptProcedureOfIpdEncounter.add(obx.getValueCoded());
 				}
 			}
 		}
-
+		
 		List<Concept> listConceptDiagnosis = new ArrayList<Concept>();
-		if (command.getSelectedDiagnosisList() != null) {
-			for (Integer cId : command.getSelectedDiagnosisList()) {
-				Concept cons = conceptService.getConcept(cId);
-				listConceptDiagnosis.add(cons);
-				if (!listConceptDianosisOfIpdEncounter.contains(cons)) {
-					Obs obsDiagnosis = new Obs();
-					// obsDiagnosis.setObsGroup(obsGroup);
-					obsDiagnosis.setConcept(cDiagnosis);
-					obsDiagnosis.setValueCoded(cons);
-					obsDiagnosis.setCreator(user);
-					obsDiagnosis.setObsDatetime(date);
-					obsDiagnosis.setLocation(location);
-					obsDiagnosis.setDateCreated(date);
-					obsDiagnosis.setPatient(ipdEncounter.getPatient());
-					obsDiagnosis.setEncounter(ipdEncounter);
-					obsDiagnosis = Context.getObsService().saveObs(
-							obsDiagnosis, "update obs diagnosis if need");
-					obses.add(obsDiagnosis);
-				}
+		if(command.getSelectedDiagnosisList()!=null){
+		for (Integer cId : command.getSelectedDiagnosisList()) {
+			Concept cons = conceptService.getConcept(cId);
+			listConceptDiagnosis.add(cons);
+			if (!listConceptDianosisOfIpdEncounter.contains(cons)) {
+				Obs obsDiagnosis = new Obs();
+				//obsDiagnosis.setObsGroup(obsGroup);
+				obsDiagnosis.setConcept(cDiagnosis);
+				obsDiagnosis.setValueCoded(cons);
+				obsDiagnosis.setCreator(user);
+				obsDiagnosis.setObsDatetime(date);
+				obsDiagnosis.setLocation(location);
+				obsDiagnosis.setDateCreated(date);
+				obsDiagnosis.setPatient(ipdEncounter.getPatient());
+				obsDiagnosis.setEncounter(ipdEncounter);
+				obsDiagnosis = Context.getObsService().saveObs(obsDiagnosis, "update obs diagnosis if need");
+				obses.add(obsDiagnosis);
 			}
 		}
+	}
 		List<Concept> listConceptProcedure = new ArrayList<Concept>();
 		if (!ArrayUtils.isEmpty(command.getSelectedProcedureList())) {
-
+			
 			if (cProcedure == null) {
 				try {
 					throw new Exception("Post for procedure concept null");
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -825,7 +714,7 @@ public class PatientAdmittedController {
 				listConceptProcedure.add(cons);
 				if (!listConceptProcedureOfIpdEncounter.contains(cons)) {
 					Obs obsProcedure = new Obs();
-					// obsDiagnosis.setObsGroup(obsGroup);
+					//obsDiagnosis.setObsGroup(obsGroup);
 					obsProcedure.setConcept(cProcedure);
 					obsProcedure.setValueCoded(conceptService.getConcept(pId));
 					obsProcedure.setCreator(user);
@@ -834,47 +723,53 @@ public class PatientAdmittedController {
 					obsProcedure.setPatient(ipdEncounter.getPatient());
 					obsProcedure.setDateCreated(date);
 					obsProcedure.setEncounter(ipdEncounter);
-					obsProcedure = Context.getObsService().saveObs(
-							obsProcedure, "update obs diagnosis if need");
-					// ipdEncounter.addObs(obsProcedure);
+					obsProcedure = Context.getObsService().saveObs(obsProcedure, "update obs diagnosis if need");
+					//ipdEncounter.addObs(obsProcedure);
 					obses.add(obsProcedure);
 				}
 			}
-
+			
 		}
-
-		// Remove obs diagnosis and procedure
+		
+		// Remove obs diagnosis and procedure 
 		/*
-		 * for (Concept con : listConceptDianosisOfIpdEncounter) { if
-		 * (!listConceptDiagnosis.contains(con)) { for (Obs obx :
-		 * listObsOfIpdEncounter) { if
-		 * (obx.getValueCoded().getConceptId().intValue() ==
-		 * con.getConceptId().intValue()) {
-		 * Context.getObsService().deleteObs(obx); obses.remove(obx); } } } }
-		 * 
-		 * for (Concept con : listConceptProcedureOfIpdEncounter) { if
-		 * (!listConceptProcedure.contains(con)) { for (Obs obx :
-		 * listObsOfIpdEncounter) { if
-		 * (obx.getValueCoded().getConceptId().intValue() ==
-		 * con.getConceptId().intValue()) {
-		 * Context.getObsService().deleteObs(obx); obses.remove(obx); } } } }
-		 */
+		for (Concept con : listConceptDianosisOfIpdEncounter) {
+			if (!listConceptDiagnosis.contains(con)) {
+				for (Obs obx : listObsOfIpdEncounter) {
+					if (obx.getValueCoded().getConceptId().intValue() == con.getConceptId().intValue()) {
+						Context.getObsService().deleteObs(obx);
+						obses.remove(obx);
+					}
+				}
+			}
+		}
+		
+		for (Concept con : listConceptProcedureOfIpdEncounter) {
+			if (!listConceptProcedure.contains(con)) {
+				for (Obs obx : listObsOfIpdEncounter) {
+					if (obx.getValueCoded().getConceptId().intValue() == con.getConceptId().intValue()) {
+						Context.getObsService().deleteObs(obx);
+						obses.remove(obx);
+					}
+				}
+			}
+		}
+		*/
 		ipdEncounter.setObs(obses);
-
+		
 		Context.getEncounterService().saveEncounter(ipdEncounter);
-
-		// end
-
-		// New requirement add drug row in discharge
-
+		
+		//end
+		
+		//New requirement add drug row in discharge
+		
 		Integer formulationId;
 		Integer frequencyId;
 		Integer noOfDays;
 		String comments;
 		if (drugOrder != null) {
 			for (String drugName : drugOrder) {
-				PatientDashboardService patientDashboardService = Context
-						.getService(PatientDashboardService.class);
+				PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
 				InventoryCommonService inventoryCommonService = Context
 						.getService(InventoryCommonService.class);
 				InventoryDrug inventoryDrug = inventoryCommonService
@@ -909,10 +804,10 @@ public class PatientAdmittedController {
 			}
 		}
 		ipdService.discharge(command.getAdmittedId(), command.getOutCome());
-
+		
 		if (StringUtils.isNotBlank(command.getNote())) {
 			Obs obs = new Obs();
-			// obs.setObsGroup(obsGroup);
+			//obs.setObsGroup(obsGroup);
 			obs.setConcept(cOtherInstructions);
 			obs.setValueText(command.getNote());
 			obs.setCreator(user);
@@ -921,154 +816,159 @@ public class PatientAdmittedController {
 			obs.setObsDatetime(ipdEncounter.getEncounterDatetime());
 			obs.setLocation(location);
 			obs.setPatient(ipdEncounter.getPatient());
-			Context.getObsService().saveObs(obs, "save other instruction");
+			Context.getObsService().saveObs(obs,"save other instruction");
 		}
-
+		
 		model.addAttribute("urlS", "main.htm?tab=1");
 		model.addAttribute("message", "Succesfully");
 		return "/module/ipd/thickbox/success";
 	}
-
+	
 	@RequestMapping(value = "/module/ipd/discharge.htm", method = RequestMethod.GET)
-	public String dischargeView(
-			@RequestParam(value = "id", required = false) Integer admittedId,
-			@ModelAttribute("ipdCommand") IpdFinalResultCommand command,
-			Model model) {
-
-		IpdService ipdService = (IpdService) Context
-				.getService(IpdService.class);
-		IpdPatientAdmitted admitted = ipdService
-				.getIpdPatientAdmitted(admittedId);
-
+	public String dischargeView(@RequestParam(value = "id", required = false) Integer admittedId,
+	                            @ModelAttribute("ipdCommand") IpdFinalResultCommand command, Model model) {
+		
+		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+		IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+		
 		Patient patient = admitted.getPatient();
 		model.addAttribute("patientId", patient.getId());
-		String address = admitted.getPatientAddress();
-		model.addAttribute("address", StringUtils.isNotBlank(address) ? address
-				: "");
-		/*PersonAddress add = patient.getPersonAddress();
-		String address = " " + add.getAddress1() + " "
-				+ add.getCountyDistrict() + " " + add.getCityVillage();
-		model.addAttribute("address", address);*/
+		
+		if(admitted.getPatientAdmittedLogTransferFrom()!=null){
+			/*
+			 * Get IPD, patient referred from
+			 * */
+			IpdPatientAdmittedLog ipl=admitted.getPatientAdmittedLogTransferFrom();
+			model.addAttribute("referredFrom", ipl.getAdmittedWard().getName());
+		}
+		else{
+			/*
+			 * Get OPD, patient referred from
+			 * */
+			model.addAttribute("referredFrom", admitted.getPatientAdmissionLog().getOpdLog().getOpdConceptName());
+		}
 
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
-		// ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the
-		// Discharge screen and print out
-		PersonAttribute relationTypeattr = patient
-				.getAttribute("Relative Name Type");
+//		PersonAddress add = patient.getPersonAddress();
+//		String address = " " + add.getAddress1() +" " + add.getCountyDistrict() + " " + add.getCityVillage();
+		/*
+		 * Will be shown stored address during IPD admission. 
+		 * */
+		model.addAttribute("address", admitted.getPatientAddress());
+		
+		admitted.getPatientAddress();
+		
+		PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+		//ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out
+		PersonAttribute relationTypeattr = patient.getAttribute("Relative Name Type");
 		model.addAttribute("relationName", relationNameattr.getValue());
-		// ghanshyam 30/07/2012 this code modified under feedback of 'New
-		// Requirement #312
-		if (relationTypeattr != null) {
+		//ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #312
+		if(relationTypeattr!=null){
 			model.addAttribute("relationType", relationTypeattr.getValue());
-		} else {
+		}
+		else{
 			model.addAttribute("relationType", "Relative Name");
 		}
 		model.addAttribute("dateTime", new Date().toString());
-
-		Concept outComeList = Context.getConceptService().getConceptByName(
-				HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
-
+		
+		Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
+		
 		model.addAttribute("listOutCome", outComeList.getAnswers());
-
+		
 		model.addAttribute("admitted", admitted);
-
-		// change CHUYEN
-
+		
+		//change CHUYEN
+		
 		//
 		ConceptService conceptService = Context.getConceptService();
-		AdministrationService administrationService = Context
-				.getAdministrationService();
+		AdministrationService administrationService = Context.getAdministrationService();
 		String gpDiagnosis = administrationService
-				.getGlobalProperty(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
-		String gpProcedure = administrationService
-				.getGlobalProperty(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
-		List<Obs> obsList = new ArrayList<Obs>(admitted
-				.getPatientAdmissionLog().getIpdEncounter().getAllObs());
+		        .getGlobalProperty(PatientDashboardConstants.PROPERTY_PROVISIONAL_DIAGNOSIS);
+		String gpProcedure = administrationService.getGlobalProperty(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+		List<Obs> obsList = new ArrayList<Obs>(admitted.getPatientAdmissionLog().getIpdEncounter().getAllObs());
 		Concept conDiagnosis = conceptService.getConcept(gpDiagnosis);
-
+		
 		Concept conProcedure = conceptService.getConcept(gpProcedure);
-
+		
 		List<Concept> selectedDiagnosisList = new ArrayList<Concept>();
 		List<Concept> selectedProcedureList = new ArrayList<Concept>();
 		if (CollectionUtils.isNotEmpty(obsList)) {
 			for (Obs obs : obsList) {
-				if (obs.getConcept().getConceptId()
-						.equals(conDiagnosis.getConceptId())) {
+				if (obs.getConcept().getConceptId().equals(conDiagnosis.getConceptId())) {
 					selectedDiagnosisList.add(obs.getValueCoded());
 				}
-				if (obs.getConcept().getConceptId()
-						.equals(conProcedure.getConceptId())) {
+				if (obs.getConcept().getConceptId().equals(conProcedure.getConceptId())) {
 					selectedProcedureList.add(obs.getValueCoded());
 				}
 			}
 		}
-
+		
 		//
-		PatientDashboardService dashboardService = Context
-				.getService(PatientDashboardService.class);
-		List<Concept> diagnosis = dashboardService.listByDepartmentByWard(
-				admitted.getAdmittedWard().getId(), DepartmentConcept.TYPES[0]);
-		if (CollectionUtils.isNotEmpty(diagnosis)
-				&& CollectionUtils.isNotEmpty(selectedDiagnosisList)) {
+		PatientDashboardService dashboardService = Context.getService(PatientDashboardService.class);
+		List<Concept> diagnosis = dashboardService.listByDepartmentByWard(admitted.getAdmittedWard().getId(),
+		    DepartmentConcept.TYPES[0]);
+		if (CollectionUtils.isNotEmpty(diagnosis) && CollectionUtils.isNotEmpty(selectedDiagnosisList)) {
 			diagnosis.removeAll(selectedDiagnosisList);
 		}
 		if (CollectionUtils.isNotEmpty(diagnosis)) {
 			Collections.sort(diagnosis, new ConceptComparator());
 		}
 		model.addAttribute("listDiagnosis", diagnosis);
-		List<Concept> procedures = dashboardService.listByDepartmentByWard(
-				admitted.getAdmittedWard().getId(), DepartmentConcept.TYPES[1]);
-		if (CollectionUtils.isNotEmpty(procedures)
-				&& CollectionUtils.isNotEmpty(selectedProcedureList)) {
+		List<Concept> procedures = dashboardService.listByDepartmentByWard(admitted.getAdmittedWard().getId(),
+		    DepartmentConcept.TYPES[1]);
+		if (CollectionUtils.isNotEmpty(procedures) && CollectionUtils.isNotEmpty(selectedProcedureList)) {
 			procedures.removeAll(selectedProcedureList);
 		}
 		if (CollectionUtils.isNotEmpty(procedures)) {
 			Collections.sort(procedures, new ConceptComparator());
 		}
 		model.addAttribute("listProcedures", procedures);
-		// New Requirement add drug row in discharge slip
+		//New Requirement add drug row in discharge slip
 		InventoryCommonService inventoryCommonService = Context
 				.getService(InventoryCommonService.class);
 		List<Concept> drugFrequencyConcept = inventoryCommonService
 				.getDrugFrequency();
 		model.addAttribute("drugFrequencyList", drugFrequencyConcept);
 		//
-
-		/*
-		 * PatientDashboardService dashboardService =
-		 * Context.getService(PatientDashboardService.class); List<Concept>
-		 * diagnosis = dashboardService.searchDiagnosis(null);
-		 * if(CollectionUtils.isNotEmpty(diagnosis) &&
-		 * CollectionUtils.isNotEmpty(selectedDiagnosisList)){
-		 * diagnosis.removeAll(selectedDiagnosisList); }
-		 * Collections.sort(diagnosis, new ConceptComparator());
-		 * model.addAttribute("listDiagnosis", diagnosis); List<Concept>
-		 * procedures = dashboardService.searchProcedure(null);
-		 * if(CollectionUtils.isNotEmpty(procedures) &&
-		 * CollectionUtils.isNotEmpty(selectedProcedureList)){
-		 * procedures.removeAll(selectedProcedureList); }
-		 * Collections.sort(procedures, new ConceptComparator());
-		 * model.addAttribute("listProcedures", procedures);
-		 */
+		
+		/*		
+				PatientDashboardService dashboardService = Context.getService(PatientDashboardService.class);
+				List<Concept> diagnosis = dashboardService.searchDiagnosis(null);
+				if(CollectionUtils.isNotEmpty(diagnosis) && CollectionUtils.isNotEmpty(selectedDiagnosisList)){
+					diagnosis.removeAll(selectedDiagnosisList);
+				}
+				Collections.sort(diagnosis, new ConceptComparator());
+				model.addAttribute("listDiagnosis", diagnosis);
+				List<Concept> procedures = dashboardService.searchProcedure(null);
+				if(CollectionUtils.isNotEmpty(procedures) && CollectionUtils.isNotEmpty(selectedProcedureList)){
+					procedures.removeAll(selectedProcedureList);
+				}
+				Collections.sort(procedures, new ConceptComparator());
+				model.addAttribute("listProcedures", procedures);*/
 		Collections.sort(selectedDiagnosisList, new ConceptComparator());
 		Collections.sort(selectedProcedureList, new ConceptComparator());
-		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		//Patient category
+		model.addAttribute("patCategory", PatientUtils.getPatientCategory(patient));
 		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
 		model.addAttribute("sProcedureList", selectedProcedureList);
-
-		String hospitalName = Context.getAdministrationService()
-				.getGlobalProperty("hospital.location_user");
-		model.addAttribute("hospitalName", hospitalName);
-
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
+		
+		String hospitalName = Context.getAdministrationService().getGlobalProperty("hospital.location_user");
+        model.addAttribute("hospitalName", hospitalName);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a");
 		model.addAttribute("currentDateTime", sdf.format(new Date()));
+		
+		model.addAttribute("admissionDateTime", sdf.format(admitted.getPatientAdmissionLog().getAdmissionDate()));
+		
+		final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
+		int diffInDays = (int) ((new Date().getTime() - admitted.getPatientAdmissionLog().getAdmissionDate().getTime() )/ DAY_IN_MILLIS );
+		if(diffInDays<1){
+			diffInDays=1;
+		}
+		model.addAttribute("admittedDays", diffInDays);
+		 
 		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
-		List<PersonAttribute> pas = hcs.getPersonAttributes(patient
-				.getPatientId());
+		List<PersonAttribute> pas = hcs.getPersonAttributes(patient.getPatientId());
 		for (PersonAttribute pa : pas) {
 			PersonAttributeType attributeType = pa.getAttributeType();
 			if (attributeType.getPersonAttributeTypeId() == 14) {
@@ -1076,7 +976,7 @@ public class PatientAdmittedController {
 			}
 
 		}
-
+		
 		String patientName;
 		if (patient.getMiddleName() != null) {
 			patientName = patient.getGivenName() + " "
@@ -1086,11 +986,11 @@ public class PatientAdmittedController {
 					+ patient.getFamilyName();
 		}
 		model.addAttribute("patientName", patientName);
-
+		
 		Date birthday = patient.getBirthdate();
 		model.addAttribute("age", PatientUtils.estimateAge(birthday));
-
+		
 		return "module/ipd/dischargeForm";
 	}
-
+	
 }
