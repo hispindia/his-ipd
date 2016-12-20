@@ -115,6 +115,7 @@ public class PatientAdmissionController {
 		if (admission != null) {
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			String address = add.getAddress1();
+			
 			String districtTehsil = add.getCountyDistrict() + " / " + add.getCityVillage();
 			
 			String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(
@@ -130,6 +131,7 @@ public class PatientAdmissionController {
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
+		
 			model.addAttribute("districtTehsil", StringUtils.isNotBlank(districtTehsil) ? districtTehsil : "");
 			model.addAttribute("relationName", relationNameattr.getValue());
 			
@@ -232,7 +234,12 @@ public class PatientAdmissionController {
 			
 			PersonAddress add = admission.getPatient().getPersonAddress();
 			
-			address = add.getAddress1() + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
+			
+			if(request.getParameter("patientPostalAddress")!="" && request.getParameter("patientPostalAddress")!=null)
+			{
+			 
+			address = request.getParameter("patientPostalAddress") + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
+			}
 			
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
@@ -280,6 +287,7 @@ public class PatientAdmissionController {
 				}
 			admitted.setMonthlyIncome(monthlyIncome);
 			admitted.setPatient(patientAdmissionLog.getPatient());
+		
 			admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
 			admitted.setPatientAdmissionLog(patientAdmissionLog);
 			admitted.setPatientIdentifier(admission.getPatientIdentifier());

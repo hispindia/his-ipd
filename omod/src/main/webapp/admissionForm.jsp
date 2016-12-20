@@ -92,8 +92,8 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td>${relationType }:&nbsp;${relationName }</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td>
-		<td><spring:message code="ipd.patient.districtTehsil"/>: ${districtTehsil }</td>  
+		<td><spring:message code="ipd.patient.homeAddress"/>:<input id="patientPostalAddress" name="patientPostalAddress" value="${address}" /></td>
+		<td><spring:message code="ipd.patient.districtTehsil"/>:${districtTehsil }</td>  
 	</tr>
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>

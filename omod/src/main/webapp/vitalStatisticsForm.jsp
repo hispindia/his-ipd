@@ -153,8 +153,7 @@
 			</tr>
 			<tr>
 				<!-- ghansham 25-june-2013 issue no # 1924 Change in the address format -->
-				<td><spring:message code="ipd.patient.address" />: ${address }
-					&nbsp;${upazila } &nbsp;${district }</td>
+				<td><spring:message code="ipd.patient.homeAddress"/>: ${address}</td>
 			</tr>
 		</table>
 

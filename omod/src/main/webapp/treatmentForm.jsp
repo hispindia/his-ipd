@@ -235,7 +235,7 @@ popClose : true
 		<td colspan="2"><spring:message code="ipd.patient.admittedWard"/>: ${admitted.admittedWard.name}</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.address"/>: ${address } &nbsp;${upazila } &nbsp;${district } </td> 
+		<td><spring:message code="ipd.patient.homeAddress"/>: ${address }</td> 
 	</tr>
 	<tr>
 		<td colspan="4"><spring:message code="ipd.patient.date/time"/>:<fmt:formatDate value="${dateTime}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
