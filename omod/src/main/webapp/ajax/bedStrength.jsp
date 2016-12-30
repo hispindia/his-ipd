@@ -27,8 +27,19 @@ function validateCheck(checkAlert,maxPatientOnBed){
 	}
 	else {
 	var mpob=parseInt(maxPatientOnBed);
-	if(mpob>2){
+	if(mpob>0 && ${isBedVacant}==true){
+	alert("please select vacant bed");
+	jQuery("#bedNumber").val("");  
+	return false;
+	}
+	else if(mpob>1 && ${isBedWithOnePatient}==true){
+	alert("please select one bed patient");
+	jQuery("#bedNumber").val("");  
+	return false;
+	}
+	else if(mpob>2){
 	alert("This bed already has 3 patients admitted. Please select another bed.");
+	jQuery("#bedNumber").val("");  
 	return false;
 	}
 	else{
@@ -64,7 +75,7 @@ function validateCheck(checkAlert,maxPatientOnBed){
 						<c:choose>
 							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied < bedMax}">
 								<td>
-									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" />
+									<input id="validate" name="validateName" size="4" style="background-color:red" onMouseOver="this.bgColor='#00CC00'" value="${count}/${bedStrengthMap[count]}" readonly="readonly" onclick="javascript:return validateCheck(${count},${bedStrengthMap[count]});"/>
 							</c:when>
 							
 							<c:when test="${bedStrengthMap[count] > 0 && bedOccupied >= bedMax}">

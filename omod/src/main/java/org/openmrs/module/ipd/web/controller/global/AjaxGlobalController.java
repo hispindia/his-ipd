@@ -209,6 +209,10 @@ public class AjaxGlobalController {
 				.getService(IpdService.class);
 		Map<Long,Integer> bedStrengthMap = new HashMap<Long, Integer>();
 		WardBedStrength wardBedStrength = ipdService.getWardBedStrengthByWardId(wardId);
+		
+		boolean isBedVacant=false;
+		boolean isBedWithOnePatient=false;
+		boolean isBedWithTwoPatient=false;
 
 		if (wardBedStrength!=null){
 		Integer bedStrength = wardBedStrength.getBedStrength();
@@ -216,6 +220,18 @@ public class AjaxGlobalController {
 		
 		for (Long i =1L ;i<=bedStrength;i++){
 			bedStrengthMap.put(i, 0);
+			List<IpdPatientAdmitted> ipa=ipdService.getBedAvailability(Context.getConceptService().getConcept(wardId),i.toString());
+			if(ipa.size()==0){
+				isBedVacant=true;	
+			}
+			
+			if(ipa.size()==1){
+				isBedWithOnePatient=true;	
+			}
+			
+			if(ipa.size()==2){
+				isBedWithTwoPatient=true;	
+			}
 			
 		}
 		
@@ -255,6 +271,9 @@ public class AjaxGlobalController {
 		model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
 		float bedStrengthSize= bedStrengthMap.size();
 		model.addAttribute("bedMax", Math.round(bedStrengthSize));
+		model.addAttribute("isBedVacant", isBedVacant);
+		model.addAttribute("isBedWithOnePatient", isBedWithOnePatient);
+		model.addAttribute("isBedWithTwoPatient", isBedWithTwoPatient);
 		return "module/ipd/ajax/bedStrength";
 	}
 }
