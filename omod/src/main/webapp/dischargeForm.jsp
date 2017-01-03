@@ -540,6 +540,14 @@
 				<td><div id="printableOPDVisitOutCome"></div></td>
 			</tr>
 		</table>
+				<table class="box">
+			<tr>
+				<td colspan="4" align="left"><b><font size="3">Clinical Findings/Instructions</font></b></td>
+			</tr>
+			<tr id="othInst">
+				<td><div id="printableOtherInstructions"></div></td>
+			</tr>
+		</table>
 		<table class="box">
 			<br />
 			<tr>
@@ -562,14 +570,14 @@
 				<td><div id="printableComments"></div></td>
 			</tr>
 		</table>
-		<table class="box">
+	
+	<br />
+	<div style="float:right;"> 
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Other Instructions</font></b></td>
+				<td colspan="4" align="right"><b><font size="3">Signature of Discharging Physician</font></b></td>
 			</tr>
-			<tr id="othInst">
-				<td><div id="printableOtherInstructions"></div></td>
-			</tr>
-		</table>
+		</div>
 	</div>
+	
 
 </form>
