@@ -90,7 +90,7 @@
 				alert("Please select formulation");
 				return false;
 			}
-			var formulationArr = formulation.split(".");
+			var formulationArr = formulation.split("_");
 			var frequency = document.getElementById('frequency').value;
 			if (frequency == null || frequency == "") {
 				alert("Please select frequency");
@@ -108,32 +108,39 @@
 					return false;
 				}
 			}
-			var comments = document.getElementById('comments').value;
-			var deleteString = 'deleteInput(\"' + drugName + '\")';
-			var htmlText = "<div id='com_"+drugName+"_div'>"
-					+ "<input id='"+drugName+"_name'  name='drugOrder' type='text' size='12' value='"+drugName+"'  readonly='readonly'/>&nbsp;&nbsp;"
-					+ "<input id='"+drugName+"_formulationName'  name='"+drugName+"_formulatioNname' type='text' size='14' value='"+formulationArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
-					+ "<input id='"+drugName+"_frequencyName'  name='"+drugName+"_frequencyName' type='text' size='6' value='"+frequencyArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
-					+ "<input id='"+drugName+"_noOfDays'  name='"+drugName+"_noOfDays' type='text' size='7' value='"+noOfDays+"'  readonly='readonly'/>&nbsp;&nbsp;"
-					+ "<input id='"+drugName+"_comments'  name='"+drugName+"_comments' type='text' size='12' value='"+comments+"'  readonly='readonly'/>&nbsp;&nbsp;"
-					+ "<input id='"+drugName+"_formulationId'  name='"+drugName+"_formulationId' type='hidden' value='"+formulationArr[1]+"'/>&nbsp;"
-					+ "<input id='"+drugName+"_frequencyId'  name='"+drugName+"_frequencyId' type='hidden' value='"+frequencyArr[1]+"'/>&nbsp;"
-					+ "<a style='color:red' href='#' onclick='"+deleteString+"' >[X]</a>"
-					+ "</div>";
-
-			var newElement = document.createElement('div');
-			newElement.setAttribute("id", drugName);
-			newElement.innerHTML = htmlText;
-			var fieldsArea = document.getElementById('headerValue');
-			fieldsArea.appendChild(newElement);
-			jQuery("#drugName").val("");
-			jQuery("#formulation").val("");
-			jQuery("#frequency").val("");
-			jQuery("#noOfDays").val("");
-			jQuery("#comments").val("");
-		}
+			 var comments=document.getElementById('comments').value;
+			   var deleteString = 'deleteInput(\"'+drugName+'\")';
+			   var htmlText =  "<div id='com_"+drugName+"_div'>"
+				       	 +"<input id='"+drugName+"_name'  name='drugOrder' type='text' size='12' value='"+drugName+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+drugName+"_formulationName'  name='"+drugName+"_formulatioNname' type='text' size='14' value='"+formulationArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+drugName+"_frequencyName'  name='"+drugName+"_frequencyName' type='text' size='6' value='"+frequencyArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+drugName+"_noOfDays'  name='"+drugName+"_noOfDays' type='text' size='7' value='"+noOfDays+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+drugName+"_comments'  name='"+drugName+"_comments' type='text' size='12' value='"+comments+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+drugName+"_formulationId'  name='"+drugName+"_formulationId' type='hidden' value='"+formulationArr[1]+"'/>&nbsp;"
+				       	 +"<input id='"+drugName+"_frequencyId'  name='"+drugName+"_frequencyId' type='hidden' value='"+frequencyArr[1]+"'/>&nbsp;"
+				       	 +"<a style='color:red' href='#' onclick='"+deleteString+"' >[X]</a>"		
+				       	 +"</div>";
+				       	
+			   var newElement = document.createElement('div');
+			   newElement.setAttribute("id", drugName);   
+			   newElement.innerHTML = htmlText;
+			   var fieldsArea = document.getElementById('headerValue');
+			   fieldsArea.appendChild(newElement);
+			   jQuery("#drugName").val("");
+			   jQuery("#formulation").val("");
+			   jQuery("#frequency").val("");
+			   jQuery("#noOfDays").val("");
+			   jQuery("#comments").val("");
+			   }
 	}
-
+	function deleteInput(drugName) {
+		   var parentDiv = 'headerValue';
+		   var child = document.getElementById(drugName);
+		   var parent = document.getElementById(parentDiv);
+		   parent.removeChild(child); 
+		   Array.prototype.remove = function(v) { this.splice(this.indexOf(v) == -1 ? this.length : this.indexOf(v), 1); }
+		   drugIssuedList.remove(drugName);
+		}
 	// Print the slip
 	function print() {
 		var selDiagLen = selectedDiagnosisList.length;

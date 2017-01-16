@@ -85,7 +85,7 @@ function addDrugOrder() {
    alert("Please select formulation");
    return false;
    }
-   var formulationArr=formulation.split("."); 
+   var formulationArr=formulation.split("_"); 
    var frequency=document.getElementById('frequency').value;
    if(frequency==null || frequency==""){
    alert("Please select frequency");
