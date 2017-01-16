@@ -465,11 +465,11 @@
 			</tr>
 			<tr>
 				<center>
-					<b><font size="3">Discharge Slip</font></b>
+					<b><font size="4">Discharge Slip</font></b>
 				</center>
 			</tr>
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Patient Details</font></b></td>
+				<td colspan="4" align="center"><b><u><font size="3">Patient Details</font></b></u></td>
 			</tr>
 			<tr>
 				<td><strong>Name:</strong></td>
@@ -503,7 +503,7 @@
 		</table>
 		<table class="box">
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Admission Details</font></b></td>
+				<td colspan="4" align="center"><b><u><font size="3">Admission Details</font></b></u></td>
 			</tr>
 			<tr>
 				<td><strong>Department/OPD Consulted:</strong></td>
@@ -532,7 +532,7 @@
 		</table>
 		<table class="box">
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Diagnosis Details</font></b></td>
+				<td colspan="4" align="center"><b><u><font size="3">Diagnosis Details</font></b></u></td>
 			</tr>
 			<tr>
 				<td><strong>Final Diagnosis:</strong></td>
@@ -549,7 +549,7 @@
 		</table>
 				<table class="box">
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Clinical Findings/Instructions</font></b></td>
+				<td colspan="4" align="center"><b><u><font size="3">Clinical Findings/Instructions</font></b></u></td>
 			</tr>
 			<tr id="othInst">
 				<td><div id="printableOtherInstructions"></div></td>
@@ -558,7 +558,7 @@
 		<table class="box">
 			<br />
 			<tr>
-				<td colspan="4" align="left"><b><font size="3">Treatment Advised</font></b></td>
+				<td colspan="6" align="center"><b><u><font size="3">Treatment Advised</font></b></u></td>
 			</tr>
 			<tr align="center">
 				<th>S.No</th>
@@ -578,6 +578,9 @@
 			</tr>
 		</table>
 	
+	<br />
+	<br />
+	<br />
 	<br />
 	<div style="float:right;"> 
 			<tr>
