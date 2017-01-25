@@ -192,6 +192,8 @@ public class AjaxGlobalController {
 				mapRelationType.put(admit.getId(), "Relative Name");
 			}
 			mapRelationName.put(admit.getId(), relationNameattr.getValue());	
+			String[] parts=admit.getPatientAddress().split("-");
+			model.addAttribute("address", parts[0]);
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
@@ -199,7 +201,7 @@ public class AjaxGlobalController {
 		model.addAttribute("dateTime", new Date().toString());
 
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
-
+      
 		return "module/ipd/ajax/admittedListAjax";
 	}
 	

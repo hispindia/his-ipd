@@ -169,7 +169,8 @@ public class PatientAdmittedController {
 						+ add.getCityVillage();
 				model.addAttribute("address", address);
 			}*/
-			model.addAttribute("address", admit.getPatientAddress());
+			String[] parts=admit.getPatientAddress().split("-");
+			model.addAttribute("address", parts[0]);
 			PersonAttribute relationTypeattr = admit.getPatient().getAttribute(
 					"Relative Name Type");
 			// ghanshyam 30/07/2012 this code modified under feedback of 'New
@@ -215,7 +216,10 @@ public class PatientAdmittedController {
 				: "");
 		model.addAttribute("district", district);
 		model.addAttribute("upazila", upazila);*/
-		model.addAttribute("address", admitted.getPatientAddress());
+		
+		//New requirement only address entered in text box should be visible
+		String[] parts=admitted.getPatientAddress().split("-");
+		model.addAttribute("address", parts[0]);
 
 		PersonAttribute relationNameattr = patient
 				.getAttribute("Father/Husband Name");
@@ -573,7 +577,9 @@ public class PatientAdmittedController {
 		model.addAttribute("district", district);
 		model.addAttribute("upazila", upazila);
 */
-		model.addAttribute("address", admitted.getPatientAddress());
+		//New requirement only address entered in text box should be visible
+				String[] parts=admitted.getPatientAddress().split("-");
+				model.addAttribute("address", parts[0]);
 		PersonAttribute relationNameattr = patient
 				.getAttribute("Father/Husband Name");
 		model.addAttribute("relationName", relationNameattr.getValue());
@@ -696,7 +702,9 @@ public class PatientAdmittedController {
 				+ add.getCityVillage();
 
 		model.addAttribute("address", address);*/
-		model.addAttribute("address", admitted.getPatientAddress());
+		//New requirement only address entered in text box should be visible
+				String[] parts=admitted.getPatientAddress().split("-");
+				model.addAttribute("address", parts[0]);
 
 		PersonAttribute relationNameattr = patient
 				.getAttribute("Father/Husband Name");
@@ -962,9 +970,11 @@ public class PatientAdmittedController {
 		/*
 		 * Will be shown stored address during IPD admission.
 		 */
-		model.addAttribute("address", admitted.getPatientAddress());
+		//New requirement only address entered in text box should be visible
+				String[] parts=admitted.getPatientAddress().split("-");
+				model.addAttribute("address", parts[0]);
 
-		admitted.getPatientAddress();
+		//admitted.getPatientAddress();
 
 		PersonAttribute relationNameattr = patient
 				.getAttribute("Father/Husband Name");

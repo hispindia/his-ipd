@@ -74,8 +74,7 @@
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${queue.gender }</strong></td></tr>
 			<%-- ghanshyam 30/07/2012 [IPD - Bug #325] [IPD] Inconsistency in print slip--%>
 			<tr><td>${mapRelationType[queue.id]}:&nbsp;${mapRelationName[queue.id]}</td></tr>
-			<c:set var="personAddress" value="${queue.patient.personAddress }"/>
-			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${personAddress.address1 } ${personAddress.countyDistrict } ${personAddress.cityVillage }</td></tr>
+			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${address }</td></tr>
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${queue.monthlyIncome}</td></tr>
 			<tr></tr>
