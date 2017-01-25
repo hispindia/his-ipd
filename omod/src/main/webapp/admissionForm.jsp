@@ -95,10 +95,10 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td><spring:message code="ipd.patient.homeAddress"/>:</td>
 		<td><input id="patientPostalAddress" name="patientPostalAddress" value="${address}" /></td>
 	</tr>
-	<tr>
+<%--<tr>
 	<td><spring:message code="ipd.patient.districtTehsil"/>:</td>
 	<td>${districtTehsil }</td> 
-	</tr> 
+	</tr> --%>
 	<tr>
 		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
 		<td><input type="text" id="monthlyIncome" name="monthlyIncome"  /></td>
