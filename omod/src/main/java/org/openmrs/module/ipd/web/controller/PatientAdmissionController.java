@@ -238,7 +238,7 @@ public class PatientAdmissionController {
 			if(request.getParameter("patientPostalAddress")!="" && request.getParameter("patientPostalAddress")!=null)
 			{
 			 
-			address = request.getParameter("patientPostalAddress") + " - " + add.getCountyDistrict() + " / " + add.getCityVillage();
+			address = request.getParameter("patientPostalAddress");
 			}
 			
 			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
