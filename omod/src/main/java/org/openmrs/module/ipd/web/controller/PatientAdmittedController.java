@@ -293,6 +293,7 @@ public class PatientAdmittedController {
 		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(
 				admitted.getPatientAdmissionLog().getOpdLog().getEncounter(),
 				Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
+		pDiagnosis.addAll(pFinalDiagnosis);
 		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(
 				admitted.getPatientAdmissionLog().getIpdEncounter(), Context
 						.getConceptService().getConcept("FINAL DIAGNOSIS")));
