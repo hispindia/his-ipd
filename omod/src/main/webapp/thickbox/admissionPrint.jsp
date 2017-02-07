@@ -37,19 +37,19 @@
 <!--<img src="${pageContext.request.contextPath}/moduleResources/ipd/HEADEROPDSLIP.jpg" width="981" height="170"></img>
 			--><p><b><h1> IPD ADMISSION SLIP </h1></b></p>
 			<table width="100%" >
-			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${admitted.patientName }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${admitted.patientIdentifier}</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${patCategory }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${admitted.age}</b></td></tr>
-			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${admitted.gender }</strong></td></tr>
+			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;${admitted.patientName }</td></tr>
+			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;${admitted.patientIdentifier}</td></tr>
+			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;${patCategory }</td></tr>
+			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;${admitted.age}</td></tr>
+			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;${admitted.gender }</td></tr>
 			<tr> <td>${relationType }:&nbsp;${relationName }</td>  </tr>
 			<tr><td ><spring:message code="ipd.patient.homeAddress"/>: ${address }</td></tr>
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${admitted.monthlyIncome}</td></tr>
 			<tr></tr>
-			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${admitted.admittedWard.name}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${treatingDoctor.givenName}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: <strong>${admitted.bed }</strong></td></tr>
+			<tr><td ><spring:message code="ipd.patient.admittedWard"/>: ${admitted.admittedWard.name}</td></tr>
+			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:${treatingDoctor.givenName}</td></tr>
+			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: ${admitted.bed }</td></tr>
 			<tr><td><spring:message code="ipd.patient.dateTime"/>: <openmrs:formatDate date="${dateAdmission}" type="long" /></td></tr>
 		</table>
 <br/><br/><br/><br/>
