@@ -61,6 +61,7 @@ import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.InventoryCommonService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
+import org.openmrs.module.hospitalcore.PatientQueueService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.InventoryDrug;
 import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
@@ -725,27 +726,28 @@ public class PatientAdmittedController {
 			Model model) {
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
+		HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+		PatientQueueService queueService = Context.getService(PatientQueueService.class);
+        PatientSearch patientSearch = hospitalCoreService.getPatient(command.getPatientId());
 		Concept cOtherInstructions = Context.getConceptService()
 				.getConceptByName("OTHER INSTRUCTIONS");
-
-		// harsh 6/14/2012 kill patient when "DEATH" is selected.
 		if (Context.getConceptService().getConcept(command.getOutCome())
 				.getName().getName().equalsIgnoreCase("DEATH")) {
+			ConceptService conceptService = Context.getConceptService();
+			Concept causeOfDeath = conceptService.getConceptByName("NONE");
 			PatientService ps = Context.getPatientService();
-			// ghanshyam,23-oct-2013,New Requirement #2937 Dealing with Dead
-			// Patient
-			HospitalCoreService hcs = (HospitalCoreService) Context
-					.getService(HospitalCoreService.class);
 			Patient patient = ps.getPatient(command.getPatientId());
-			PatientSearch patientSearch = hcs
-					.getPatient(command.getPatientId());
 			patient.setDead(true);
 			patient.setDeathDate(new Date());
-
+			patient.setCauseOfDeath(causeOfDeath);
 			ps.savePatient(patient);
-
 			patientSearch.setDead(true);
-			hcs.savePatientSearch(patientSearch);
+			patientSearch.setAdmitted(false);
+			hospitalCoreService.savePatientSearch(patientSearch);
+		}
+		else{
+			patientSearch.setAdmitted(false);
+			hospitalCoreService.savePatientSearch(patientSearch);
 		}
 
 		// star

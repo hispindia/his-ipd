@@ -47,6 +47,7 @@ import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
+import org.openmrs.module.hospitalcore.model.PatientSearch;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipd.util.IpdConstants;
@@ -295,6 +296,10 @@ public class PatientAdmissionController {
 			admitted.setStatus(IpdConstants.STATUS[0]);
 			admitted.setUser(Context.getAuthenticatedUser());
 			admitted = ipdService.saveIpdPatientAdmitted(admitted);
+			HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
+			PatientSearch patientSearch = hospitalCoreService.getPatient(patientAdmissionLog.getPatient().getPatientId());
+			patientSearch.setAdmitted(true);
+            hospitalCoreService.savePatientSearch(patientSearch);
 			model.addAttribute("admitted", admitted);
 			
 			//delete admission
