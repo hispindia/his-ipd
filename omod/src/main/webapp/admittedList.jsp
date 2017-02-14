@@ -68,11 +68,11 @@
 			-->
 			
 			<table width="100%" >
-			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;<strong>${queue.patientName }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;<strong>${queue.patientIdentifier}</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;<strong>${queue.patientCategory }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;<strong>${queue.age }</strong></td></tr>
-			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;<strong>${queue.gender }</strong></td></tr>
+			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;${queue.patientName }</td></tr>
+			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;${queue.patientIdentifier}</td></tr>
+			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;${queue.patientCategory }</td></tr>
+			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;${queue.age }</td></tr>
+			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;${queue.gender }</td></tr>
 			<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>
 			<%-- ghanshyam 30/07/2012 this code modified under feedback of 'New Requirement #313'.changed from relationType to mapRelationType and relationName 
 			to  mapRelationName because in every print slip same relation name and relative name is coming--%>
@@ -81,10 +81,10 @@
 			<tr></tr>
 			<tr><td ><spring:message code="ipd.patient.monthlyIncome"/>: ${queue.monthlyIncome}</td></tr>
 			<tr></tr>
-			<tr><td ><spring:message code="ipd.patient.admittedWard"/>:<strong> ${queue.admittedWard.name}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>:<strong> ${queue.ipdAdmittedUser.givenName}</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: <strong>${queue.bed }</strong></td></tr>
-			<tr><td ><spring:message code="ipd.patient.date/time"/>: <strong>${dateTime }</strong></td></tr>
+			<tr><td ><spring:message code="ipd.patient.admittedWard"/>: ${queue.admittedWard.name}</td></tr>
+			<tr><td ><spring:message code="ipd.patient.treatingDoctor"/>: ${queue.ipdAdmittedUser.givenName}</td></tr>
+			<tr><td ><spring:message code="ipd.patient.bedNumber"/>: ${queue.bed }</td></tr>
+			<tr><td ><spring:message code="ipd.patient.date/time"/>: ${dateTime }</td></tr>
 		</table>
 		<br/><br/><br/><br/><br/><br/>
 		<span style="float:right;font-size: 1.5em">Signature of ward sister/attending Doctor / Stamp</span>

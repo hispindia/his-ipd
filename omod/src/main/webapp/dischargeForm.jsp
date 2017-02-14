@@ -222,10 +222,10 @@
 		</c:if>
 		<table width="100%">
 			<tr>
-				<td><spring:message code="ipd.patient.patientName" />:&nbsp;<b>${admitted.patientName }</b></td>
-				<td><spring:message code="ipd.patient.patientId" />:&nbsp;<b>${admitted.patientIdentifier}</b></td>
-				<td><spring:message code="ipd.patient.age" />:&nbsp;<b>${admitted.age}</b></td>
-				<td><spring:message code="ipd.patient.gender" />:&nbsp;<b>${admitted.gender }</b></td>
+				<td><spring:message code="ipd.patient.patientName" />:&nbsp;${admitted.patientName }</td>
+				<td><spring:message code="ipd.patient.patientId" />:&nbsp;${admitted.patientIdentifier}</td>
+				<td><spring:message code="ipd.patient.age" />:&nbsp;${admitted.age}</td>
+				<td><spring:message code="ipd.patient.gender" />:&nbsp;${admitted.gender }</td>
 			</tr>
 			<tr>
 				<td colspan="2"><spring:message code="ipd.patient.category" />:

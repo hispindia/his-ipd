@@ -80,15 +80,15 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 </c:if>
 <table width="100%">
 	<tr>
-		<td colspan="2"><spring:message code="ipd.patient.patientName"/>:&nbsp;<b>${admission.patientName }</b></td>
-		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;<b>${admission.patientIdentifier}</b></td>
+		<td colspan="2"><spring:message code="ipd.patient.patientName"/>:&nbsp;${admission.patientName }</td>
+		<td><spring:message code="ipd.patient.patientId"/>:&nbsp;${admission.patientIdentifier}</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.age"/>:&nbsp;<b>${admission.age }</b></td>
-		<td><spring:message code="ipd.patient.gender"/>:&nbsp;<b>${admission.gender }</b></td>
+		<td><spring:message code="ipd.patient.age"/>:&nbsp;${admission.age }</td>
+		<td><spring:message code="ipd.patient.gender"/>:&nbsp;${admission.gender }</td>
 	</tr>
 	<tr>
-		<td><spring:message code="ipd.patient.category"/>:&nbsp;<b>${patCategory }</b> </td>
+		<td><spring:message code="ipd.patient.category"/>:&nbsp;${patCategory } </td>
 		<td>${relationType }:&nbsp;${relationName }</td>
 	</tr>
 	<tr>
@@ -139,7 +139,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 		<td>Click To Select Bed Number</td>
 	</tr>
 	<tr>
-		<td><b><spring:message code="ipd.patient.bedNumber"/></b><em>*</em></td>
+		<td><spring:message code="ipd.patient.bedNumber"/><em>*</em></td>
 		<td><input type="text" id="bedNumber" name="bedNumber" readonly="readonly" /></td>
 		<td>
 		<div id="divBedStrength"></div>
