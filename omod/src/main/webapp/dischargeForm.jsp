@@ -143,6 +143,7 @@
 		}
 	// Print the slip
 	function print() {
+		if(validate()){
 		var selDiagLen = selectedDiagnosisList.length;
 		for (i = selDiagLen - 1; i >= 0; i--) {
 			var diag = selectedDiagnosisList[i].text;
@@ -202,6 +203,19 @@
 			mode : "popup",
 			popClose : true
 		});
+	  }
+	}
+	
+	function validate() {
+	var selDiagLen = selectedDiagnosisList.length;
+	var outcome=jQuery("#outCome").val();
+	if(selDiagLen==0){
+	return false;
+	}
+	if(outcome==""){
+	return false;
+	}
+	return true;
 	}
 </script>
 <input type="hidden" id="pageId" value="dischagePage" />
