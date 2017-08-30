@@ -151,12 +151,14 @@ public class PatientAdmittedController {
 		 * snapshot- age column in IPD admitted patient index
 		 */
 		model.addAttribute("listPatientAdmitted", listPatientAdmitted);
-
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		Map<Integer, String> mapRelationName = new HashMap<Integer, String>();
 		Map<Integer, String> mapRelationType = new HashMap<Integer, String>();
 		for (IpdPatientAdmitted admit : listPatientAdmitted) {
-			PersonAttribute relationNameattr = admit.getPatient().getAttribute(
-					"Father/Husband Name");
+			PatientSearch psearchRelativeName = hcs.getPatient(admit.getPatient().getPatientId()) ;
+			String relationNameattr="";
+			relationNameattr= psearchRelativeName.getRelativeName();
+		
 			// ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the
 			// Discharge screen and print out
 		/*	PersonAddress add = admit.getPatient().getPersonAddress();
@@ -181,7 +183,7 @@ public class PatientAdmittedController {
 			} else {
 				mapRelationType.put(admit.getId(), "Relative Name");
 			}
-			mapRelationName.put(admit.getId(), relationNameattr.getValue());
+			mapRelationName.put(admit.getId(), relationNameattr);
 		}
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
@@ -222,11 +224,12 @@ public class PatientAdmittedController {
 		String[] parts=admitted.getPatientAddress().split("-");
 		model.addAttribute("address", parts[0]);
 
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
+		PatientSearch psearchRelativeName = hospitalCoreService.getPatient(admitted.getPatient().getPatientId()) ;
+		String relationNameattr="";
+		relationNameattr= psearchRelativeName.getRelativeName();
 		PersonAttribute relationTypeattr = patient
 				.getAttribute("Relative Name Type");
-		model.addAttribute("relationName", relationNameattr.getValue());
+		model.addAttribute("relationName", relationNameattr);
 		if (relationTypeattr != null) {
 			model.addAttribute("relationType", relationTypeattr.getValue());
 		} else {
@@ -534,6 +537,7 @@ public class PatientAdmittedController {
 					opdDrugOrder.setCreator(user);
 					opdDrugOrder.setCreatedOn(date);
 					opdDrugOrder.setOrderFrom(1);
+					opdDrugOrder.setReferralWardName(admitted.getAdmittedWard().getName().toString());
 					patientDashboardService
 							.saveOrUpdateOpdDrugOrder(opdDrugOrder);
 				}
@@ -553,7 +557,7 @@ public class PatientAdmittedController {
 			@RequestParam(value = "patientAdmissionLogId", required = false) Integer patientAdmissionLogId,
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
-
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
@@ -582,9 +586,11 @@ public class PatientAdmittedController {
 		//New requirement only address entered in text box should be visible
 				String[] parts=admitted.getPatientAddress().split("-");
 				model.addAttribute("address", parts[0]);
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
-		model.addAttribute("relationName", relationNameattr.getValue());
+		//PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+				PatientSearch psearchRelativeName = hcs.getPatient(admitted.getPatient().getPatientId()) ;
+				String relationNameattr="";
+				relationNameattr= psearchRelativeName.getRelativeName();
+		model.addAttribute("relationName", relationNameattr);
 
 		// Patient category
 		model.addAttribute("patCategory",
@@ -674,7 +680,7 @@ public class PatientAdmittedController {
 			@RequestParam(value = "id", required = false) Integer admittedId,
 			@RequestParam(value = "ipdWard", required = false) String ipdWard,
 			Model model) {
-
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
@@ -708,9 +714,11 @@ public class PatientAdmittedController {
 				String[] parts=admitted.getPatientAddress().split("-");
 				model.addAttribute("address", parts[0]);
 
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
-		model.addAttribute("relationName", relationNameattr.getValue());
+	//	PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
+				PatientSearch psearchRelativeName = hcs.getPatient(admitted.getPatient().getPatientId()) ;
+				String relationNameattr="";
+				relationNameattr= psearchRelativeName.getRelativeName();
+		model.addAttribute("relationName", relationNameattr);
 
 		// Patient category
 		model.addAttribute("patCategory",
@@ -911,6 +919,7 @@ public class PatientAdmittedController {
 					opdDrugOrder.setCreator(user);
 					opdDrugOrder.setCreatedOn(date);
 					opdDrugOrder.setOrderFrom(2);
+					opdDrugOrder.setReferralWardName(admitted.getAdmittedWard().getName().toString());
 					patientDashboardService
 							.saveOrUpdateOpdDrugOrder(opdDrugOrder);
 				}
@@ -943,7 +952,7 @@ public class PatientAdmittedController {
 			@RequestParam(value = "id", required = false) Integer admittedId,
 			@ModelAttribute("ipdCommand") IpdFinalResultCommand command,
 			Model model) {
-
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		IpdService ipdService = (IpdService) Context
 				.getService(IpdService.class);
 		IpdPatientAdmitted admitted = ipdService
@@ -979,13 +988,19 @@ public class PatientAdmittedController {
 
 		//admitted.getPatientAddress();
 
-		PersonAttribute relationNameattr = patient
-				.getAttribute("Father/Husband Name");
+	//	PersonAttribute relationNameattr = patient.getAttribute("Father/Husband Name");
 		// ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the
 		// Discharge screen and print out
+				
+				
+				PatientSearch psearchRelativeName = hcs.getPatient(admitted.getPatient().getPatientId()) ;
+				String relationNameattr="";
+				relationNameattr= psearchRelativeName.getRelativeName();
+				
+				
 		PersonAttribute relationTypeattr = patient
 				.getAttribute("Relative Name Type");
-		model.addAttribute("relationName", relationNameattr.getValue());
+		model.addAttribute("relationName", relationNameattr);
 		// ghanshyam 30/07/2012 this code modified under feedback of 'New
 		// Requirement #312
 		if (relationTypeattr != null) {
@@ -1107,7 +1122,6 @@ public class PatientAdmittedController {
 		}
 		model.addAttribute("admittedDays", diffInDays);
 
-		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
 		List<PersonAttribute> pas = hcs.getPersonAttributes(patient
 				.getPatientId());
 		for (PersonAttribute pa : pas) {
@@ -1119,13 +1133,9 @@ public class PatientAdmittedController {
 		}
 
 		String patientName;
-		if (patient.getMiddleName() != null) {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName() + " " + patient.getMiddleName();
-		} else {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName();
-		}
+	
+			patientName = patient.getGivenName() + " "+ patient.getFamilyName();
+		
 		model.addAttribute("patientName", patientName);
 
 		Date birthday = patient.getBirthdate();

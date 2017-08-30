@@ -101,13 +101,14 @@ public class PatientAdmissionController {
 			    IpdUtils.convertStringToList(doctorString), fromDate, toDate, ipdWard, "");
 		
 		model.addAttribute("listPatientAdmission", listPatientAdmission);
-		
+	
 		return "module/ipd/patientsForAdmission";
 	}
 	
 	@RequestMapping(value = "/module/ipd/admission.htm", method = RequestMethod.GET)
 	public String admission(@RequestParam(value = "admissionId", required = false) Integer admissionId, //If that tab is active we will set that tab active when page load.
 	                        Model model) {
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		Concept ipdConcept = Context.getConceptService().getConceptByName(
 		    Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -127,14 +128,16 @@ public class PatientAdmissionController {
 				model.addAttribute("listDoctor", listDoctor);
 			}
 			
-			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
-			
+			PatientSearch psearchRelativeName = hcs.getPatient(admission.getPatient().getPatientId()) ;
+			String relationNameattr="";
+			relationNameattr= psearchRelativeName.getRelativeName();
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 			
 			model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
 		
 			model.addAttribute("districtTehsil", StringUtils.isNotBlank(districtTehsil) ? districtTehsil : "");
-			model.addAttribute("relationName", relationNameattr.getValue());
+			
+			model.addAttribute("relationName", relationNameattr);
 			
 			/*ghanshyam 30/07/2012 this code modified under feedback of #290 for new patient it is working fine but for old patient it is giving null pointer 
 			                       exception.*/
@@ -163,6 +166,7 @@ public class PatientAdmissionController {
 	public String admissionSubmit(
 	
 	HttpServletRequest request, Model model) {
+		HospitalCoreService hcs =(HospitalCoreService) Context.getService(HospitalCoreService.class);
 		IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 		int id = NumberUtils.toInt(request.getParameter("id"));
 		IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(id);
@@ -204,6 +208,7 @@ public class PatientAdmissionController {
 			patientAdmissionLog.setOpdLog(admission.getOpdLog());
 			patientAdmissionLog.setPatient(admission.getPatient());
 			patientAdmissionLog.setPatientIdentifier(admission.getPatientIdentifier());
+			
 			patientAdmissionLog.setPatientName(admission.getPatientName());
 			patientAdmissionLog.setStatus(IpdConstants.STATUS[0]);
 			
@@ -241,10 +246,14 @@ public class PatientAdmissionController {
 			 
 			address = request.getParameter("patientPostalAddress");
 			}
+			PatientSearch psearchRelativeName = hcs.getPatient(admission.getPatient().getPatientId()) ;
+			String relationNameattr="";
+			relationNameattr= psearchRelativeName.getRelativeName();
 			
-			PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
+			model.addAttribute("relationName", relationNameattr);
+			//PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 			PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
-			model.addAttribute("relationName", relationNameattr.getValue());
+			
 			//ghanshyam 02/08/2012 [IPD - Bug #331] (New) DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
 			if(relationTypeattr!=null){
 				model.addAttribute("relationType", relationTypeattr.getValue());
@@ -265,7 +274,7 @@ public class PatientAdmissionController {
 			admitted.setBirthDate(admission.getPatient().getBirthdate());
 			admitted.setCaste(caste);
 			if (relationNameattr != null) {
-				fathername = relationNameattr.getValue();
+				fathername = relationNameattr;
 			}
 			admitted.setFatherName(fathername);
 			if (relationTypeattr != null) {
