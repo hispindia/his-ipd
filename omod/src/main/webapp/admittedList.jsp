@@ -59,7 +59,7 @@
 		<c:set var="person" value="${queue.ipdAdmittedUser.person }"/>
 		<td width="50">${person.givenName} ${person.middleName } ${person.familyName }</td>
 		<td>  <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Enter Vitals" onclick="ADMITTED.vitalStatistics('${queue.id}','${queue.patientAdmissionLog.id}',${ipdWard});"/>
-		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Treatment" onclick="ADMITTED.treatment('${queue.id}','${queue.patientAdmissionLog.id}',${ipdWard});"/>
+	<!-- <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Treatment" onclick="ADMITTED.treatment('${queue.id}','${queue.patientAdmissionLog.id}',${ipdWard});"/> -->
 		    <input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Transfer" onclick="ADMITTED.transfer('${queue.id}',${ipdWard});"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Discharge" onclick="ADMITTED.discharge('${queue.id}');"/>
 			<input type="button" class="ui-button ui-widget ui-state-default ui-corner-all" value="Print" onclick="ADMITTED.print('${queue.id}');"/>
