@@ -70,7 +70,7 @@
 			<table width="100%" >
 			<tr><td><spring:message code="ipd.patient.patientName"/>:&nbsp;${queue.patientName }</td></tr>
 			<tr><td><spring:message code="ipd.patient.patientId"/>:&nbsp;${queue.patientIdentifier}</td></tr>
-			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;${queue.patientCategory }</td></tr>
+			<tr><td><spring:message code="ipd.patient.category"/>:&nbsp;${patCategory }</td></tr>
 			<tr><td><spring:message code="ipd.patient.age"/>:&nbsp;${queue.age }</td></tr>
 			<tr><td><spring:message code="ipd.patient.gender"/>:&nbsp;${queue.gender }</td></tr>
 			<%-- ghanshyam 10/07/2012 New Requirement #312 [IPD] Add fields in the Discharge screen and print out --%>

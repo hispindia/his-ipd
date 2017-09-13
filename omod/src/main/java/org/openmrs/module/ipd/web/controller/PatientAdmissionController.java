@@ -37,6 +37,7 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
@@ -153,8 +154,16 @@ public class PatientAdmissionController {
 			//ghanshyam 25-oct-2012 Bug #425 [IPD Module] Admission Date fetched incorrectly.
 			model.addAttribute("dateAdmission", new Date());
 			
-			// patient category
-			model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
+			//category
+			List<PersonAttribute> pas = hcs.getPersonAttributes(admission.getPatient().getPatientId());
+			for (PersonAttribute pa : pas) {
+				PersonAttributeType attributeType = pa.getAttributeType();
+				if (attributeType.getPersonAttributeTypeId() == 14) {
+					model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+				}
+			}
+			
+			
 			
 			return "module/ipd/admissionForm";
 		}
@@ -324,9 +333,13 @@ public class PatientAdmissionController {
 		model.addAttribute("relationType", relationshipType);
 		model.addAttribute("message", "Succesfully");
 		model.addAttribute("urlS", "main.htm");
-		
-		// patient category
-		model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
+		List<PersonAttribute> pas = hcs.getPersonAttributes(admission.getPatient().getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+			}
+		}
 		
 		return "module/ipd/thickbox/admissionPrint";
 	}

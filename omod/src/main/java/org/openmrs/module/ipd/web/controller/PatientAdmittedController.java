@@ -184,7 +184,18 @@ public class PatientAdmittedController {
 				mapRelationType.put(admit.getId(), "Relative Name");
 			}
 			mapRelationName.put(admit.getId(), relationNameattr);
+			
+			List<PersonAttribute> pas = hcs.getPersonAttributes(admit.getPatient().getPatientId());
+			for (PersonAttribute pa : pas) {
+				PersonAttributeType attributeType = pa.getAttributeType();
+				if (attributeType.getPersonAttributeTypeId() == 14) {
+					model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+
+				}
+			}
 		}
+		
+	
 		model.addAttribute("mapRelationName", mapRelationName);
 		model.addAttribute("mapRelationType", mapRelationType);
 		model.addAttribute("dateTime", new Date().toString());
@@ -328,8 +339,7 @@ public class PatientAdmittedController {
 		Collections.sort(selectedDiagnosisList, new ConceptComparator());
 		Collections.sort(selectedProcedureList, new ConceptComparator());
 		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		
 		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
 		model.addAttribute("sProcedureList", selectedProcedureList);
 
@@ -380,7 +390,7 @@ public class PatientAdmittedController {
 		for (PersonAttribute pa : pas) {
 			PersonAttributeType attributeType = pa.getAttributeType();
 			if (attributeType.getPersonAttributeTypeId() == 14) {
-				model.addAttribute("selectedCategory", pa.getValue());
+				model.addAttribute("selectedCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
 			}
 
 		}
@@ -593,8 +603,13 @@ public class PatientAdmittedController {
 		model.addAttribute("relationName", relationNameattr);
 
 		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		List<PersonAttribute> pas = hcs.getPersonAttributes(admitted.getPatient().getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+			}
+		}
 		List<IpdPatientVitalStatistics> ipdPatientVitalStatistics = ipdService
 				.getIpdPatientVitalStatistics(patient.getPatientId(),
 						patientAdmissionLogId);
@@ -721,8 +736,14 @@ public class PatientAdmittedController {
 		model.addAttribute("relationName", relationNameattr);
 
 		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		List<PersonAttribute> pas = hcs.getPersonAttributes(admitted.getPatient().getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+			}
+		}
+		
 		model.addAttribute("ipdWard", ipdWard);
 		return "module/ipd/transferForm";
 	}
@@ -1098,8 +1119,13 @@ public class PatientAdmittedController {
 		Collections.sort(selectedDiagnosisList, new ConceptComparator());
 		Collections.sort(selectedProcedureList, new ConceptComparator());
 		// Patient category
-		model.addAttribute("patCategory",
-				PatientUtils.getPatientCategory(patient));
+		List<PersonAttribute> pas = hcs.getPersonAttributes(admitted.getPatient().getPatientId());
+		for (PersonAttribute pa : pas) {
+			PersonAttributeType attributeType = pa.getAttributeType();
+			if (attributeType.getPersonAttributeTypeId() == 14) {
+				model.addAttribute("patCategory",Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
+			}
+		}
 		model.addAttribute("sDiagnosisList", selectedDiagnosisList);
 		model.addAttribute("sProcedureList", selectedProcedureList);
 
@@ -1122,12 +1148,12 @@ public class PatientAdmittedController {
 		}
 		model.addAttribute("admittedDays", diffInDays);
 
-		List<PersonAttribute> pas = hcs.getPersonAttributes(patient
+		List<PersonAttribute> pas1 = hcs.getPersonAttributes(patient
 				.getPatientId());
-		for (PersonAttribute pa : pas) {
+		for (PersonAttribute pa : pas1) {
 			PersonAttributeType attributeType = pa.getAttributeType();
 			if (attributeType.getPersonAttributeTypeId() == 14) {
-				model.addAttribute("selectedCategory", pa.getValue());
+				model.addAttribute("selectedCategory", Context.getConceptService().getConceptByIdOrName(pa.getValue()).getName());
 			}
 
 		}
