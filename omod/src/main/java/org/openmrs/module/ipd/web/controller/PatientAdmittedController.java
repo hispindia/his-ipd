@@ -1166,6 +1166,7 @@ public class PatientAdmittedController {
 
 		Date birthday = patient.getBirthdate();
 		model.addAttribute("age", PatientUtils.estimateAge(birthday));
+		model.addAttribute("patient", patient);
 
 		return "module/ipd/dischargeForm";
 	}
