@@ -285,14 +285,14 @@ public class PatientAdmittedController {
 		List<Obs> pFinalDiagnosis = new ArrayList<Obs>();
 		Set<String> lhs = new LinkedHashSet<String>();
 		pDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(admitted
-				.getPatientAdmissionLog().getOpdLog().getEncounter(), Context
+				.getPatientAdmissionLog().getOpdLog().getOpdEncounter(), Context
 				.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
 		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(
 				admitted.getPatientAdmissionLog().getIpdEncounter(), Context
 						.getConceptService()
 						.getConcept("PROVISIONAL DIAGNOSIS")));
 		pFinalDiagnosis = hospitalCoreService.getObsInstanceForDiagnosis(
-				admitted.getPatientAdmissionLog().getOpdLog().getEncounter(),
+				admitted.getPatientAdmissionLog().getOpdLog().getOpdEncounter(),
 				Context.getConceptService().getConcept("FINAL DIAGNOSIS"));
 		pDiagnosis.addAll(pFinalDiagnosis);
 		pDiagnosis.addAll(hospitalCoreService.getObsInstanceForDiagnosis(
