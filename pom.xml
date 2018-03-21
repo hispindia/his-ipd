@@ -5,7 +5,7 @@
   <groupId>org.openmrs.module</groupId>
   <artifactId>ipd</artifactId>
   <name>Ipd module</name>
-  <version>0.10.2</version>
+  <version>0.10.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <description>Ipd module</description>
@@ -22,13 +22,13 @@
             <repository>
                 <id>shimla-nexus</id>
                 <name>Shimla nexus repo</name>
-                <url>http://hospdev.hispindia.org/nexus/content/repositories/releases/</url>
+                <url>http://hospdev.hispindia.org/nexus/content/repositories/tvhaupgraded-releases/</url>
             </repository>
         <!-- use the following if you ARE using a snapshot version. -->
             <snapshotRepository>
                 <id>shimla-nexus</id>
                 <name>Shimla nexus repo</name>
-                <url>http://hospdev.hispindia.org/nexus/content/repositories/snapshots/</url>
+                <url>http://hospdev.hispindia.org/nexus/content/repositories/tvhaupgraded-snapshots/</url>
                 <uniqueVersion>false</uniqueVersion>
              </snapshotRepository>
      </distributionManagement>
@@ -69,7 +69,7 @@
   </dependencyManagement>
 
   <properties>
-    <openMRSVersion>1.8.0</openMRSVersion>
+    <openMRSVersion>1.9.7</openMRSVersion>
   </properties>
 
   <build>
