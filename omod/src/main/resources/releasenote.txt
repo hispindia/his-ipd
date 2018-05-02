@@ -1,0 +1,50 @@
+0.9.10
+released by ghanshyam on 16-March-2015
+
+0.9.9
+released by ghanshyam on 11-Nov-2013
+- #2937 Dealing with Dead Patient
+
+0.9.8
+released by ghanshyam on 20-may-2013
+- #423	Error Screen on clicking patient ID in Admitted patient Index
+- #425	Admission Date fetched incorrectly. The Admission date isn't showing the actual date of admission but the date on which admission is advised (in IPD)
+- #1411	The IPD form is submitted even without filling the mandatory fields
+- #1430	The screen of the IPD Admission Slip continues to be there even after a print out is generated.
+- #1545	The "Patient ID" hyperlink, which takes you to patient dashboard  in "Admitted patient index" appears in  all India module which needs to be removed
+
+0.9.7
+released by harsh
+New Requirement #312: [IPD] Add fields in the Discharge screen and print out
+New Requirement #313: [IPD] Add fields in the Admitted patient print slip
+Bug #325: [IPD] Inconsistency in print slip
+Support #327:[IPD] (DDU(SDMX)instance) snapshot- age column in IPD admitted patient index
+Bug #331: [IPD]DDU-SDMX-IPD-0.9.7SNAP SHOT,Error in ipd admission form
+
+0.9.6
+- Resolved issues
+	Bug #57: Discharge Patient in IPD
+	Bug #170: IPD: Patient search in name box
+	Bug #171: IPD : Patient outcome
+	Bug #235: [0.9.6-SNAP SHOT] [SOLAN] Error with IPD patient
+	Support #51: discharge form
+	Support #146: IPD User role
+	Support #178: Tanda- IPD -Admission Slip printout
+	Support #290: [IPD Module] Address of the patient, Relative Name Logic and Date and Time should appears 
+				  on the admission screen and print out
+
+28/05/2011
+- set PatientAdmittedLogTransferFrom at the transfer time 
+- show concept name at transfer form and discharge form , current show concept_id
+15/04/2011
+- Update print add title for HISP
+14/04/2011
+- Change solution get diagnosis and procedure
+
+07/04/2011
+
+Remove 2 fields Caste and Basic Pay to not mandatory on admission form
+
+06/04/2011
+
+Add category of patient to admission form  
