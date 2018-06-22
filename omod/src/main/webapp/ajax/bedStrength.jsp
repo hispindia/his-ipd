@@ -29,7 +29,7 @@ function validateCheck(checkAlert,maxPatientOnBed){
 	}
 	else if(mpob>1 && ${isBedWithOnePatient}==true){
 	alert("please select one bed patient");
-	jQuery("#bedNumber").val("");  
+	jQuery("#bedNumber").val(""); 
 	return false;
 	}
 	else if(mpob>2){
@@ -37,8 +37,11 @@ function validateCheck(checkAlert,maxPatientOnBed){
 	jQuery("#bedNumber").val("");  
 	return false;
 	}
-	else{
+	else if(document.forms["admissionForm"] != undefined){
 	document.forms["admissionForm"]["bedNumber"].value=checkAlert;
+	}
+	else{
+	document.forms["transferForm"]["bedNumber"].value=checkAlert;
 	 }
 }
 </script>
