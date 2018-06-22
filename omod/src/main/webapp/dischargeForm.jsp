@@ -86,6 +86,13 @@
 			return false;
 		} else {
 			var formulation = document.getElementById('formulation').value;
+			drugIssuedList.push(drugName.concat("+").concat(formulation));
+			var i;var value;
+			   for(i=0;i<drugIssuedList.length;i++)
+				   {
+				    value=drugIssuedList[i];
+				   }
+			   var valueArr=value.split("+");  
 			if (formulation == null || formulation == "") {
 				alert("Please select formulation");
 				return false;
@@ -109,20 +116,21 @@
 				}
 			}
 			 var comments=document.getElementById('comments').value;
-			   var deleteString = 'deleteInput(\"'+drugName+'\")';
-			   var htmlText =  "<div id='com_"+drugName+"_div'>"
-				       	 +"<input id='"+drugName+"_name'  name='drugOrder' type='text' size='12' value='"+drugName+"'  readonly='readonly'/>&nbsp;&nbsp;"
-				       	 +"<input id='"+drugName+"_formulationName'  name='"+drugName+"_formulatioNname' type='text' size='14' value='"+formulationArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
-				       	 +"<input id='"+drugName+"_frequencyName'  name='"+drugName+"_frequencyName' type='text' size='6' value='"+frequencyArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
-				       	 +"<input id='"+drugName+"_noOfDays'  name='"+drugName+"_noOfDays' type='text' size='7' value='"+noOfDays+"'  readonly='readonly'/>&nbsp;&nbsp;"
-				       	 +"<input id='"+drugName+"_comments'  name='"+drugName+"_comments' type='text' size='12' value='"+comments+"'  readonly='readonly'/>&nbsp;&nbsp;"
-				       	 +"<input id='"+drugName+"_formulationId'  name='"+drugName+"_formulationId' type='hidden' value='"+formulationArr[1]+"'/>&nbsp;"
-				       	 +"<input id='"+drugName+"_frequencyId'  name='"+drugName+"_frequencyId' type='hidden' value='"+frequencyArr[1]+"'/>&nbsp;"
+			   var deleteString = 'deleteInput(\"'+value+'\")';
+			   var htmlText =  "<div id='com_"+value+"_div'>"
+			 	 +"<input id='"+value+"_names'  name='drugOrder' value='"+value+"' type='hidden' />&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_name' name='"+value+"drugOrder' type='text' size='14' value='"+valueArr[0]+"'  type='hidden' readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_formulationName'  name='"+value+"_formulatioNname' type='text' size='14' value='"+formulationArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_frequencyName'  name='"+value+"_frequencyName' type='text' size='6' value='"+frequencyArr[0]+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_noOfDays'  name='"+value+"_noOfDays' type='text' size='7' value='"+noOfDays+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_comments'  name='"+value+"_comments' type='text' size='12' value='"+comments+"'  readonly='readonly'/>&nbsp;&nbsp;"
+				       	 +"<input id='"+value+"_formulationId'  name='"+value+"_formulationId' type='hidden' value='"+formulationArr[1]+"'/>&nbsp;"
+				       	 +"<input id='"+value+"_frequencyId'  name='"+value+"_frequencyId' type='hidden' value='"+frequencyArr[1]+"'/>&nbsp;"
 				       	 +"<a style='color:red' href='#' onclick='"+deleteString+"' >[X]</a>"		
 				       	 +"</div>";
 				       	
 			   var newElement = document.createElement('div');
-			   newElement.setAttribute("id", drugName);   
+			   newElement.setAttribute("id", value);   
 			   newElement.innerHTML = htmlText;
 			   var fieldsArea = document.getElementById('headerValue');
 			   fieldsArea.appendChild(newElement);
@@ -162,6 +170,7 @@
 		var k = 1;
 		for (i = selDrugLen - 1; i >= 0; i--) {
 			var drug = drugIssuedList[i];
+			var drugArr=drug.split("+"); 
 			var formulationName = document.getElementById(drug
 					+ "_formulationName").value;
 			var frequencyName = document
@@ -171,7 +180,7 @@
 			jQuery("#printableSlNo").append(
 					"<span style='margin:5px;'>" + k + "<br/>" + "</span>");
 			jQuery("#printableDrug").append(
-					"<span style='margin:5px;'>" + drug + "<br/>" + "</span>");
+					"<span style='margin:5px;'>" + drugArr[0] + "<br/>" + "</span>");
 			jQuery("#printableFormulation").append(
 					"<span style='margin:5px;'>" + formulationName + "<br/>"
 							+ "</span>");
@@ -428,6 +437,8 @@
 			<td>
 				<div id="headerValue"
 					style="background: #FFFFFF; border: 1px #808080 solid; padding: 0.3em; margin: 0.3em 0em; width: 100%;">
+				<input type='hidden' id="drugs" name="drugs" value='Drugss' size="14"
+							readonly="readonly" />&nbsp; 
 					<input type='text' id="drug" name="drug" value='Drugs' size="12"
 						readonly="readonly" />&nbsp; <input type='text' id="formulation"
 						name='formulation' value="Formulation" size="14"
