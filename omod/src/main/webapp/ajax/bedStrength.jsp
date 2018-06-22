@@ -21,11 +21,6 @@
 
 <script type="text/javascript">
 function validateCheck(checkAlert,maxPatientOnBed){
-	if(document.forms["transferForm"] != undefined)
-	{
-	document.forms["transferForm"]["bedNumber"].value=checkAlert;	
-	}
-	else {
 	var mpob=parseInt(maxPatientOnBed);
 	if(mpob>0 && ${isBedVacant}==true){
 	alert("please select vacant bed");
@@ -45,7 +40,6 @@ function validateCheck(checkAlert,maxPatientOnBed){
 	else{
 	document.forms["admissionForm"]["bedNumber"].value=checkAlert;
 	 }
-	}
 }
 </script>
 

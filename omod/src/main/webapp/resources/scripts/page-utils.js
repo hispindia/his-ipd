@@ -43,7 +43,7 @@ BEDSTRENGTH = {
 						cache : false
 					}).responseText;
 					if (data != undefined && data != null && data != '') {
-						jQuery("#divBedStrength").html(data);
+						jQuery("#divBedStrengthh").html(data);
 
 					} else {
 						alert('Please refresh page!');

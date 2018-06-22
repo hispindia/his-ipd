@@ -118,7 +118,7 @@ function validateForm(){
 		<input type="text" id="comments" name="comments" />
 		</td>
 		<td>
-		<div id="divBedStrength"></div>
+		<div id="divBedStrengthh"></div>
 		</td>
 	</tr>
 </table>
