@@ -32,21 +32,11 @@ FIRSTBEDSTRENGTH.getFirstBedStrength(wardId);
 
 
 function validate(){
-var monthlyincome=document.forms["admissionForm"]["monthlyIncome"].value;
+//var monthlyincome=document.forms["admissionForm"]["monthlyIncome"].value;
 var admittedward=document.forms["admissionForm"]["admittedWard"].value;
 var treatingdoctor=document.forms["admissionForm"]["treatingDoctor"].value;
 var bednumber=document.forms["admissionForm"]["bedNumber"].value;
-  if (monthlyincome==null || monthlyincome=="")
-  {
-  alert("Please enter monthly Income");
-  return false;
-  }
-  else{
-   if (!StringUtils.isDigit(monthlyincome)) {
-	 alert("Please enter monthly Income in Digit");
-	 return false;
-	}
-  }
+  
   if (admittedward==null || admittedward=="")
   {
   alert("Please select admitted Ward");
@@ -100,7 +90,7 @@ var bednumber=document.forms["admissionForm"]["bedNumber"].value;
 	<td>${districtTehsil }</td> 
 	</tr> --%>
 	<tr>
-		<td><spring:message code="ipd.patient.monthlyIncome"/><em>*</em></td>
+		<td><spring:message code="ipd.patient.monthlyIncome"/></td>
 		<td><input type="text" id="monthlyIncome" name="monthlyIncome"  /></td>
 	</tr>
 	<tr>

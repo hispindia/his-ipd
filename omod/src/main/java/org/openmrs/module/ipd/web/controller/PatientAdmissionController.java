@@ -185,7 +185,9 @@ public class PatientAdmissionController {
 			String age = request.getParameter("age");
 			String gender = request.getParameter("gender");*/
 		String caste = request.getParameter("caste");
-		BigDecimal monthlyIncome = NumberUtils.createBigDecimal(request.getParameter("monthlyIncome"));
+		BigDecimal monthlyIncome=null;
+		if(request.getParameter("monthlyIncome")!="")
+		{monthlyIncome = NumberUtils.createBigDecimal(request.getParameter("monthlyIncome"));}
 		//String fatherName = request.getParameter("fatherName");
 		String basicPay = request.getParameter("basicPay");
 		int admittedWard = NumberUtils.toInt(request.getParameter("admittedWard"), 0);
@@ -304,6 +306,7 @@ public class PatientAdmissionController {
 			if(patientAdmissionLog!=null){
 				admitted.setPatient(patientAdmissionLog.getPatient());
 				}
+			
 			admitted.setMonthlyIncome(monthlyIncome);
 			admitted.setPatient(patientAdmissionLog.getPatient());
 		

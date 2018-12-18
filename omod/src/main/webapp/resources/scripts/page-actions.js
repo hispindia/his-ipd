@@ -128,7 +128,7 @@ var CHECK =
 					event : "blur",
 					rules : 
 					{
-						"monthlyIncome" : { required : true , number: true},
+						
 						"admittedWard" : { required : true},
 						"bedNumber" : { required : true},
 						"treatingDoctor" : { required : true}
