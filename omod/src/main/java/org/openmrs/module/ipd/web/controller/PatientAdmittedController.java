@@ -383,13 +383,7 @@ public class PatientAdmittedController {
 		}
 
 		String patientName;
-		if (patient.getMiddleName() != null) {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName() + " " + patient.getMiddleName();
-		} else {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName();
-		}
+		patientName = patient.getGivenName() + " "+ patient.getFamilyName();
 		model.addAttribute("patientName", patientName);
 
 		Date birthday = patient.getBirthdate();
@@ -1119,13 +1113,7 @@ public class PatientAdmittedController {
 		}
 
 		String patientName;
-		if (patient.getMiddleName() != null) {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName() + " " + patient.getMiddleName();
-		} else {
-			patientName = patient.getGivenName() + " "
-					+ patient.getFamilyName();
-		}
+		patientName = patient.getGivenName() + " "+ patient.getFamilyName();
 		model.addAttribute("patientName", patientName);
 
 		Date birthday = patient.getBirthdate();

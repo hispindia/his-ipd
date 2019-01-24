@@ -20,9 +20,9 @@
 
 package org.openmrs.module.ipd.extension.html;
 
-import org.openmrs.module.Extension;
+import org.openmrs.module.web.extension.LinkExt;
 
-public class IpdHeader extends Extension {
+public class IpdHeader extends LinkExt {
 
 	public MEDIA_TYPE getMediaType() {
 		return MEDIA_TYPE.html;
