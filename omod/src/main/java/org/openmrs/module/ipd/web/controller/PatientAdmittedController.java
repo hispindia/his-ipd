@@ -1095,11 +1095,14 @@ public class PatientAdmittedController {
 		final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
 		int diffInDays = (int) ((new Date().getTime() - admitted
-				.getPatientAdmissionLog().getAdmissionDate().getTime()) / DAY_IN_MILLIS);
-		if (diffInDays < 1) {
+				.getPatientAdmissionLog().getAdmissionDate().getTime()) / DAY_IN_MILLIS) ;
+
+
+		/*if (diffInDays < 1) {
 			diffInDays = 1;
-		}
-		model.addAttribute("admittedDays", diffInDays);
+		}*/
+		
+		model.addAttribute("admittedDays", diffInDays+1);
 
 		HospitalCoreService hcs = Context.getService(HospitalCoreService.class);
 		List<PersonAttribute> pas = hcs.getPersonAttributes(patient
