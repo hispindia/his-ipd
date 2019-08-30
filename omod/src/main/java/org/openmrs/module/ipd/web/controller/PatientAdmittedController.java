@@ -1143,11 +1143,12 @@ public class PatientAdmittedController {
 
 		int diffInDays = (int) ((new Date().getTime() - admitted
 				.getPatientAdmissionLog().getAdmissionDate().getTime()) / DAY_IN_MILLIS);
-		if (diffInDays < 1) {
+		/*if (diffInDays < 1) {
 			diffInDays = 1;
-		}
-		model.addAttribute("admittedDays", diffInDays);
-
+		}*/
+		model.addAttribute("admittedDays", diffInDays+1);
+		System.out.println(diffInDays+"****"+new Date().getTime()+"^^^^"+admitted
+				.getPatientAdmissionLog().getAdmissionDate().getTime()+"%%%%"+DAY_IN_MILLIS);
 		List<PersonAttribute> pas1 = hcs.getPersonAttributes(patient
 				.getPatientId());
 		for (PersonAttribute pa : pas1) {
